@@ -553,6 +553,9 @@ kbd {
     padding: 50px 10px 30px 10px
 }
 
+#header.inner{
+    color :#312D60
+}
 #project_title {
     margin: 0;
     color: #fff;
