@@ -540,13 +540,18 @@ kbd {
     border-bottom-right-radius: 2px
 }
 
-#header_wrap {
-    background: #212121;
+/*#header_wrap {
+    background: #312D60;
     background: -moz-linear-gradient(top, #373737, #212121);
     background: -webkit-linear-gradient(top, #373737, #212121);
     background: -ms-linear-gradient(top, #373737, #212121);
     background: -o-linear-gradient(top, #373737, #212121);
     background: linear-gradient(to top, #373737, #212121)
+}*/
+
+#header_wrap {
+    background-color: #312D60; /* Change this to your desired background color */
+    color: white; /* Change this to your desired text color */
 }
 
 #header_wrap .inner {
@@ -622,7 +627,7 @@ kbd {
 }
 
 #footer_wrap {
-    background: #212121
+    background: #312D60
 }
 
 @media screen and (max-width: 992px) {
