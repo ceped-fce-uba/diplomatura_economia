@@ -1,3 +1,5 @@
-theme: jekyll-theme-slate
+remote_theme: pages-themes/slate@v0.2.0
+plugins:
+- jekyll-remote-theme
 title: "Problemáticas actuales de la economía, el empleo y el comercio desde la perspectiva de la medición"
 description: "Diplomatura - CEPED"

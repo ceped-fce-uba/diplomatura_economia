@@ -14,7 +14,7 @@ Este repositorio contiene un detalle del programa de la diplomatura, organizada 
 
 ### Producción y distribución. Dinero, inflación.
 
-![](images/clipboard-1227717430.png)
+![](assets/images/descarga.png)
 
 -   Temas de clase:
     -   Funciónes y producción de dinero.
