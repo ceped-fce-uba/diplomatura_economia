@@ -1,0 +1,539 @@
+---
+title: "Introducción al Software libre R"
+author: "Diplomatura PEEC - UBA"
+format: 
+  html:
+    minimal: true
+editor: visual
+---
+
+## ¿Qué es R?
+
+R es un lenguaje de programación, y un entorno de software libre con múltiples aplicaciones. Fue desarrollado durante los años 90´ en la Universidad de Auckland, y esta inspirado en el lenguaje S proveniente de los años 70´.
+
+Fue lanzado como software de código abierto en 1995 y alcanzó su versión 1.0 en el año 2000. Desde entonces, R ha evolucionado con un ecosistema de paquetes en constante expansión, permitiendo su aplicación en múltiples disciplinas.
+
+El Comprehensive R Archive Network (CRAN) es el principal repositorio de paquetes para R, fundado en 1997. Actualmente alberga más de 19.000 paquetes, yacen allí modelos estadísticos clásicos hasta herramientas avanzadas de machine learning y visualización de datos. El entorno de CRAN garantiza la estabilidad y compatibilidad de los paquetes, como el proceso de validación de este último posee ciertras complejidades, muchos desarrolladores y desarrolladoras publican versiones preliminares de sus paquetes en GitHub, donde la comunidad puede probarlas antes de su incorporación a CRAN.
+
+```{r}
+knitr::include_graphics("number-of-submitted-packages-to-CRAN.png")
+```
+
+En 2011, la empresa Posit (antes RStudio) lanzó RStudio, un entorno de desarrollo integrado que transformó la accesibilidad y usabilidad de R. Su interfaz gráfica facilitó la escritura de código, la depuración y la gestión de proyectos, consolidándose como la herramienta estándar para trabajar con R.
+
+Un desarrollo clave en la evolución de R ha sido el tidyverse, un conjunto de paquetes diseñados para simplificar la manipulación y análisis de datos. Creado por Hadley Wickham y su equipo en Posit, el tidyverse sigue principios de diseño coherentes, basados en el concepto de tidy data, donde cada columna es una variable y cada fila es una observación.
+
+Entre los paquetes más destacados del tidyverse se encuentran:
+
+-   {ggplot2} → Visualización de datos.
+-   {dplyr} → Manipulación y transformación de datos.
+-   {tidyr} → Limpieza y estructuración de datos.
+-   {readr} → Importación de datos.
+-   {purrr} → Programación funcional.
+-   {tibble} → Data frames mejorados.
+
+Con el tiempo, el enfoque tidy ha ganado popularidad, inspirando otros paquetes como {tidymodels} (modelado estadístico y machine learning), {tidytext} (análisis de texto) y {tidygraph} (análisis de redes). Este ecosistema ha desplazado en gran medida el enfoque base de R y se ha convertido en el estándar en la comunidad de análisis de datos.
+
+A su vez, en los últimos años R ha experimentado cambios tendientes a generar mayor interoperabilidad con Python, y expansión hacia tecnologías como Quarto.
+
+### Diferencias con STATA y SPSS
+
+-   Gratuito
+-   Únicamente funciona por líneas de código (No hay botones para ejecutar comandos)
+-   Posibilita trabajar con múltiples bases de microdatos al mismo tiempo, sin mayor dificultad (No requiere abrir cada base, trabajarla por separado y luego cerrarla)
+-   Totalmente automatizable
+-   Extensible a otros lenguajes y usos (como esta presentación)
+-   Más veloz
+
+## Paneles
+
+**FOTO + DESCRIPCIÒN**
+
+## Lógica sintáctica del lenguaje
+
+### Definir objetos
+
+La definición de objetos se realiza a través del operador `<-`. De este modo, es posible asignar la definición a un elemento:
+
+```{r}
+Y <- 1
+```
+
+Este operador tiene un atajo en el teclado: `Alt + -`
+
+Al definir un elemento, el mismo queda guardado en el ambiente del programa, y podrá ser utilizado posteriormente para observar su contenido o para realizar una operación con el mismo
+
+```{r}
+Y
+```
+
+El operador `=` es equivalente a `<-`, pero en la práctica no se utiliza para la definición de objetos.
+
+```{r}
+X = 2
+X
+```
+
+El caracter **unidireccional** de `<-` implica que es posible redefinir objetos ya creados en el ambiente de R, reemplazándolos por el contenido de otro. Por ejemplo:
+
+```{r}
+Y <- X
+Y #En este caso Y fue redefinida con el contenido de X
+```
+
+### R Base
+
+Con R base nos referimos a los comandos básicos que vienen incorporados en el R, sin necesidad de cargar librerías.
+
+### Operadores lógicos
+
+-   `>` **Mayor**
+-   `>=` **Mayor o igual**
+-   `<` **Menor**
+-   `<=` **Menor o igual**
+-   `==` **Igual que**
+-   `!=` **Distinto que**
+
+```{r}
+Y <- 1
+X <- 2
+
+Y > X
+```
+
+```{r}
+Y >= X
+```
+
+```{r}
+Y == X
+```
+
+```{r}
+Y != X
+```
+
+```{r}
+Z <- Y != X
+Z
+```
+
+### Aritmética
+
+```{r}
+#suma
+
+A <- 2+2
+A
+```
+
+```{r}
+#resta
+B <- 10-5
+B
+```
+
+```{r}
+#cociente
+C <- 15/3
+C
+```
+
+```{r}
+#multiplicación
+D <- 4*3
+D
+```
+
+### Caracteres especiales
+
+-   R es sensible a mayúsculas y minúsculas, tanto para los nombres de las variables, como para las funciones y parámetros.
+-   Los **espacios en blanco** y los **carriage return** (enter) no son considerados por el lenguaje. Los podemos aprovechar para emprolijar el código y que la lectura sea más simple.
+-   El numeral `#` se utiliza para hacer comentarios. Todo lo que se escribe después del `#` no es interpretado por R. Se debe utilizar un `#` por cada línea de código que se desea anular
+-   Los corchetes `[]` se utilizan para acceder a un objeto:
+    -   en un vector \[n° orden\]
+    -   en una matriz \[fila, columna\]
+    -   en una lista \[n° elemento\]
+-   El signo `$` también es un método de acceso, que permite llamar al elemento por su nombre, en dataframes y listas.
+-   Los paréntesis `()` se utilizan en las funciones para definir los parámetros.
+-   Las comas `,` se utilizan para separar los elementos.
+
+### Objetos:
+
+-   Valor
+-   Vector
+-   Matriz
+-   Data Frame
+-   Lista
+-   Valores
+
+### Valores
+
+Los valores tienen distintos tipos:
+
+**Numeric**
+
+```{r}
+A <- 1
+class(A)
+```
+
+**character**
+
+```{r}
+A <- paste('Soy', 'una', 'concatenación', 'de', 'caracteres', sep = " ")
+class(A)
+```
+
+**factor**
+
+```{r}
+A <- factor("Soy un factor, con niveles fijos") 
+class(A)
+```
+
+La diferencia entre un **character** y un **factor** es que el último tiene **solo algunos valores permitidos** (levels), y se le puede dar un orden.
+
+**Date**
+
+```{r}
+A <- as.Date("2017-01-01")
+class(A)
+```
+
+### Vectores
+
+Para crear un **vector** utilizamos el comando `c()`, de combinar. Puede tener variables **de cualquier tipo**
+
+```{r}
+C <- c(1, 3, 4)
+C
+```
+
+También, por ejemplo, se puede sumar 1 a cada elemento del vector anterior
+
+```{r}
+C <- C + 1
+C
+```
+
+O, sumarle 1 al primer elemento, 2 al segundo, y 3 al tercer elemento del vector anterior
+
+```{r}
+D <- C + 1:3 #esto es equivalente a hacer 3+1, 5+2, 6+9 
+D
+```
+
+`1:3` significa que queremos todos los números enteros desde 1 hasta 3.
+
+crear un **vector** que contenga las palabras: *Ingreso, Variación, Indice*
+
+```{r}
+E <- c("Ingreso", "Variación", "Indice")
+```
+
+para acceder a algún elemento del vector, podemos buscarlo por su número de orden, entre `[]`
+
+```{r}
+elemento2 <- E(2)
+elemento2
+```
+
+para borrar un objeto, utilizamos el comando `rm()`
+
+```{r}
+rm(elemento2)
+elemento2
+```
+
+También podemos cambiar el texto del segundo elemento de E, por el texto “var”
+
+```{r}
+E[2] <- "var"
+```
+
+### Data Frames (DF)
+
+Un Data Frame es una tabla de datos, donde cada columna representa una variable, y cada fila una observación. Son el equivalente a las tablas de *STATA* y *SPSS*.
+
+Este objeto suele ser central en el proceso de trabajo, y suele ser la forma en que se cargan datos externos, así como la mayoría de los elementos intermedios, hasta aquello que exportemos.
+
+También Se puede crear como la combinación de N vectores de igual tamaño. Por ejemplo, tomamos algunos valores de un [Indice de Salarios](https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-31-61)
+
+```{r}
+INDICE  <- c(100,   100,   100,
+             101.8, 101.2, 100.73,
+             102.9, 102.4, 103.2)
+FECHA  <-  c("Oct-16", "Oct-16", "Oct-16",
+             "Nov-16", "Nov-16", "Nov-16",
+             "Dic-16", "Dic-16", "Dic-16")
+SECTOR  <-  c("Privado_Registrado","Público","Privado_No_Registrado",
+             "Privado_Registrado","Público","Privado_No_Registrado",
+             "Privado_Registrado","Público","Privado_No_Registrado")
+             
+Datos <- data.frame(INDICE, FECHA, SECTOR)
+Datos
+```
+
+Notar que el nuevo objeto creado se encuentra dentro de la sección de **Data** en el interior de nuestro **ambiente de R**. Tal como en un vector se ubica a los elementos mediante `[]`, en un dataframe se obtienen sus elementos de la forma \`\[fila, columna\]\`\`.
+
+Otra opción es seleccionar la columna, mediante el operador `$`, y luego seleccionar dentro de esa columna, por el número de orden.
+
+```{r}
+Datos$FECHA
+```
+
+```{r}
+Datos[3,2]
+```
+
+*¿que pasa si hacemos Datos\$FECHA\[3,2\]?*
+
+```{r}
+Datos$FECHA[3,2]
+```
+
+Nótese que el último comando tiene un número incorrecto de dimensiones, porque estamos refiriendonos 2 veces a la columna FECHA.
+
+### Listas
+
+Contienen una concatenación de objetos de cualquier tipo. Así como un vector contiene valores, un dataframe contiene vectores, una lista puede contener dataframes, pero también vectores, o valores, y todo ello a la vez
+
+```{r}
+lista1 <- list(A, B, C, D, E, FECHA, DF = Datos, INDICE, SECTOR)
+lista1
+```
+
+Para acceder un elemento de una lista, podemos utilizar el operador \$, que se puede usar a su vez de forma iterativa
+
+```{r}
+lista1$DF$FECHA[2]
+```
+
+### Loops, condicionales y funciones
+
+Un loop es una estructura de código que nos permite recorrer iterativamente un conjunto de comandos, variando algún elemento. Por ejemplo:
+
+```{r}
+for(i in 1:10){
+  Cuadrados<- i^2
+  print(Cuadrados)
+}
+```
+
+La interpretación de este loop es: para i, que toma valor de 1 a 10, imprimí cada resultado de la acción `i^2`
+
+También se puede tomar una lista de valores cualesquiera. Por ejemplo reutilizar datos de un dataframe:
+
+```{r}
+Datos
+```
+
+```{r}
+unique(Datos$SECTOR)
+```
+
+```{r}
+for(variable in unique(Datos$SECTOR)){
+  print(Datos[Datos$SECTOR == variable,])
+}
+```
+
+Las estructuras condiconales nos permites ejecutar código de forma condicional a que se cumpla determinada condición.
+
+```{r}
+resultado <- ifelse(test = class(A) == "character", yes =  paste0("Esto es un caracter"),
+       no = paste0("Esto no era un caracter"))
+resultado
+```
+
+Otra función para condicionar la ejecución de una porción del código es `if(condicion){codigo a ejecutar si se cumple la condición}`
+
+Las funciones nos permiten automatizar todas aquellas partes del código que se repiten mucho. Una vez diseñadas, funcionan igual que cualquier comando. La facilidad para crear las funciones es en buena medida la explicación de que haya tantas contribuciones de usuarios a la expansión del lenguaje.
+
+```{r}
+funcion_prueba <- function(a,b) {
+  print(paste(a, b, sep = " "))
+  
+}
+
+funcion_prueba(a = "soy la primera parte de un string.", b = "Y yo la segunda parte")
+```
+
+También podemos asignar un valor por default.
+
+```{r}
+funcion_prueba <- function(a = "Soy una primera parte default.",b) {
+  print(paste(a, b, sep = " "))
+  
+}
+
+funcion_prueba(b = "A mi no me defaulteas")
+```
+
+Las funciones que creamos en un script propio viven dentro del ambiente donde se las define. Es decir, es necesario volver a correr la definición cada vez que la queremos utilizar.
+
+Vale mencionar que lo que ocurre en una función, queda en la función excepto que explícitamente pidamos que devuelva el resultado, con el comando `print()` o `return()`.
+
+Los paquetes, en cambio, cuentan con funciones que ya fueron definidas y tan solo con convocar el paquete al ambiente de R, estas se encuentran operativas.
+
+## Lectura y guardado: formatos existentes
+
+R tiene formatos de archivos propios:
+
+-   Rdata
+-   RDS
+
+### Rdata
+
+```{r}
+x <- 1:15
+y <- list(a = 1, b = TRUE, c = "oops")
+#Para guardar
+save(x, y, file = "xy.RData")
+#Para leer
+load('xy.RData')
+```
+
+Los archivos de tipo RData permiten grabar una imagen de todos los objetos R que querramos.
+
+### RDS
+
+```{r}
+X
+```
+
+```{r}
+saveRDS(x, "x.RDS")
+Z <- readRDS("x.RDS")
+Z
+```
+
+Los archivos de tipo RDS no guardan el nombre del objeto, por lo que podemos nombrarlos cuando los cargamos (aconsejable)
+
+### Otros formatos
+
+Hay **muchas funciones** para leer archivos de tipo .txt y .csv. La mayoría sólo cambia los parámetros que vienen por default.
+
+Es importante tener en cuenta:
+
+-   encabezado
+-   delimitador (,, tab, ;)
+-   separador decimal
+
+```{r}
+dataframe <- read.delim(file, header = TRUE, sep = "\t", quote = "\"", dec = ".", fill = TRUE, comment.char = "", ...) 
+```
+
+### Excel
+
+Ejemplo: Levantar la base de SIPA con la que trabajaremos en la Clase 2
+
+```{r}
+#install.packages("openxlsx")
+library(openxlsx)
+
+base_sipa <- read.xlsx() #a definir
+```
+
+```{r}
+#View(base_sipa)
+names(base_sipa)
+```
+
+```{r}
+head(base_sipa)[,1:5]
+```
+
+### .txt
+
+Ejemplo de alguna
+
+### SPSS, STATA, SAS
+
+Podemos utilizar la librería haven, y los comandos:
+
+-   read_spss()
+-   read_dta()
+-   read_sas()
+
+### Encoding
+
+Tanto a la hora de leer y escribir archivos, como al trabajar un mismo script desde distintas computadoras, debemos ser cuidadosos con el encoding seteado. El encoding es el sistema mediante el cual el sistema interpreta los caracteres del lenguaje natural. Hay muchos encodings diferentes, que interpretan distinto algunos caracteres, como tildes y signos de puntuación. Por ende, si el encoding seteado no es el mismo que el de nuestro script/tabla pueden generarse errores. En medida de lo posible, al escribir nuestros scripts es recomendable evitar estos caracteres.
+
+R tiene por default el encoding **“ISO-8859-1”**, sin embargo el más habitual en América Latina es “UTF-8”.
+
+-   Lectura de archivos : Aglunas de las funciones del tipo read_table, read_xlsx permiten establecer como uno de sus parametros el encoding deseado
+-   Encoding utilizado para abrir un script:File -\> Reopen with Encoding
+-   Encoding default con el que se guardan nuestros Scripts: Tools -\> Global Options -\> Code -\> Saving
+
+### Directorios
+
+Siempre que escribimos el nombre del archivo, R lo busca en el working directory. Para saber cual es el directorio de trabajo utilizamos la función `getwd()`. Para redefinir el directorio de trabajo, utilizamos la función `setwd`
+
+No es aconsejable utilizar el directorio de trabajo, si nos olvidamos de definirlo, tiramos los archivos en cualquier lado
+
+Lo más práctico es definir los directorios de trabajo como valores. y pegar el nombre del archivo con las carpetas.
+
+```{r}
+carpeta_fuentes    <- paste("C:/Users/.../Documents/R/fuentes/")
+carpeta_resultados <- paste("C:/Users/.../Documents/R/resultados/")
+```
+
+**Es importante notar que se utiliza la barra `/` en lugar de `\` (que sale de copiar y pegar el directorio)**
+
+el nombre completo del archivo puede ser
+
+```{r}
+archivo_datos      <- paste0(carpeta_fuentes, "archivo_fuentes.txt")
+archivo_resultados <- paste0(carpeta_resultados, "archivo_resultados.txt")
+```
+
+luego, para leer un excel, se escribe:
+
+```{r}
+tabla <- read.xlsx(file = archivo_datos,sheetName = "hoja 1") #como es una variable, ya no lleva comillas
+```
+
+### Directorios autorreferenciales
+
+Si bien excede los alcances de este curso, dejamos un chunk de código que puede resultar sumamente útil para crear un directorio de trabajo para un proyecto nuevo.
+
+```{r}
+#install.packages(rstudioapi)
+script.dir <- paste0(dirname(rstudioapi::getActiveDocumentContext()$path),"/")
+bases.dir  <-  paste0(dirname(script.dir),"/Fuentes/")
+#dir.create(bases.dir)
+resultados.dir <- paste0(dirname(script.dir),"/Resultados/")
+#dir.create(resultados.dir)
+#chequeo
+dir.exists(bases.dir)
+```
+
+```{r}
+dir.exists(resultados.dir)
+```
+
+La primera línea encuentra la carpeta donde esta guardado el script (si no esta guardado no funciona).La segunda línea crea el nombre del directorio Fuentes. La tercera línea (anulada) crea el directorio Fuentes. La cuarta línea crea el nombre del directorio Resultados. La quinta línea (anulada) crea el directorio Resultados.
+
+## Organización scripts
+
+Por último, es aconsejable mantener en todos los script una misma estructura del tipo:
+
+1.  Limpiar la memoria rm(list=ls())
+2.  Cargar librerías
+3.  Definir directorios
+4.  Definir funciones
+5.  Levantar archivos … procesamiento ….
+
+<!-- -->
+
+n.  grabar resultados
+
+También es útil organizar las partes del script en capítulos. Para eso
+
+`### escribimos el título del capitulo encerrado entre tres o más corchetes ###`
+
+## Diferencia entre proyectos y scripts
+
+## Para la clase 2
