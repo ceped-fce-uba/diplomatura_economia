@@ -1,9 +1,13 @@
 ---
 title: "Introducción al Software libre R"
 author: "Diplomatura PEEC - UBA"
-format: 
+format:
   html:
-    minimal: true
+    embed-resources: true
+code-tools: false
+toc: true
+theme: 
+  - styles.scss
 editor: visual
 ---
 
@@ -16,6 +20,8 @@ Fue lanzado como software de código abierto en 1995 y alcanzó su versión 1.0 
 El Comprehensive R Archive Network (CRAN) es el principal repositorio de paquetes para R, fundado en 1997. Actualmente alberga más de 19.000 paquetes, yacen allí modelos estadísticos clásicos hasta herramientas avanzadas de machine learning y visualización de datos. El entorno de CRAN garantiza la estabilidad y compatibilidad de los paquetes, como el proceso de validación de este último posee ciertras complejidades, muchos desarrolladores y desarrolladoras publican versiones preliminares de sus paquetes en GitHub, donde la comunidad puede probarlas antes de su incorporación a CRAN.
 
 ```{r}
+#| echo: false
+
 knitr::include_graphics("number-of-submitted-packages-to-CRAN.png")
 ```
 
@@ -235,13 +241,15 @@ E <- c("Ingreso", "Variación", "Indice")
 para acceder a algún elemento del vector, podemos buscarlo por su número de orden, entre `[]`
 
 ```{r}
-elemento2 <- E(2)
+elemento2 <- E[2]
 elemento2
 ```
 
 para borrar un objeto, utilizamos el comando `rm()`
 
 ```{r}
+#| error: true
+
 rm(elemento2)
 elemento2
 ```
@@ -290,6 +298,8 @@ Datos[3,2]
 *¿que pasa si hacemos Datos\$FECHA\[3,2\]?*
 
 ```{r}
+#| error: true
+
 Datos$FECHA[3,2]
 ```
 
@@ -421,7 +431,7 @@ Es importante tener en cuenta:
 -   delimitador (,, tab, ;)
 -   separador decimal
 
-```{r}
+```{{r}}
 dataframe <- read.delim(file, header = TRUE, sep = "\t", quote = "\"", dec = ".", fill = TRUE, comment.char = "", ...) 
 ```
 
@@ -429,19 +439,19 @@ dataframe <- read.delim(file, header = TRUE, sep = "\t", quote = "\"", dec = "."
 
 Ejemplo: Levantar la base de SIPA con la que trabajaremos en la Clase 2
 
-```{r}
+```{{r}}
 #install.packages("openxlsx")
 library(openxlsx)
 
 base_sipa <- read.xlsx() #a definir
 ```
 
-```{r}
+```{{r}}
 #View(base_sipa)
 names(base_sipa)
 ```
 
-```{r}
+```{{r}}
 head(base_sipa)[,1:5]
 ```
 
@@ -491,15 +501,15 @@ archivo_resultados <- paste0(carpeta_resultados, "archivo_resultados.txt")
 
 luego, para leer un excel, se escribe:
 
-```{r}
-tabla <- read.xlsx(file = archivo_datos,sheetName = "hoja 1") #como es una variable, ya no lleva comillas
+```{{r}}
+tabla <- read_xlsx(file = archivo_datos,sheetName = "hoja 1") #como es una variable, ya no lleva comillas
 ```
 
 ### Directorios autorreferenciales
 
 Si bien excede los alcances de este curso, dejamos un chunk de código que puede resultar sumamente útil para crear un directorio de trabajo para un proyecto nuevo.
 
-```{r}
+```{{r}}
 #install.packages(rstudioapi)
 script.dir <- paste0(dirname(rstudioapi::getActiveDocumentContext()$path),"/")
 bases.dir  <-  paste0(dirname(script.dir),"/Fuentes/")
@@ -510,7 +520,7 @@ resultados.dir <- paste0(dirname(script.dir),"/Resultados/")
 dir.exists(bases.dir)
 ```
 
-```{r}
+```{{r}}
 dir.exists(resultados.dir)
 ```
 
