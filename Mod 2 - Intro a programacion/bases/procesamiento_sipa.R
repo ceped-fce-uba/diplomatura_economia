@@ -57,9 +57,9 @@ data4 <- read_excel("Mod 2 - Intro a programacion/bases/sipa_seleccion.xlsx",
 
 data1_long <- data1 %>%
   pivot_longer(
-    cols = -Período, # Usamos Período como la columna ID
-    names_to = "Provincia", # Nueva columna con las provincias
-    values_to = "Valor" # Columna a la que va el valor
+    cols = -Período,
+    names_to = "Geografia", 
+    values_to = "Valor"
   ) %>% 
   mutate(Variable = "Asalariados registrados en el sector privado")
 
@@ -68,25 +68,33 @@ data2_long <- data2 %>%
     cols = -Período,
     names_to = "Variable", 
     values_to = "Valor" 
-  )
+  ) %>% 
+  mutate(Geografia = "Total Pais")
 
 data3_long <- data3 %>%
   pivot_longer(
     cols = -Período,
     names_to = "Variable",
     values_to = "Valor" 
-  )
+  ) %>% 
+  mutate(Geografia = "Total Pais")
 
 data4_long <- data4 %>%
   pivot_longer(
     cols = -Período, 
     names_to = "Variable",
     values_to = "Valor" 
-  )
+  ) %>% 
+  mutate(Geografia = "Total Pais")
 
+# Ahora uso bind_rows() de dplyr que es más flexible que rbind() de R Base.
 
+base_sipa <- bind_rows(data1_long, data2_long, data3_long, data4_long) %>%
+  select(Período, Variable, Geografia, Valor)
 
 # Guardado ####
+
+write_csv(base_sipa, "Mod 2 - Intro a programacion/bases/base_sipa.csv")
 
 # Si hubiera que guardarlas por separado
 # write_csv(data1_long, "Mod 2 - Intro a programacion/bases/asalariados_registrados_provincia.csv")
