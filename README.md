@@ -5,13 +5,10 @@ Este repositorio contiene un detalle del programa de la diplomatura, organizada 
 ## Fundamentos de Economía Política
 [![Download](assets/images/boton_clase1.png)](M1_C1.rar)[![Download](assets/images/boton_clase2.png)](M1_C2.rar)[![Download](assets/images/boton_clase3.png)](M1_C3.rar)
 
-### Valor agregado y producción de riqueza
-
--   Temas de clase:
-    -   Modelo de Smith.
-    -   Enfoque de Ricardo y Marx.
-    -   El marginalismo. (Problemas)
--   Bibliografía: Completar
+### Clases
+    -   Discusiones clásicas de la economía política.
+    -   Problemas actuales de la economía.
+    -   Economía análitica: por qué, qué y cómo medir
 
 ### Producción y distribución. Dinero, inflación.
 
