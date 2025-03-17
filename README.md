@@ -27,14 +27,14 @@ Este repositorio contiene un detalle del programa de la diplomatura, organizada 
 [![Download](assets/images/boton_clase2.png)](M1_C2.rar) Agregados e indicadores de Gobierno: déficit y deuda pública  
 [![Download](assets/images/boton_clase3.png)](M1_C3.rar) Agregados monetarios: dinámicas del circulante, depósitos y créditos  
 
-### Indicadores sociolaborales
+## Indicadores sociolaborales
 
 [![Download](assets/images/boton_clase1.png)](M1_C1.rar) Análisis del mercado de trabajo: desempleo, subempleo y sobreocupación      
 [![Download](assets/images/boton_clase2.png)](M1_C2.rar) Informalidad y precariedad del empleo: la fragmentación de la fuerza de trabajo  
 [![Download](assets/images/boton_clase3.png)](M1_C3.rar) Automatización del trabajo: economía de plataformas e inteligencia artificial  
 [![Download](assets/images/boton_clase4.png)](M1_C3.rar) La desigualdad en las sociedades modernas: distribución del ingreso y pobreza  
 
-### Programación en R avanzada
+## Programación en R avanzada
 
 [![Download](assets/images/boton_clase1.png)](M1_C1.rar) Informes en RStudio - Quarto y Markdown   
 [![Download](assets/images/boton_clase2.png)](M1_C2.rar) Control de versiones - Git y Github
