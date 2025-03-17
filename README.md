@@ -3,7 +3,9 @@
 Este repositorio contiene un detalle del programa de la diplomatura, organizada en 5 módulos. A continuación, se describen los contenidos de cada módulo y sus respectivas clases.
 
 ## Fundamentos de Economía Política
-[![Discusiones clásicas de la economía política](assets/images/boton_clase1.png)](M1_C1.rar)[![Download](assets/images/boton_clase2.png)](M1_C2.rar)[![Download](assets/images/boton_clase3.png)](M1_C3.rar)
+- [![Download](assets/images/boton_clase1.png)](M1_C1.rar) Discusiones clásicas de la economía política
+[![Download](assets/images/boton_clase2.png)](M1_C2.rar)
+[![Download](assets/images/boton_clase3.png)](M1_C3.rar)
 
 ### Clases
     - Discusiones clásicas de la economía política.
