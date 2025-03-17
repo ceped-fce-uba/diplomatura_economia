@@ -7,20 +7,12 @@ Este repositorio contiene un detalle del programa de la diplomatura, organizada 
 [![Download](assets/images/boton_clase2.png)](M1_C2.rar) Problemas actuales de la economía    
 [![Download](assets/images/boton_clase3.png)](M1_C3.rar) Economía análitica: por qué, qué y cómo medir    
 
-### Clases
-    - Discusiones clásicas de la economía política.
-    - Problemas actuales de la economía.
-    - Economía análitica: por qué, qué y cómo medir
+## Introducción a la programación en R
 
-### Producción y distribución. Dinero, inflación.
-
-![](assets/images/descarga.png)
-
--   Temas de clase:
-    -   Funciónes y producción de dinero.
-    -   Ganancias, rentas y salarios.
-    -   El tipo de cambio.
--   Bibliografía: Completar
+[![Download](assets/images/boton_clase1.png)](M1_C1.rar) Introducción a R y RStudio. Lenguaje básico     
+[![Download](assets/images/boton_clase2.png)](M1_C2.rar) Manipulación de bases de datos I  
+[![Download](assets/images/boton_clase3.png)](M1_C3.rar) Manipulación de bases de datos II    
+[![Download](assets/images/boton_clase4.png)](M1_C3.rar) Visualización en R - Ggplot  
 
 ## Introducción a la programación en R
 
