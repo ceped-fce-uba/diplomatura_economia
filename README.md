@@ -5,7 +5,7 @@ Este repositorio contiene un detalle del programa de la diplomatura, organizada 
 ## Fundamentos de Economía Política
 - [![Download](assets/images/boton_clase1.png)](M1_C1.rar) Discusiones clásicas de la economía política
 - [![Download](assets/images/boton_clase2.png)](M1_C2.rar) Problemas actuales de la economía
-- [![Download](assets/images/boton_clase3.png)](M1_C3.rar) conomía análitica: por qué, qué y cómo medir
+- [![Download](assets/images/boton_clase3.png)](M1_C3.rar) Economía análitica: por qué, qué y cómo medir
 
 ### Clases
     - Discusiones clásicas de la economía política.
