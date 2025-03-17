@@ -3,7 +3,7 @@
 Este repositorio contiene un detalle del programa de la diplomatura, organizada en 5 módulos. A continuación, se describen los contenidos de cada módulo y sus respectivas clases.
 
 ## Fundamentos de Economía Política
-
+![](assets/images/boton_clase1.png)
 ### Valor agregado y producción de riqueza
 
 -   Temas de clase:
