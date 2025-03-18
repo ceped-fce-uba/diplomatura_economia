@@ -1,6 +1,13 @@
 ---
-title: "Untitled"
-format: html
+title: "Introducción al Tidyverse (o otro título)"
+author: "Diplomatura PEEC - UBA"
+format:
+  html:
+    embed-resources: true
+code-tools: false
+toc: true
+theme: 
+  - styles.scss
 editor: visual
 ---
 
@@ -11,13 +18,22 @@ Tidyverse es un conjunto de paquetes de R que comparten una filosofía de diseñ
 La idea central del tidyverse es promover un enfoque "tidy", donde los datos se organizan en un formato adecuado para el análisis (es decir, en "tidy data"), lo que facilita su uso en las diferentes etapas del proceso de análisis.
 
 ```{r}
+#| eval: false
 install.packages("tidyverse")
 library(tidyverse)
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+library(tidyverse)
+
 ```
 
 Como ya se ha visto, se requiere instalar las librerías en primer lugar y por única vez, y luego convocarla al ambiente de R cada vez que se quiera utilizar las funciones que yacen dentro de esta. Una analogía a esta dinámica sería la acción de comprar y uso de un libro, la compra es única, pero para poder disponer de su contenido se requiere siempre de su apertura.
 
-A partir de este momento, trabajaremos las funciones a estudiar volcadas sobre una base de datos del creada a partir de [información](https://www.argentina.gob.ar/sites/default/files/trabajoregistrado_2411_estadisticas.xlsx) del Sistema Integrado Previsional Argentino ([SIPA](https://www.argentina.gob.ar/situacion-y-evolucion-del-trabajo-registrado)).
+A partir de este momento, trabajaremos las funciones a estudiar volcadas sobre una base de datos creada a partir de [información](https://www.argentina.gob.ar/sites/default/files/trabajoregistrado_2411_estadisticas.xlsx) del Sistema Integrado Previsional Argentino ([SIPA](https://www.argentina.gob.ar/situacion-y-evolucion-del-trabajo-registrado)).
 
 ```{r}
 OCUPADOS  <- c(6105953, 2543717, 10931300,
@@ -112,7 +128,7 @@ Datos2
 
 Notar que puede elegirse el orden de las columnas (variables) al escribirlas.
 
-```{r}
+```{{r}}
 Datos <- Datos %>% 
   select(-c(Doble, caso_cuando))
 Datos
@@ -233,10 +249,10 @@ summary(Datos)
 
 ### unique()
 
-Permite ver los únicos valores que toma cierta variable en mi base de datos.
+Permite ver los valores únicos que toma cierta variable en mi base de datos.
 
 ```{r}
-unique(Datos$OCUPADOS)
+unique(Datos$SECTOR)
 ```
 
 ### sample_n()
@@ -252,22 +268,5 @@ sample_n(tbl = Datos,size = 9)
 Esta función puede utilizarse para hacer tabulados univariados o bivariados en variables discretas.
 
 ```{r}
-table(Datos$SECOTR)
+table(Datos$SECTOR)
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
