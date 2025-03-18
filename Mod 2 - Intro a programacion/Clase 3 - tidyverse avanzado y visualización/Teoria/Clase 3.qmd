@@ -1,0 +1,69 @@
+---
+title: "Tidyverse avanzado y principios de viualización"
+author: "Diplomatura PEEC - UBA"
+format:
+  html:
+    embed-resources: true
+code-tools: false
+toc: true
+theme: 
+  - styles.scss
+editor: visual
+---
+
+## Complejizar tidyverse
+
+Hasta el momento se ha avanzado sobre funciones que componen el paquete `tidyverse` en forma individual, pero no hemos observado esquemas que concatenen estas funciones en un **flujo de trabajo**. Este tipo de esquemas, o procesos, tienden a ser el trabajo más típico de un usuario/a en R, ya que para sintetizar grandes volumenes de información en indicadores o métricas, se requieren procesos previos sobre los datos.
+
+
+### El operador pipe (%>%) como conector fundamental
+
+
+
+
+### Primera concatenación: desde el group_by() 
+
+```{r}
+
+```
+
+
+
+
+Ideas para la primera parte:
+
+1) Buscar los scripts de EPH
+2) Tomar series en niveles, pasarlas a logs y después visualizar
+3) 
+
+
+
+Ideas para la visualización:
+
+1) Mirar boxplots
+
+
+
+
+Al final mostrar por encima el HTML que hizo Vladi para EPH
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

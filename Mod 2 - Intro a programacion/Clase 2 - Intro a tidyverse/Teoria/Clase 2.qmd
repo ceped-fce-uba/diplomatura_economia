@@ -1,5 +1,5 @@
 ---
-title: "Introducción al Tidyverse (o otro título)"
+title: "Introducción a tidyverse"
 author: "Diplomatura PEEC - UBA"
 format:
   html:
