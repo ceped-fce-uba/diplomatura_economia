@@ -41,5 +41,27 @@ h1, .h1, h2, .h2, h3, .h3 {
     margin-top: 84px;
 }
 
+// Custom parallax styles
+.parallax-container {
+  position: relative;
+}
+
+.parallax-image-container {
+  background-image: url('r.jpg');
+  height: 200px; // Use viewport height to fill the screen
+  background-attachment: scroll; // Remove fixed attachment for natural scrolling
+  background-position: center top; // Align to the top initially
+  background-repeat: no-repeat;
+  background-size: contain; // Show the entire image without cropping
+  opacity: 1;
+}
+
+// eso se usa con esto:
+// <br/><br/>
+// 
+// <div class="parallax-container"><div class="parallax-image-container"></div></div>
+// 
+// <br/><br/>
+
 // Para más postas ir a ver este sitio
 // https://www.productive-r-workflow.com/quarto-tricks
