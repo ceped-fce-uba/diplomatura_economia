@@ -1,0 +1,106 @@
+/*-- scss:defaults --*/
+
+// Color variables
+$theme-black: #4c4c4c;
+$theme-white: #ffffff;
+$theme-teal: #50847B;
+$theme-blue: #76AADB;
+
+// Font imports (corrected syntax)
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+
+// Base styling
+$font-size-root: 20px;
+$hl-font-size: $font-size-root * 3;  // ó * 0.85
+
+$body-bg: $theme-white;
+$body-color: $theme-black;
+$link-color: $theme-teal;
+$code-color: $theme-blue;
+
+// Font assignments
+$font-family-sans-serif: 'Montserrat', sans-serif;
+$font-family-monospace: 'Source Code Pro', monospace;
+
+pre, pre.sourceCode {
+font-size: 1.175em;
+}
+
+/*-- scss:rules --*/
+h1 {
+  color: darken($theme-blue, 50%);
+}
+
+h2, h3, h4 {
+  color: $theme-blue;
+}
+
+// Para darle aire (espacio antes de los títulos)
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 84px;
+}
+
+/*
+ * Custom styling for code folding in Quarto with balanced indentation
+ */
+
+/* Target the code-fold details element for button positioning */
+.cell details.code-fold {
+  margin-left: 2em !important;
+}
+
+/* Target the summary button specifically */
+.cell details.code-fold > summary.code-fold-header {
+  position: relative;
+  left: 0;
+  margin-left: 0 !important;
+}
+
+/* Style for the code summary text */
+.code-fold-header-text {
+  display: inline-block;
+  margin-left: 0 !important;
+}
+
+/* Make sure code blocks are properly indented when shown, but not doubly indented */
+.cell details.code-fold[open] div.sourceCode {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* Base indentation for code blocks */
+pre.sourceCode {
+  margin-left: 0;
+}
+
+/* Add subtle styling to make code blocks visually distinct */
+div.sourceCode {
+  border-left: 3px solid #ddd;
+  padding-left: 1em;
+}
+
+// Custom parallax styles
+// .parallax-container {
+//   position: relative;
+// }
+// 
+// .parallax-image-container {
+//   background-image: url('r.jpg');
+//   height: 200px; // Use viewport height to fill the screen
+//   background-attachment: scroll; // Remove fixed attachment for natural scrolling
+//   background-position: center top; // Align to the top initially
+//   background-repeat: no-repeat;
+//   background-size: contain; // Show the entire image without cropping
+//   opacity: 1;
+// }
+
+// eso se usa con esto:
+// <br/><br/>
+// 
+// <div class="parallax-container"><div class="parallax-image-container"></div></div>
+// 
+// <br/><br/>
+
+// Para más postas ir a ver este sitio
+// https://www.productive-r-workflow.com/quarto-tricks

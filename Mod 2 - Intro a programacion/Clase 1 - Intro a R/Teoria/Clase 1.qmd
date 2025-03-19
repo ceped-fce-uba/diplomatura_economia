@@ -11,6 +11,42 @@ theme:
 editor: visual
 ---
 
+<div class="parallax-container">
+  <div class="parallax-image-container parallax-scroll" id="parallax-image"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const parallaxImage = document.getElementById('parallax-image');
+  
+  // Set initial background position
+  parallaxImage.style.backgroundPosition = 'center -50px';
+  
+  window.addEventListener('scroll', function() {
+    // Calculate viewport position
+    const scrolled = window.pageYOffset;
+    
+    // Get the parallax container position
+    const container = parallaxImage.parentElement;
+    const containerRect = container.getBoundingClientRect();
+    const containerTop = containerRect.top + scrolled;
+    
+    // Calculate how far the container is from the top of viewport
+    const distanceFromTop = containerTop - scrolled;
+    
+    // Only apply effect when container is in viewport
+    if (distanceFromTop < window.innerHeight && distanceFromTop + containerRect.height > 0) {
+      // Adjust the divisor (3) to control parallax intensity
+      // Lower number = more movement
+      const yPos = -50 + (scrolled - containerTop) / 3;
+      
+      // Apply parallax effect
+      parallaxImage.style.backgroundPosition = `center ${yPos}px`;
+    }
+  });
+});
+</script>
+
 ## ¿Qué es R?
 
 R es un lenguaje de programación, y un entorno de software libre con múltiples aplicaciones. Fue desarrollado durante los años 90´ en la Universidad de Auckland, y esta inspirado en el lenguaje S proveniente de los años 70´.

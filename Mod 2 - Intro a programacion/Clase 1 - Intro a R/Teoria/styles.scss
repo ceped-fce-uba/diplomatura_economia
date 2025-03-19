@@ -41,27 +41,36 @@ h1, .h1, h2, .h2, h3, .h3 {
     margin-top: 84px;
 }
 
-// Custom parallax styles
+/* Enhanced Full-Width Parallax for Quarto documents */
+
 .parallax-container {
   position: relative;
+  width: 100%;       /* Takes full width of parent container */
+  height: 250px;     /* Reduced height so image isn't fully visible */
+  margin: 2rem 0;    /* Space before and after */
+  overflow: hidden;  /* Hide overflow */
 }
 
 .parallax-image-container {
-  background-image: url('r.jpg');
-  height: 200px; // Use viewport height to fill the screen
-  background-attachment: scroll; // Remove fixed attachment for natural scrolling
-  background-position: center top; // Align to the top initially
+  /* Use your local image */
+  background-image: url("R.jpg");
+  
+  /* Position settings */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  /* Image display settings */
+  background-position: center top; /* Position from the top */
   background-repeat: no-repeat;
-  background-size: contain; // Show the entire image without cropping
-  opacity: 1;
+  background-size: 100% auto;     /* Width 100%, height auto to maintain aspect ratio */
 }
 
-// eso se usa con esto:
-// <br/><br/>
-// 
-// <div class="parallax-container"><div class="parallax-image-container"></div></div>
-// 
-// <br/><br/>
-
+/* Class for JavaScript parallax effect */
+.parallax-scroll {
+  transition: transform 0.1s ease-out;
+}
 // Para más postas ir a ver este sitio
 // https://www.productive-r-workflow.com/quarto-tricks
