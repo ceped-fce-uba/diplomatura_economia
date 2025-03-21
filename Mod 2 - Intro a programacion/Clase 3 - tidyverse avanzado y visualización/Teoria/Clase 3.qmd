@@ -11,59 +11,91 @@ theme:
 editor: visual
 ---
 
+```{r}
+library(tidyverse)
+library(lubridate)
+```
+
 ## Complejizar tidyverse
 
-Hasta el momento se ha avanzado sobre funciones que componen el paquete `tidyverse` en forma individual, pero no hemos observado esquemas que concatenen estas funciones en un **flujo de trabajo**. Este tipo de esquemas, o procesos, tienden a ser el trabajo más típico de un usuario/a en R, ya que para sintetizar grandes volumenes de información en indicadores o métricas, se requieren procesos previos sobre los datos.
+Hasta el momento se ha avanzado sobre funciones que componen el paquete `tidyverse` en forma individual, pero no hemos observado esquemas que concatenen estas funciones en un **flujo de trabajo más complejos**. Este tipo de esquemas, o procesos, tienden a ser el trabajo más típico de un usuario/a en R, ya que para sintetizar grandes volumenes de información en indicadores o métricas, se requieren procesos previos sobre los datos.
 
+### El operador pipe (%\>%) como conector fundamental
 
-### El operador pipe (%>%) como conector fundamental
+Este instrumento o herramienta es fundamental para los flujos de trabajo, ya que es el operador a través del cual se concatenan las operaciones u ordenes que están codificadas. Su esencia se encuentra en la posibilidad de realizar múltiples operaciones, de forma secuencial y velozmente, al mismo tiempo que dicho conjunto de operaciones quedan escritas en una secuencia de código.
 
+## Flujo de trabajo y base de datos
 
-
-
-### Primera concatenación: desde el group_by() 
+En esta clase abarcaremos el análisis y la práctica de flujos más complejos con `tidyverse`, a partir del uso de una base de datos de SIPA. Para ello, se procederá a importar dicha base y contar con ella en el ambiente de R.
 
 ```{r}
+SIPA <- read.csv("base_sipa.csv")
+```
+
+### Explorar la base
+
+En primer lugar, se puede observar con que variables cuenta la base.
+
+```{r}
+names(SIPA)
+```
+
+Así, dado que una columna se llama "Variable", puede observarse al interior de esta qué etiquetas aparecen y cuál la frecuencia de cada una de estas.
+
+```{r}
+table(SIPA$Variable)
+```
+
+De este modo, es posible incluir una variable de defina el año de cada observación, a fin de obtener datos que den cuenta de una frecuencia anual y no solo mensual.
+
+```{r}
+SIPA1 <- SIPA %>% 
+  mutate(Año = year(Período))
+```
+
+Explicar el comando...
+
+### Primera concatenación: desde el group_by()
+
+Un primer procesamiento de utilidad refiere a la utilización de la función `group_by()`, la cual permite "iterar" algún proceso lógico para todos los valores que toma alguna variable de nuestro dataset. Por ejemplo...
+
+```{r}
+flujo1 <- SIPA1 %>% 
+  group_by(Año, Variable) %>% 
+  summarise(Promedio = mean(Valor))
+
 
 ```
 
+Explicar el comando...
 
+```{r}
+flujo2 <- SIPA1 %>%
+  filter(Variable == "Empleo asalariado en el sector privado") %>% 
+  group_by(Año) %>% 
+  summarise(Promedio = mean(Valor))
 
+```
+
+Explicar el comando...
+
+```{r}
+flujo3 <- SIPA1 %>%
+  filter(Variable == "Empleo en casas particulares") %>% 
+  group_by(Año) %>% 
+  summarise(Promedio = mean(Valor)) %>% 
+  arrange(-Año)
+
+```
 
 Ideas para la primera parte:
 
-1) Buscar los scripts de EPH
-2) Tomar series en niveles, pasarlas a logs y después visualizar
-3) 
-
-
+1)  Buscar los scripts de EPH
+2)  Tomar series en niveles, pasarlas a logs y después visualizar
+3)  
 
 Ideas para la visualización:
 
-1) Mirar boxplots
-
-
-
+1)  Mirar boxplots
 
 Al final mostrar por encima el HTML que hizo Vladi para EPH
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
