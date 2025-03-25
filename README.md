@@ -1,7 +1,7 @@
 # Diplomatura - Programa de Estudios
 
 Este repositorio contiene un detalle del programa de la diplomatura, organizada en 5 módulos. A continuación, se describen los contenidos de cada módulo y sus respectivas clases.  
-La bibliografía se encuentra estructurada por módulos [aquí](https://drive.google.com/drive/folders/1U_ck7uVjZY6-V5-ggrJ6nVFnu3bTciDU?usp=sharing)
+La bibliografía se encuentra estructurada por módulos [aquí](https://drive.google.com/drive/folders/1MOkyekIffcvcanEWP0mp1Z46g4CV3kiY?usp=sharing)
 
 ## Fundamentos de Economía Política
 [![Download](assets/images/boton_clase1.png)](M1_C1.rar) Discusiones clásicas de la economía política     
