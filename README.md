@@ -13,7 +13,7 @@ Los materiales teóricos y prácticos de cada uno de los módulos se pueden desc
 [![Download](assets/images/boton_clase1.png)](M2_C1.rar) Introducción a R y RStudio. Lenguaje básico     
 [![Download](assets/images/boton_clase2.png)](M2_C2.rar) Manipulación de bases de datos I  
 [![Download](assets/images/boton_clase3.png)](M2_C3.rar) Manipulación de bases de datos II    
-[![Download](assets/images/boton_clase4.png)](M2_C3.rar) Visualización en R - Ggplot  
+[![Download](assets/images/boton_clase4.png)](M2_C4.rar) Visualización en R - Ggplot  
 
 ## Indicadores de economía internacional
 
@@ -38,4 +38,4 @@ Los materiales teóricos y prácticos de cada uno de los módulos se pueden desc
 ## Programación en R avanzada
 
 [![Download](assets/images/boton_clase1.png)](M6_C1.rar) Informes en RStudio - Quarto y Markdown   
-[![Download](assets/images/boton_clase2.png)](M&_C2.rar) Control de versiones - Git y Github
+[![Download](assets/images/boton_clase2.png)](M6_C2.rar) Control de versiones - Git y Github
