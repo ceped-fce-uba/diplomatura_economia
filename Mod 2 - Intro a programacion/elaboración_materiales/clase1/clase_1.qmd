@@ -1,50 +1,76 @@
 ---
 title: "Introducción al Software libre R"
 author: "Diplomatura PEEC - UBA"
+output-file: "Clase 1 - Intro a R" 
 format:
   html:
     embed-resources: true
-code-tools: false
-toc: true
-theme: 
-  - styles.scss
+    code-tools: false
+    code-copy: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/teoria_claro.scss
+      dark: ../assets/teoria_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+execute:
+  freeze: auto
 editor: visual
+include-after-body: ../assets/footer.html
 ---
 
 :::: parallax-container
-::: {#parallax-image .parallax-image-container .parallax-scroll}
+::: {#parallax-image .parallax-image-container .parallax-scroll data-image="imgs/R.jpg"}
 :::
 ::::
 
 ```{=html}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const parallaxImage = document.getElementById('parallax-image');
+  // Get all parallax elements
+  const parallaxElements = document.querySelectorAll('.parallax-image-container');
   
-  // Set initial background position
-  parallaxImage.style.backgroundPosition = 'center -50px';
+  parallaxElements.forEach(function(element) {
+    // Set background image from data attribute
+    const imagePath = element.getAttribute('data-image');
+    if (imagePath) {
+      element.style.backgroundImage = `url("${imagePath}")`;
+    }
+    
+    // Set initial background position
+    element.style.backgroundPosition = 'center -50px';
+  });
   
+  // Add scroll event listener
   window.addEventListener('scroll', function() {
     // Calculate viewport position
     const scrolled = window.pageYOffset;
     
-    // Get the parallax container position
-    const container = parallaxImage.parentElement;
-    const containerRect = container.getBoundingClientRect();
-    const containerTop = containerRect.top + scrolled;
-    
-    // Calculate how far the container is from the top of viewport
-    const distanceFromTop = containerTop - scrolled;
-    
-    // Only apply effect when container is in viewport
-    if (distanceFromTop < window.innerHeight && distanceFromTop + containerRect.height > 0) {
-      // Adjust the divisor (3) to control parallax intensity
-      // Lower number = more movement
-      const yPos = -50 + (scrolled - containerTop) / 3;
+    // Apply parallax effect to each element
+    parallaxElements.forEach(function(element) {
+      // Get the parallax container position
+      const container = element.parentElement;
+      const containerRect = container.getBoundingClientRect();
+      const containerTop = containerRect.top + scrolled;
       
-      // Apply parallax effect
-      parallaxImage.style.backgroundPosition = `center ${yPos}px`;
-    }
+      // Calculate how far the container is from the top of viewport
+      const distanceFromTop = containerTop - scrolled;
+      
+      // Only apply effect when container is in viewport
+      if (distanceFromTop < window.innerHeight && distanceFromTop + containerRect.height > 0) {
+        // Adjust the divisor (3) to control parallax intensity
+        const yPos = -50 + (scrolled - containerTop) / 3;
+        
+        // Apply parallax effect
+        element.style.backgroundPosition = `center ${yPos}px`;
+      }
+    });
   });
 });
 </script>
@@ -61,7 +87,7 @@ El Comprehensive R Archive Network (CRAN), fundado en 1997, constituye el reposi
 ```{r}
 #| echo: false
 
-knitr::include_graphics("number-of-submitted-packages-to-CRAN.png")
+knitr::include_graphics("imgs/CRAN.png")
 ```
 
 En 2011, la empresa Posit (antes RStudio) lanzó RStudio, un entorno de desarrollo integrado que transformó la accesibilidad y usabilidad de R. Su interfaz gráfica facilitó la escritura de código, la depuración y la gestión de proyectos, consolidándose como la herramienta estándar para trabajar con R.
@@ -438,7 +464,7 @@ R tiene formatos de archivos propios:
 ```{r}
 x <- 1:15
 y <- list(a = 1, b = TRUE, c = "oops")
-#Para guardar
+#Para guardar (en este caso, en la carpeta output)
 save(x, y, file = "xy.RData")
 #Para leer
 load('xy.RData')
@@ -516,6 +542,50 @@ R tiene por default el encoding **“ISO-8859-1”**, sin embargo el más habitu
 -   Encoding utilizado para abrir un script:File -\> Reopen with Encoding
 -   Encoding default con el que se guardan nuestros Scripts: Tools -\> Global Options -\> Code -\> Saving
 
+## Organización scripts
+
+Por último, es aconsejable mantener en todos los script una misma estructura del tipo:
+
+1.  Limpiar la memoria rm(list=ls())
+2.  Cargar librerías
+3.  Definir directorios
+4.  Definir funciones
+5.  Levantar archivos … procesamiento ….
+
+<!-- -->
+
+n.  grabar resultados
+
+También es útil organizar las partes del script en capítulos. Para eso
+
+`### escribimos el título del capitulo encerrado entre tres o más numerales ###`
+
+## Diferencia entre proyectos y scripts
+
+### Scripts:
+
+Los scripts en R son archivos de texto (.R) que permiten estructurar el código de manera modular. Esto significa que cada segmento del análisis o cada tarea específica se puede desarrollar de forma independiente, facilitando la confección, organización y la reutilización del código. Además, esta estructura modular confiere una gran flexibilidad, ya que permite ejecutar o modificar bloques de código sin necesidad de reestructurar todo el proyecto, lo cual es ideal para realizar experimentos rápidos o pruebas puntuales. Sumado a esto, el uso de scripts posibilita documentar detalladamente cada paso del proceso, lo que resulta de gran ayuda para la depuración y para revisar el trabajo hecho.
+
+### Proyectos R:
+
+Un proyecto en R es, esencialmente, un contenedor que agrupa todos los elementos necesarios para desarrollar un análisis o una aplicación, tales como el código, los datos, los resultados y las configuraciones específicas. Al abrir un proyecto, se establece automáticamente el directorio de trabajo y se cargan los ajustes predefinidos, lo que facilita el uso de rutas relativas (en inglés, *relative paths*) sin importar la ubicación de la carpeta del proyecto.
+
+Esta estructura organizada mejora la reproducibilidad y la colaboración, ya que permite compartir el trabajo o trasladarlo a diferentes computadoras sin que pierda coherencia. Además, los proyectos gestionan la integración con Git, un aspecto que profundizaremos en las últimas clases de la diplomatura.
+
+La forma típica de comenzar a trabajar en R es haciendo doble clic en el archivo `.Rproj`. También es posible (y muy cómodo) acceder a los proyectos abiertos recientemente desde la esquina superior derecha de la interfaz.
+
+### Su uso conjunto:
+
+Les recomendamos trabajar con un `.Rproj` para cada análisis o proyecto. Al hacerlo, se centraliza la configuración del entorno, las rutas de acceso y demás ajustes, lo que garantiza uniformidad durante todo el proceso. Sobre esa base, se recomienda dividir el código en diferentes scripts, asignando a cada uno tareas específicas —por ejemplo, uno para la limpieza de datos, otro para el análisis exploratorio y un tercero para la generación de gráficos—. Esta separación no solo simplifica el mantenimiento y la reutilización del código, sino que también mejora la colaboración en equipo, permitiendo que cada colaborador se familiarice rápidamente con la estructura y el flujo de trabajo.
+
+## Para la clase 2
+
+En la misma carpeta en la encontraron esta presentación hay una guía práctica. Allá van a encontrar ejercicios de diferente dificultad, sus respuestas, y nuestras recomendaciones.
+
+## Extras
+
+A continuación les dejamos algunas cosas más avanzadas: [Lo cierto es que si trabajan siempre con un `.Rproj` entonces no deberían tener que preocuparse por esto que sigue.]{.aside}
+
 ### Directorios
 
 Siempre que escribimos el nombre del archivo, R lo busca en el working directory. Para saber cual es el directorio de trabajo utilizamos la función `getwd()`. Para redefinir el directorio de trabajo, utilizamos la función `setwd`
@@ -564,25 +634,3 @@ dir.exists(resultados.dir)
 ```
 
 La primera línea encuentra la carpeta donde esta guardado el script (si no esta guardado no funciona).La segunda línea crea el nombre del directorio Fuentes. La tercera línea (anulada) crea el directorio Fuentes. La cuarta línea crea el nombre del directorio Resultados. La quinta línea (anulada) crea el directorio Resultados.
-
-## Organización scripts
-
-Por último, es aconsejable mantener en todos los script una misma estructura del tipo:
-
-1.  Limpiar la memoria rm(list=ls())
-2.  Cargar librerías
-3.  Definir directorios
-4.  Definir funciones
-5.  Levantar archivos … procesamiento ….
-
-<!-- -->
-
-n.  grabar resultados
-
-También es útil organizar las partes del script en capítulos. Para eso
-
-`### escribimos el título del capitulo encerrado entre tres o más corchetes ###`
-
-## Diferencia entre proyectos y scripts
-
-## Para la clase 2

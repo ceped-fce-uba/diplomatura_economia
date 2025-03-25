@@ -1,0 +1,5 @@
+library(data.table)
+library(rvest)
+library(xml2)
+library(ggplot2)
+library(httr)
