@@ -1,17 +1,29 @@
 ---
 title: "Práctica 1"
 author: "Diplomatura PEEC - UBA"
+output-file: "Guía Práctica 1" 
 format:
   html:
-    embed-resources: true  # Ensure resources are embedded
+    embed-resources: true
     code-fold: true
     code-summary: "Mostrar respuesta"
-code-tools: false
-toc: true
-theme: 
-  - styles.scss
+    code-tools: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/practica_claro.scss
+      dark: ../assets/practica_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+execute:
+  freeze: auto
 editor: visual
-include-after-body: "footer.html"
+include-after-body: ../assets/footer.html
 ---
 
 ## Consideraciones preliminares
@@ -65,18 +77,14 @@ RESULTADO <- 2 + 2
 
 Guardar en un objeto llamado *Cosa*, lo que arroje la evaluación 2 + 2 == 3.
 
-```         
--   ¿A qué famosa banda de rock argentina hace referencia el ejercicio anterior? (esto era para joderlos a ustedes, no se preocupen por favor...)
-
 -   Pásen también este objeto a la función class() para ver qué clase de objeto es.
-```
 
--   Intenten llamar, desde la consola (no en el script) la variable COSA (en máyusculas). ¿Qué ocurre?
+-   Intenten llamar, desde la consola (no en el script) la variable COSA (en máyusculas). ¿Qué ocurre? ¿Por qué?
 
 ### Métodos de acceso
 
 -   Levantar alguna basesita se me ocurre, quizá la del SIPA ya que estamos.
--   Instalar, si no lo hicieron durante la clase, el paquete tidyverse, con la función `library()`
+-   Instalar, si no lo hicieron durante la clase, el paquete tidyverse, con la función `install_packages()`[Al instalar los paquetes debemos pasarlos a `install_packages()` con el nombre entre comillas. Pero cuando los cargamos con `library()` van sin éstas.]{.aside}
 
 ### Ejercicios avanzados
 

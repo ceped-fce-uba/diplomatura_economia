@@ -634,3 +634,15 @@ dir.exists(resultados.dir)
 ```
 
 La primera línea encuentra la carpeta donde esta guardado el script (si no esta guardado no funciona).La segunda línea crea el nombre del directorio Fuentes. La tercera línea (anulada) crea el directorio Fuentes. La cuarta línea crea el nombre del directorio Resultados. La quinta línea (anulada) crea el directorio Resultados.
+
+## Referencias {.unnumbered}
+
+```{=html}
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+  <div id="ref-r-core" class="csl-entry">
+    R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+  </div>
+
+</div>
+```

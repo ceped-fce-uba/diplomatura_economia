@@ -198,7 +198,6 @@ SIPA %>%
   )
 ```
 
-
 # More informative variable exploration
 
 ```{r}
@@ -226,7 +225,7 @@ SIPA %>%
 
 ## Advanced Tidyverse Workflows
 
-### The pipe operator: From %>% to |>
+### The pipe operator: From %\>% to \|\>
 
 R 4.1 introduced a native pipe operator `|>` as an alternative to the magrittr pipe `%>%`. Both accomplish similar goals, but the native pipe is slightly faster and has fewer dependencies.
 
@@ -359,16 +358,14 @@ SIPA |>
   theme(legend.position = "bottom")
 ```
 
-
 ### Lo que aprendimos
 
 Throughout this session, we've focused on building a critical analytical toolkit that goes beyond basic data manipulation. We've seen how:
 
-- The pipe operator (`%>%` and `|>`) allows for clearer, more maintainable code by creating logical data processing flows
-- Modern visualization techniques help reveal patterns in economic data that might otherwise remain hidden
-- Time series analysis provides formal methods to understand trends, seasonal patterns, and make forecasts
-- Critical economic perspectives challenge us to look beyond the surface numbers
-
+-   The pipe operator (`%>%` and `|>`) allows for clearer, more maintainable code by creating logical data processing flows
+-   Modern visualization techniques help reveal patterns in economic data that might otherwise remain hidden
+-   Time series analysis provides formal methods to understand trends, seasonal patterns, and make forecasts
+-   Critical economic perspectives challenge us to look beyond the surface numbers
 
 ### Recursos adicionales
 
@@ -376,12 +373,10 @@ Para quienes quieran profundizar en estos conceptos:
 
 #### R y Tidyverse
 
-- Wickham, H., & Grolemund, G. (2023). *R for Data Science (2nd ed)*. O'Reilly Media. [https://r4ds.hadley.nz/](https://r4ds.hadley.nz/)
-- Healy, K. (2019). *Data Visualization: A Practical Introduction*. Princeton University Press. [https://socviz.co/](https://socviz.co/)
-- Hyndman, R.J., & Athanasopoulos, G. (2021). *Forecasting: Principles and Practice (3rd ed)*. OTexts. [https://otexts.com/fpp3/](https://otexts.com/fpp3/)
+-   Wickham, H., & Grolemund, G. (2023). *R for Data Science (2nd ed)*. O'Reilly Media. <https://r4ds.hadley.nz/>
+-   Healy, K. (2019). *Data Visualization: A Practical Introduction*. Princeton University Press. <https://socviz.co/>
 
-
-## Bibliografía {.unnumbered}
+## Referencias {.unnumbered}
 
 ```{=html}
 <div id="refs" class="references csl-bib-body hanging-indent">
@@ -396,6 +391,10 @@ Para quienes quieran profundizar en estos conceptos:
 
   <div id="ref-dataviz" class="csl-entry">
     DataViz Inspiration. (n.d.). Retrieved from <a href="https://www.dataviz-inspiration.com/">https://www.dataviz-inspiration.com/</a>
+  </div>
+
+  <div id="ref-r-core" class="csl-entry">
+    R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
   </div>
 
 </div>
