@@ -1,14 +1,28 @@
 ---
-title: "Introducción a tidyverse"
+title: "Clase 2 - Intro a Tidyverse"
 author: "Diplomatura PEEC - UBA"
+output-file: "Clase 2 - Intro a Tidyverse" 
 format:
   html:
     embed-resources: true
-code-tools: false
-toc: true
-theme: 
-  - styles.scss
+    code-tools: false
+    code-copy: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/teoria_claro.scss
+      dark: ../assets/teoria_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+execute:
+  freeze: auto
 editor: visual
+include-after-body: ../assets/footer.html
 ---
 
 ## Tidyverse
@@ -173,6 +187,12 @@ Otra implementación muy importante del paquete dplyr son las funciones para uni
 
 ```{r}
 #| echo: false
+#| fig-width: 10
+#| fig-height: 6
+#| out-width: "80%"
+#| fig-align: "center"
+#| fig-cap: "Diagrama de tipos de join estilo SQL. *Fuente: [intro2r.library.duke.edu/join.html](https://intro2r.library.duke.edu/join.html)*"
+#| fig-cap-location: bottom
 
 knitr::include_graphics("joins.png")
 ```
@@ -270,3 +290,17 @@ Esta función puede utilizarse para hacer tabulados univariados o bivariados en 
 ```{r}
 table(Datos$SECTOR)
 ```
+
+::::: {#refs .references .csl-bib-body .hanging-indent}
+::: {#ref-r-core .csl-entry}
+```         
+R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+```
+:::
+
+::: {#ref-ceped .csl-entry}
+```         
+CEPED. (2022). Ceped.data. Portal de difusión de datos del Centro de Estudios sobre Población, Empleo y Desarrollo (CEPED-UBA), Universidad de Buenos Aires, Buenos Aires. Recuperado de <a href="https://www.ceped-data.shinyapps.io/">https://www.ceped-data.shinyapps.io/</a>
+```
+:::
+:::::
