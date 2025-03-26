@@ -1,6 +1,5 @@
 ---
 title: "Introducción a R y RStudio"
-author: "Diplomatura PEEC - UBA"
 output-file: "Clase 1 - Introducción a R y RStudio" 
 format:
   html:

@@ -1,6 +1,5 @@
 ---
 title: "Clase 2 - Manipulación de bases de datos I"
-author: "Diplomatura PEEC - UBA"
 output-file: "Clase 2 - Manipulación de bases de datos I" 
 format:
   html:
@@ -24,57 +23,6 @@ execute:
 editor: visual
 include-after-body: ../assets/footer.html
 ---
-
-:::: parallax-container
-::: {#parallax-image .parallax-image-container .parallax-scroll data-image="imgs/tidyverse.png"}
-:::
-::::
-
-```{=html}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Get all parallax elements
-  const parallaxElements = document.querySelectorAll('.parallax-image-container');
-  
-  parallaxElements.forEach(function(element) {
-    // Set background image from data attribute
-    const imagePath = element.getAttribute('data-image');
-    if (imagePath) {
-      element.style.backgroundImage = `url("${imagePath}")`;
-    }
-    
-    // Set initial background position
-    element.style.backgroundPosition = 'center -50px';
-  });
-  
-  // Add scroll event listener
-  window.addEventListener('scroll', function() {
-    // Calculate viewport position
-    const scrolled = window.pageYOffset;
-    
-    // Apply parallax effect to each element
-    parallaxElements.forEach(function(element) {
-      // Get the parallax container position
-      const container = element.parentElement;
-      const containerRect = container.getBoundingClientRect();
-      const containerTop = containerRect.top + scrolled;
-      
-      // Calculate how far the container is from the top of viewport
-      const distanceFromTop = containerTop - scrolled;
-      
-      // Only apply effect when container is in viewport
-      if (distanceFromTop < window.innerHeight && distanceFromTop + containerRect.height > 0) {
-        // Adjust the divisor (3) to control parallax intensity
-        const yPos = -50 + (scrolled - containerTop) / 3;
-        
-        // Apply parallax effect
-        element.style.backgroundPosition = `center ${yPos}px`;
-      }
-    });
-  });
-});
-</script>
-```
 
 ## Tidyverse
 
@@ -123,15 +71,17 @@ base_sipa <- read_csv("bases/base_sipa.csv",
          
 str(base_sipa) #str es una abreviatura de structure
 ```
+
 ```{r}
 unique(base_sipa$Variable)
 ```
+
 Función clave de dplyr (mejor meter un "De ahora en más full dplyr"):
+
 ```{r}
 remuneracion_media <- filter(base_sipa,
                              Variable == "Remuneración promedio - con estacionalidad")
 ```
-
 
 ### Levantar archivos de excel
 
@@ -144,10 +94,13 @@ base_ipc <- read_excel("bases/ipc_ceped_data.xlsx", sheet = "Hoja1")
 ```
 
 Podemos ver las primeras 5 filas de la tabla:
+
 ```{r}
 head(base_ipc)
 ```
+
 Una función clave del paquete `dplyr` del tidyverse es `select()`, cuya finalidad es seleccionar un subconjunto de columnas. En este caso vamos a seleccionar las únicas dos columnas que necesitamos de la base del Índice de Precios al Consumidor (IPC).
+
 ```{r}
 ipc_mensual <- select(base_ipc, fecha, valor)
 ```
@@ -159,10 +112,10 @@ ipc_mensual <- rename(ipc_mensual, ipc = valor)
 ```
 
 Ahora, estas dos acciones las podríamos haber hecho con una sola línea, lo cual es más elegante:
+
 ```{r}
 ipc_mensual <- select(base_ipc, fecha, ipc = valor)
 ```
-
 
 ## Dataframes y Tibbles
 
@@ -173,18 +126,18 @@ Acá un repaso sobre qué son
 La opción automática para explorar un dataset es la función `summary()`, que arroja un resumen genérico.
 
 ```{r}
-summary(SIPA)
+summary(base_sipa)
 ```
 
 Una alternativa, del paquete `dplyr` es `summarize()`, con la cual pueden calcular medidas de resumen de columnas específicas.
 
 ```{r}
-SIPA %>%
+base_sipa %>%
   summarize(
-    min_fecha = min(Período),
-    max_fecha = max(Período),
-    min_anio = min(year(Período)),
-    max_anio = max(year(Período))
+    min_fecha = min(Periodo),
+    max_fecha = max(Periodo),
+    min_anio = min(year(Periodo)),
+    max_anio = max(year(Periodo))
   )
 ```
 
@@ -426,16 +379,16 @@ Esta función puede utilizarse para hacer tabulados univariados o bivariados en 
 table(Datos$SECTOR)
 ```
 
-::::: {#refs .references .csl-bib-body .hanging-indent}
-::: {#ref-r-core .csl-entry}
-```         
-R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
-```
-:::
+```{=html}
+<div id="refs" class="references csl-bib-body hanging-indent">
 
-::: {#ref-ceped .csl-entry}
-```         
-CEPED. (2022). Ceped.data. Portal de difusión de datos del Centro de Estudios sobre Población, Empleo y Desarrollo (CEPED-UBA), Universidad de Buenos Aires, Buenos Aires. Recuperado de <a href="https://www.ceped-data.shinyapps.io/">https://www.ceped-data.shinyapps.io/</a>
+  <div id="ref-r-core" class="csl-entry">
+    R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+  </div>
+  
+  <div id="ref-ceped" class="csl-entry">
+    CEPED. (2022). Ceped.data. Portal de difusión de datos del Centro de Estudios sobre Población, Empleo y Desarrollo (CEPED-UBA), Universidad de Buenos Aires, Buenos Aires. Recuperado de <a href="https://www.ceped-data.shinyapps.io/">https://www.ceped-data.shinyapps.io/</a>
+  </div>
+  
+</div>
 ```
-:::
-:::::

@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Diplomatura PEEC - UBA">
 
 <title>Clase 2 - Manipulación de bases de datos I</title>
 <style>
@@ -54,26 +53,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-
-div.csl-bib-body { }
-div.csl-entry {
-clear: both;
-}
-.hanging-indent div.csl-entry {
-margin-left:2em;
-text-indent:-2em;
-}
-div.csl-left-margin {
-min-width:2em;
-float:left;
-}
-div.csl-right-inline {
-margin-left:2em;
-padding-left:1em;
-}
-div.csl-indent {
-margin-left: 2em;
-}</style>
+</style>
 
 
 <script>const sectionChanged = new CustomEvent("quarto-sectionChanged", {
@@ -3102,7 +3082,12 @@ vertical-align: -.125em;
     <h2 id="toc-title">Índice</h2>
    
   <ul>
-  <li><a href="#tidyverse" id="toc-tidyverse" class="nav-link active" data-scroll-target="#tidyverse">Tidyverse</a></li>
+  <li><a href="#tidyverse" id="toc-tidyverse" class="nav-link active" data-scroll-target="#tidyverse">Tidyverse</a>
+  <ul class="collapse">
+  <li><a href="#levantar-archivos-de-excel" id="toc-levantar-archivos-de-excel" class="nav-link" data-scroll-target="#levantar-archivos-de-excel">Levantar archivos de excel</a></li>
+  </ul></li>
+  <li><a href="#dataframes-y-tibbles" id="toc-dataframes-y-tibbles" class="nav-link" data-scroll-target="#dataframes-y-tibbles">Dataframes y Tibbles</a></li>
+  <li><a href="#pruebas-sipa" id="toc-pruebas-sipa" class="nav-link" data-scroll-target="#pruebas-sipa">Pruebas SIPA</a></li>
   <li><a href="#dplyr" id="toc-dplyr" class="nav-link" data-scroll-target="#dplyr">Dplyr</a>
   <ul class="collapse">
   <li><a href="#filter" id="toc-filter" class="nav-link" data-scroll-target="#filter">filter()</a></li>
@@ -3117,6 +3102,7 @@ vertical-align: -.125em;
   <li><a href="#joins" id="toc-joins" class="nav-link" data-scroll-target="#joins">Joins</a>
   <ul class="collapse">
   <li><a href="#left_join" id="toc-left_join" class="nav-link" data-scroll-target="#left_join">left_join()</a></li>
+  <li><a href="#ejemplo-con-base-del-sip" id="toc-ejemplo-con-base-del-sip" class="nav-link" data-scroll-target="#ejemplo-con-base-del-sip">Ejemplo con base del SIP</a></li>
   </ul></li>
   <li><a href="#tidyr" id="toc-tidyr" class="nav-link" data-scroll-target="#tidyr">Tidyr</a>
   <ul class="collapse">
@@ -3146,12 +3132,6 @@ vertical-align: -.125em;
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Diplomatura PEEC - UBA </p>
-          </div>
-  </div>
     
   
     
@@ -3162,54 +3142,6 @@ vertical-align: -.125em;
 </header>
 
 
-<div class="parallax-container">
-<div id="parallax-image" class="parallax-image-container parallax-scroll" data-image="imgs/tidyverse.png">
-
-</div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Get all parallax elements
-  const parallaxElements = document.querySelectorAll('.parallax-image-container');
-  
-  parallaxElements.forEach(function(element) {
-    // Set background image from data attribute
-    const imagePath = element.getAttribute('data-image');
-    if (imagePath) {
-      element.style.backgroundImage = `url("${imagePath}")`;
-    }
-    
-    // Set initial background position
-    element.style.backgroundPosition = 'center -50px';
-  });
-  
-  // Add scroll event listener
-  window.addEventListener('scroll', function() {
-    // Calculate viewport position
-    const scrolled = window.pageYOffset;
-    
-    // Apply parallax effect to each element
-    parallaxElements.forEach(function(element) {
-      // Get the parallax container position
-      const container = element.parentElement;
-      const containerRect = container.getBoundingClientRect();
-      const containerTop = containerRect.top + scrolled;
-      
-      // Calculate how far the container is from the top of viewport
-      const distanceFromTop = containerTop - scrolled;
-      
-      // Only apply effect when container is in viewport
-      if (distanceFromTop < window.innerHeight && distanceFromTop + containerRect.height > 0) {
-        // Adjust the divisor (3) to control parallax intensity
-        const yPos = -50 + (scrolled - containerTop) / 3;
-        
-        // Apply parallax effect
-        element.style.backgroundPosition = `center ${yPos}px`;
-      }
-    });
-  });
-});
-</script>
 <section id="tidyverse" class="level2">
 <h2 class="anchored" data-anchor-id="tidyverse">Tidyverse</h2>
 <p>Tidyverse es un conjunto de paquetes de R que comparten una filosofía de diseño común y son fáciles de usar en conjunto. Fue creado para facilitar la manipulación, visualización y análisis de datos de manera eficiente, integrando una serie de herramientas que permiten trabajar con datos de forma coherente y fluida. Entre los paquetes más conocidos de tidyverse se encuentran <code>ggplot2</code> para la visualización, <code>dplyr</code> para la manipulación de datos, <code>tidyr</code> para la organización de datos, y <code>readr</code> para la importación de datos, entre otros.</p>
@@ -3252,6 +3184,128 @@ document.addEventListener('DOMContentLoaded', function() {
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Privado_Registrado&quot;</span>,<span class="st">&quot;Público&quot;</span>,<span class="st">&quot;Total&quot;</span>)</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>Datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(OCUPADOS, FECHA, SECTOR)</span></code></pre></div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>base_sipa <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;bases/base_sipa.csv&quot;</span>, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>         </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(base_sipa) <span class="co">#str es una abreviatura de structure</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>spc_tbl_ [5,118 × 4] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ Periodo  : POSIXct[1:5118], format: &quot;2009-01-01&quot; &quot;2009-01-01&quot; ...
+ $ Variable : chr [1:5118] &quot;Asalariados registrados en el sector privado&quot; &quot;Asalariados registrados en el sector privado&quot; &quot;Asalariados registrados en el sector privado&quot; &quot;Asalariados registrados en el sector privado&quot; ...
+ $ Geografia: chr [1:5118] &quot;BUENOS AIRES&quot; &quot;Cdad. Autónoma \r\nde Buenos Aires&quot; &quot;CATAMARCA&quot; &quot;CHACO&quot; ...
+ $ Valor    : num [1:5118] 1787.6 1469.9 29.8 59.9 93.3 ...
+ - attr(*, &quot;spec&quot;)=
+  .. cols(
+  ..   Periodo = col_datetime(format = &quot;&quot;),
+  ..   Variable = col_character(),
+  ..   Geografia = col_character(),
+  ..   Valor = col_double()
+  .. )
+ - attr(*, &quot;problems&quot;)=&lt;externalptr&gt; </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(base_sipa<span class="sc">$</span>Variable)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] &quot;Asalariados registrados en el sector privado&quot;
+ [2] &quot;Empleo asalariado en el sector privado&quot;      
+ [3] &quot;Empleo asalariado en el sector público&quot;      
+ [4] &quot;Empleo en casas particulares&quot;                
+ [5] &quot;Trabajo Independientes Autónomos&quot;            
+ [6] &quot;Trabajo Independientes Monotributo&quot;          
+ [7] &quot;Trabajo Independientes MonotributoSocial&quot;    
+ [8] &quot;Total&quot;                                       
+ [9] &quot;Remuneración mediana - con estacionalidad&quot;   
+[10] &quot;Remuneración mediana - sin estacionalidad&quot;   
+[11] &quot;Remuneración promedio - con estacionalidad&quot;  
+[12] &quot;Remuneración promedio - sin estacionalidad&quot;  </code></pre>
+</div>
+</div>
+<p>Función clave de dplyr (mejor meter un “De ahora en más full dplyr”):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>remuneracion_media <span class="ot">&lt;-</span> <span class="fu">filter</span>(base_sipa,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                             Variable <span class="sc">==</span> <span class="st">&quot;Remuneración promedio - con estacionalidad&quot;</span>)</span></code></pre></div>
+</div>
+<section id="levantar-archivos-de-excel" class="level3">
+<h3 class="anchored" data-anchor-id="levantar-archivos-de-excel">Levantar archivos de excel</h3>
+<p>En la práctica, es posible que se encuentren más seguido en situación de levantar archivos de Excel. Esto tiene sus particularidades y todo un paquete dedicado a ello: <code>readxl</code>. Éste es parte de la familia del tidyverse pero por no ser del núcleo duro del ecosistema tienen que importarlo aparte. Verán que la sintaxis es similar y que su uso es intuitivo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl) <span class="co">#en general, pero nostros ya importamos el tidyverse</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>base_ipc <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;bases/ipc_ceped_data.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;Hoja1&quot;</span>)</span></code></pre></div>
+</div>
+<p>Podemos ver las primeras 5 filas de la tabla:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(base_ipc)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  nombre.variable         ANO4 sub   fecha               valor      var metadata
+  &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt; &lt;dttm&gt;              &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   
+1 IPC Mensual (Enero 20…  2000 1     2000-01-01 00:00:00  58.5  0.845   Esta va…
+2 IPC Mensual (Enero 20…  2000 2     2000-02-01 00:00:00  58.5  0.00410 Esta va…
+3 IPC Mensual (Enero 20…  2000 3     2000-03-01 00:00:00  58.2 -0.528   Esta va…
+4 IPC Mensual (Enero 20…  2000 4     2000-04-01 00:00:00  58.1 -0.112   Esta va…
+5 IPC Mensual (Enero 20…  2000 5     2000-05-01 00:00:00  57.9 -0.389   Esta va…
+6 IPC Mensual (Enero 20…  2000 6     2000-06-01 00:00:00  57.8 -0.185   Esta va…</code></pre>
+</div>
+</div>
+<p>Una función clave del paquete <code>dplyr</code> del tidyverse es <code>select()</code>, cuya finalidad es seleccionar un subconjunto de columnas. En este caso vamos a seleccionar las únicas dos columnas que necesitamos de la base del Índice de Precios al Consumidor (IPC).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ipc_mensual <span class="ot">&lt;-</span> <span class="fu">select</span>(base_ipc, fecha, valor)</span></code></pre></div>
+</div>
+<p>Otra función importante: <code>rename()</code>, con la cual renombramos columnas a partir de la sintaxis nombre_nuevo = nombre_viejo. Reescribamos la base del IPC mensual con este cambio:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ipc_mensual <span class="ot">&lt;-</span> <span class="fu">rename</span>(ipc_mensual, <span class="at">ipc =</span> valor)</span></code></pre></div>
+</div>
+<p>Ahora, estas dos acciones las podríamos haber hecho con una sola línea, lo cual es más elegante:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ipc_mensual <span class="ot">&lt;-</span> <span class="fu">select</span>(base_ipc, fecha, <span class="at">ipc =</span> valor)</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="dataframes-y-tibbles" class="level2">
+<h2 class="anchored" data-anchor-id="dataframes-y-tibbles">Dataframes y Tibbles</h2>
+<p>Acá un repaso sobre qué son</p>
+</section>
+<section id="pruebas-sipa" class="level2">
+<h2 class="anchored" data-anchor-id="pruebas-sipa">Pruebas SIPA</h2>
+<p>La opción automática para explorar un dataset es la función <code>summary()</code>, que arroja un resumen genérico.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(base_sipa)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Periodo                         Variable          Geografia        
+ Min.   :2009-01-01 00:00:00.00   Length:5118        Length:5118       
+ 1st Qu.:2012-07-01 00:00:00.00   Class :character   Class :character  
+ Median :2015-01-01 00:00:00.00   Mode  :character   Mode  :character  
+ Mean   :2015-10-10 08:23:04.28                                        
+ 3rd Qu.:2018-12-01 00:00:00.00                                        
+ Max.   :2024-11-01 00:00:00.00                                        
+     Valor          
+ Min.   :     20.6  
+ 1st Qu.:     95.3  
+ Median :    141.2  
+ Mean   :  16916.7  
+ 3rd Qu.:   1930.7  
+ Max.   :1627916.6  </code></pre>
+</div>
+</div>
+<p>Una alternativa, del paquete <code>dplyr</code> es <code>summarize()</code>, con la cual pueden calcular medidas de resumen de columnas específicas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>base_sipa <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_fecha =</span> <span class="fu">min</span>(Periodo),</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_fecha =</span> <span class="fu">max</span>(Periodo),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_anio =</span> <span class="fu">min</span>(<span class="fu">year</span>(Periodo)),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_anio =</span> <span class="fu">max</span>(<span class="fu">year</span>(Periodo))</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  min_fecha           max_fecha           min_anio max_anio
+  &lt;dttm&gt;              &lt;dttm&gt;                 &lt;dbl&gt;    &lt;dbl&gt;
+1 2009-01-01 00:00:00 2024-11-01 00:00:00     2009     2024</code></pre>
+</div>
+</div>
 </section>
 <section id="dplyr" class="level2">
 <h2 class="anchored" data-anchor-id="dplyr">Dplyr</h2>
@@ -3262,8 +3316,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <h3 class="anchored" data-anchor-id="filter">filter()</h3>
 <p>Permite filtrar la tabla acorde al cumplimiento de condiciones lógicas</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="sc">%&gt;%</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">filter</span>(SECTOR <span class="sc">==</span> <span class="st">&quot;Total&quot;</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">filter</span>(SECTOR <span class="sc">==</span> <span class="st">&quot;Total&quot;</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  OCUPADOS  FECHA SECTOR
 1 10931300 Ene-12  Total
@@ -3273,8 +3327,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 <p>En este caso, se exige filtrar por todos los casos cuya categoría sea idéntica a “Total”. A su vez, es posible agregar condiciones:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(SECTOR <span class="sc">==</span> <span class="st">&quot;Total&quot;</span>, OCUPADOS <span class="sc">&gt;</span> <span class="dv">10931300</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(SECTOR <span class="sc">==</span> <span class="st">&quot;Total&quot;</span>, OCUPADOS <span class="sc">&gt;</span> <span class="dv">10931300</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  OCUPADOS  FECHA SECTOR
 1 10982740 Feb-12  Total
@@ -3283,8 +3337,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 <p>Nótese que en este caso al separar con una <code>,</code> las condiciones se exige el cumplimiento de ambas. En caso de desear que se cumpla una sola condición debe utilizarse el caracter <code>|</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="sc">%&gt;%</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(OCUPADOS <span class="sc">&gt;</span> <span class="dv">10931300</span> <span class="sc">|</span> SECTOR <span class="sc">==</span> <span class="st">&quot;Privado_Registrado&quot;</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(OCUPADOS <span class="sc">&gt;</span> <span class="dv">10931300</span> <span class="sc">|</span> SECTOR <span class="sc">==</span> <span class="st">&quot;Privado_Registrado&quot;</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  OCUPADOS  FECHA             SECTOR
 1  6105953 Ene-12 Privado_Registrado
@@ -3299,8 +3353,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <h3 class="anchored" data-anchor-id="rename">rename()</h3>
 <p>Permite renombrar una columna de la tabla o base de datos, a través de la siguiente lógica: <code>Data %&gt;% rename(nuevo_nombre = viejo_nombre)</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="sc">%&gt;%</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Periodo =</span> FECHA)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Periodo =</span> FECHA)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  OCUPADOS Periodo             SECTOR
 1  6105953  Ene-12 Privado_Registrado
@@ -3321,9 +3375,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <p>Permite crear una nueva variable a la tabla o base de datos, que puede ser el resultado de operaciones sobre otras variables de la misma base.</p>
 <p>En caso de especificar el nombre de una columna existente, el resultado de la operación realizada reemplazará la información de la columna con dicho nombre.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="ot">&lt;-</span> Datos <span class="sc">%&gt;%</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Promedio =</span> <span class="fu">mean</span>(OCUPADOS))</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>Datos</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="ot">&lt;-</span> Datos <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Promedio =</span> <span class="fu">mean</span>(OCUPADOS))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>Datos</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  OCUPADOS  FECHA             SECTOR Promedio
 1  6105953 Ene-12 Privado_Registrado  6552432
@@ -3343,11 +3397,11 @@ document.addEventListener('DOMContentLoaded', function() {
 <p>Permite definir el contenido de una variable, donde el valor particular depende de una <strong>condición establecida al interior de esta función</strong>. En caso de no cumplir ninguna de las condiciones establecidas la variable tomara valor <strong>NA</strong>.</p>
 <p>La sintaxis de la función es <code>case_when(condición lógica1 ~ valor asignado1)</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="ot">&lt;-</span> Datos <span class="sc">%&gt;%</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">caso_cuando =</span> <span class="fu">case_when</span>(SECTOR <span class="sc">==</span> <span class="st">&quot;Privado_Registrado&quot;</span>    <span class="sc">~</span> OCUPADOS<span class="sc">*</span><span class="dv">2</span>,</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                                 SECTOR <span class="sc">==</span> <span class="st">&quot;Público&quot;</span>               <span class="sc">~</span> OCUPADOS<span class="sc">*</span><span class="dv">3</span>,</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                                 SECTOR <span class="sc">==</span> <span class="st">&quot;Privado_No_Registrado&quot;</span> <span class="sc">~</span> OCUPADOS<span class="sc">*</span><span class="dv">5</span> ))</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>Datos</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="ot">&lt;-</span> Datos <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">caso_cuando =</span> <span class="fu">case_when</span>(SECTOR <span class="sc">==</span> <span class="st">&quot;Privado_Registrado&quot;</span>    <span class="sc">~</span> OCUPADOS<span class="sc">*</span><span class="dv">2</span>,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>                                 SECTOR <span class="sc">==</span> <span class="st">&quot;Público&quot;</span>               <span class="sc">~</span> OCUPADOS<span class="sc">*</span><span class="dv">3</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>                                 SECTOR <span class="sc">==</span> <span class="st">&quot;Privado_No_Registrado&quot;</span> <span class="sc">~</span> OCUPADOS<span class="sc">*</span><span class="dv">5</span> ))</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>Datos</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  OCUPADOS  FECHA             SECTOR Promedio caso_cuando
 1  6105953 Ene-12 Privado_Registrado  6552432    12211906
@@ -3366,9 +3420,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <h3 class="anchored" data-anchor-id="select">select()</h3>
 <p>Permite especificar la serie de columnas que se desea conservar de una base de datos. También pueden especificarse las columnas que se desean descartar (agregándoles un -, o sin nombrarlas al interior de la función). Muy útil para agilizar el trabajo en bases de datos de gran tamaño.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Datos2 <span class="ot">&lt;-</span> Datos <span class="sc">%&gt;%</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(OCUPADOS, FECHA, SECTOR)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>Datos2</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>Datos2 <span class="ot">&lt;-</span> Datos <span class="sc">%&gt;%</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(OCUPADOS, FECHA, SECTOR)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>Datos2</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  OCUPADOS  FECHA             SECTOR
 1  6105953 Ene-12 Privado_Registrado
@@ -3383,19 +3437,19 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 </div>
 <p>Notar que puede elegirse el orden de las columnas (variables) al escribirlas.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="in">Datos &lt;- Datos %&gt;% </span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="in">  select(-c(Doble, caso_cuando))</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="in">Datos</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="in">Datos &lt;- Datos %&gt;% </span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="in">  select(-c(Doble, caso_cuando))</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="in">Datos</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div>
 </section>
 <section id="arrange" class="level3">
 <h3 class="anchored" data-anchor-id="arrange">arrange()</h3>
 <p>Permite ordenar la tabla por los valores de determinada/s variable/s. Es útil cuando deben hacerse otras operaciones que requieran del ordenamiento previo de la tabla.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="ot">&lt;-</span> Datos <span class="sc">%&gt;%</span> </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(SECTOR, OCUPADOS)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>Datos</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="ot">&lt;-</span> Datos <span class="sc">%&gt;%</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(SECTOR, OCUPADOS)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>Datos</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  OCUPADOS  FECHA             SECTOR Promedio caso_cuando
 1  6103382 Feb-12 Privado_Registrado  6552432    12206764
@@ -3415,8 +3469,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <h3 class="anchored" data-anchor-id="summarise">summarise()</h3>
 <p>Crea un nuevo objeto de tipo data framme, es decir puede utilizarse para crear tablas que sinteticen la información o grandes bases de datos con algún cálculo extra.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="sc">%&gt;%</span> </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Indprom =</span> <span class="fu">mean</span>(OCUPADOS))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Indprom =</span> <span class="fu">mean</span>(OCUPADOS))</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Indprom
 1 6552432</code></pre>
@@ -3428,9 +3482,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <p>Esta función permite agrupar una operación para cada valor de una variable especificada. La función separa a la tabla según los valores de la variable indicada, y realiza las operaciones que se especifica continuación, de manera independiente para cada una de las “subtablas”.</p>
 <p>En nuestro ejemplo, se calcula la cantidad de ocupados sobre habitantes totales de Argentina por fecha (se asumen 45 millones de habitantes).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="sc">%&gt;%</span> </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(FECHA) <span class="sc">%&gt;%</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">&quot;Ocupados por habitante&quot;</span> <span class="ot">=</span> OCUPADOS<span class="sc">/</span><span class="dv">45000000</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>Datos <span class="sc">%&gt;%</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(FECHA) <span class="sc">%&gt;%</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">&quot;Ocupados por habitante&quot;</span> <span class="ot">=</span> OCUPADOS<span class="sc">/</span><span class="dv">45000000</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 2
 # Groups:   FECHA [3]
@@ -3466,24 +3520,24 @@ document.addEventListener('DOMContentLoaded', function() {
 <h3 class="anchored" data-anchor-id="left_join">left_join()</h3>
 <p>Veamos un ejemplo de la función left_join (una de las más utilizadas en la práctica). Utilicemos una base similar a la anterior, pero en este caso serán datos del <a href="https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-31-61">Indice de Salarios</a>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>INDICE  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">100</span>,   <span class="dv">100</span>,   <span class="dv">100</span>,</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>             <span class="fl">101.8</span>, <span class="fl">101.2</span>, <span class="fl">100.73</span>,</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>             <span class="fl">102.9</span>, <span class="fl">102.4</span>, <span class="fl">103.2</span>)</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>FECHA  <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="st">&quot;Oct-16&quot;</span>, <span class="st">&quot;Oct-16&quot;</span>, <span class="st">&quot;Oct-16&quot;</span>,</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;Nov-16&quot;</span>, <span class="st">&quot;Nov-16&quot;</span>, <span class="st">&quot;Nov-16&quot;</span>,</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;Dic-16&quot;</span>, <span class="st">&quot;Dic-16&quot;</span>, <span class="st">&quot;Dic-16&quot;</span>)</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>GRUPO  <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="st">&quot;Privado_Registrado&quot;</span>,<span class="st">&quot;Público&quot;</span>,<span class="st">&quot;Privado_No_Registrado&quot;</span>,</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;Privado_Registrado&quot;</span>,<span class="st">&quot;Público&quot;</span>,<span class="st">&quot;Privado_No_Registrado&quot;</span>,</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;Privado_Registrado&quot;</span>,<span class="st">&quot;Público&quot;</span>,<span class="st">&quot;Privado_No_Registrado&quot;</span>)</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>IS <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(INDICE, FECHA, GRUPO)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>INDICE  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">100</span>,   <span class="dv">100</span>,   <span class="dv">100</span>,</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>             <span class="fl">101.8</span>, <span class="fl">101.2</span>, <span class="fl">100.73</span>,</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>             <span class="fl">102.9</span>, <span class="fl">102.4</span>, <span class="fl">103.2</span>)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>FECHA  <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="st">&quot;Oct-16&quot;</span>, <span class="st">&quot;Oct-16&quot;</span>, <span class="st">&quot;Oct-16&quot;</span>,</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;Nov-16&quot;</span>, <span class="st">&quot;Nov-16&quot;</span>, <span class="st">&quot;Nov-16&quot;</span>,</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;Dic-16&quot;</span>, <span class="st">&quot;Dic-16&quot;</span>, <span class="st">&quot;Dic-16&quot;</span>)</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>GRUPO  <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="st">&quot;Privado_Registrado&quot;</span>,<span class="st">&quot;Público&quot;</span>,<span class="st">&quot;Privado_No_Registrado&quot;</span>,</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;Privado_Registrado&quot;</span>,<span class="st">&quot;Público&quot;</span>,<span class="st">&quot;Privado_No_Registrado&quot;</span>,</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;Privado_Registrado&quot;</span>,<span class="st">&quot;Público&quot;</span>,<span class="st">&quot;Privado_No_Registrado&quot;</span>)</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>IS <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(INDICE, FECHA, GRUPO)</span></code></pre></div>
 </div>
 <p>Para ello, crearemos en forma simultanea previamente un dataframe que contenga un Ponderador para cada uno de los Grupos del Dataframe IS.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>Ponderadores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">GRUPO =</span> <span class="fu">c</span>(<span class="st">&quot;Privado_Registrado&quot;</span>,<span class="st">&quot;Público&quot;</span>,<span class="st">&quot;Privado_No_Registrado&quot;</span>),</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">PONDERADOR =</span> <span class="fu">c</span>(<span class="fl">50.16</span>,<span class="fl">29.91</span>,<span class="fl">19.93</span>))</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>IS_join <span class="ot">&lt;-</span> IS <span class="sc">%&gt;%</span> </span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(.,Ponderadores, <span class="at">by =</span> <span class="st">&quot;GRUPO&quot;</span>)</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>IS_join</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>Ponderadores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">GRUPO =</span> <span class="fu">c</span>(<span class="st">&quot;Privado_Registrado&quot;</span>,<span class="st">&quot;Público&quot;</span>,<span class="st">&quot;Privado_No_Registrado&quot;</span>),</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">PONDERADOR =</span> <span class="fu">c</span>(<span class="fl">50.16</span>,<span class="fl">29.91</span>,<span class="fl">19.93</span>))</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>IS_join <span class="ot">&lt;-</span> IS <span class="sc">%&gt;%</span> </span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(.,Ponderadores, <span class="at">by =</span> <span class="st">&quot;GRUPO&quot;</span>)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>IS_join</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  INDICE  FECHA                 GRUPO PONDERADOR
 1 100.00 Oct-16    Privado_Registrado      50.16
@@ -3499,10 +3553,10 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 <p>Aprovecharemos el ejemplo para introducir la función weigthed.mean, y así calcular un Indice Ponderado.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>IS_Indice_Gral <span class="ot">&lt;-</span> IS_join <span class="sc">%&gt;%</span> </span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(FECHA) <span class="sc">%&gt;%</span> </span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Indice_Gral =</span> <span class="fu">weighted.mean</span>(INDICE,<span class="at">w =</span> PONDERADOR))</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>IS_Indice_Gral</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>IS_Indice_Gral <span class="ot">&lt;-</span> IS_join <span class="sc">%&gt;%</span> </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(FECHA) <span class="sc">%&gt;%</span> </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Indice_Gral =</span> <span class="fu">weighted.mean</span>(INDICE,<span class="at">w =</span> PONDERADOR))</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>IS_Indice_Gral</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   FECHA  Indice_Gral
@@ -3512,6 +3566,14 @@ document.addEventListener('DOMContentLoaded', function() {
 3 Oct-16        100 </code></pre>
 </div>
 </div>
+</section>
+<section id="ejemplo-con-base-del-sip" class="level3">
+<h3 class="anchored" data-anchor-id="ejemplo-con-base-del-sip">Ejemplo con base del SIP</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>remuneracion_con_ipc <span class="ot">&lt;-</span> remuneracion_media <span class="sc">%&gt;%</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ipc_mensual, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;Periodo&quot;</span> <span class="ot">=</span> <span class="st">&quot;fecha&quot;</span>))</span></code></pre></div>
+</div>
+<p>Y acá podriamos calcular la remuneración promedio en términos reales</p>
 </section>
 </section>
 <section id="tidyr" class="level2">
@@ -3542,7 +3604,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <h3 class="anchored" data-anchor-id="summary">summary()</h3>
 <p>Resume la información de cada una de las variables de la base de datos, mostrando distintos momentos de la distribución para variables numéricas, y un conteo de casos para variables del tipo factor o character</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Datos)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Datos)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    OCUPADOS           FECHA              SECTOR             Promedio      
  Min.   : 2543717   Length:9           Length:9           Min.   :6552432  
@@ -3567,7 +3629,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <h3 class="anchored" data-anchor-id="unique">unique()</h3>
 <p>Permite ver los valores únicos que toma cierta variable en mi base de datos.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(Datos<span class="sc">$</span>SECTOR)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(Datos<span class="sc">$</span>SECTOR)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] &quot;Privado_Registrado&quot; &quot;Público&quot;            &quot;Total&quot;             </code></pre>
 </div>
@@ -3577,18 +3639,18 @@ document.addEventListener('DOMContentLoaded', function() {
 <h3 class="anchored" data-anchor-id="sample_n">sample_n()</h3>
 <p>Esta función está dentro del paquete tidyverse. Nos permite seleccionar de manera muy simple una muestra al azar de n casos de nuestra base de datos. Puede ser útil para una primera mirada de la base que trascienda a los primeros casos, o bien para procedimienos de muestreo aleatorio.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_n</span>(<span class="at">tbl =</span> Datos,<span class="at">size =</span> <span class="dv">9</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_n</span>(<span class="at">tbl =</span> Datos,<span class="at">size =</span> <span class="dv">9</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  OCUPADOS  FECHA             SECTOR Promedio caso_cuando
-1 10931300 Ene-12              Total  6552432          NA
-2  2602057 Mar-12            Público  6552432     7806171
-3  2598154 Feb-12            Público  6552432     7794462
-4  6103382 Feb-12 Privado_Registrado  6552432    12206764
-5  2543717 Ene-12            Público  6552432     7631151
-6 10992215 Mar-12              Total  6552432          NA
-7  6112372 Mar-12 Privado_Registrado  6552432    12224744
-8 10982740 Feb-12              Total  6552432          NA
-9  6105953 Ene-12 Privado_Registrado  6552432    12211906</code></pre>
+1  2543717 Ene-12            Público  6552432     7631151
+2  2598154 Feb-12            Público  6552432     7794462
+3 10992215 Mar-12              Total  6552432          NA
+4  6112372 Mar-12 Privado_Registrado  6552432    12224744
+5  6105953 Ene-12 Privado_Registrado  6552432    12211906
+6  6103382 Feb-12 Privado_Registrado  6552432    12206764
+7 10982740 Feb-12              Total  6552432          NA
+8  2602057 Mar-12            Público  6552432     7806171
+9 10931300 Ene-12              Total  6552432          NA</code></pre>
 </div>
 </div>
 </section>
@@ -3596,25 +3658,28 @@ document.addEventListener('DOMContentLoaded', function() {
 <h3 class="anchored" data-anchor-id="table">table()</h3>
 <p>Esta función puede utilizarse para hacer tabulados univariados o bivariados en variables discretas.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(Datos<span class="sc">$</span>SECTOR)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(Datos<span class="sc">$</span>SECTOR)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Privado_Registrado            Público              Total 
                  3                  3                  3 </code></pre>
 </div>
 </div>
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-r-core" class="csl-entry" role="listitem">
-<pre><code>R Core Team. (2024). &lt;i&gt;R: A Language and Environment for Statistical Computing&lt;/i&gt;. R Foundation for Statistical Computing, Vienna, Austria. Retrieved from &lt;a href=&quot;https://www.R-project.org/&quot;&gt;https://www.R-project.org/&lt;/a&gt;</code></pre>
-</div>
-<div id="ref-ceped" class="csl-entry" role="listitem">
-<pre><code>CEPED. (2022). Ceped.data. Portal de difusión de datos del Centro de Estudios sobre Población, Empleo y Desarrollo (CEPED-UBA), Universidad de Buenos Aires, Buenos Aires. Recuperado de &lt;a href=&quot;https://www.ceped-data.shinyapps.io/&quot;&gt;https://www.ceped-data.shinyapps.io/&lt;/a&gt;</code></pre>
-</div>
-</div>
+
 </section>
 </section>
 
-</main>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent">
+
+  <div id="ref-r-core" class="csl-entry">
+    R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+  </div>
+  
+  <div id="ref-ceped" class="csl-entry">
+    CEPED. (2022). Ceped.data. Portal de difusión de datos del Centro de Estudios sobre Población, Empleo y Desarrollo (CEPED-UBA), Universidad de Buenos Aires, Buenos Aires. Recuperado de <a href="https://www.ceped-data.shinyapps.io/">https://www.ceped-data.shinyapps.io/</a>
+  </div>
+  
+</div></section></div></main>
 <!-- /main column -->
  
 <hr>
