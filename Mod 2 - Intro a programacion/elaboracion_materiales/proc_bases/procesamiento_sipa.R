@@ -10,7 +10,7 @@ library(lubridate)
 # A.5.1.Personas con empleo asalariado registrado en el sector privado,
 # según provincia. Con estacionalidad. En miles.
 
-data1 <- read_excel("Mod 2 - Intro a programacion/bases/sipa_seleccion.xlsx",
+data1 <- read_excel("Mod 2 - Intro a programacion/elaboracion_materiales/proc_bases/sipa_seleccion.xlsx",
                  sheet = "A.5.1",
                  range = "A2:Y93"
                  )
@@ -19,24 +19,24 @@ data1 <- read_excel("Mod 2 - Intro a programacion/bases/sipa_seleccion.xlsx",
 # Con estacionalidad. Total país. En miles.
 
 data2 <- read_excel(
-  "Mod 2 - Intro a programacion/bases/sipa_seleccion.xlsx",
+  "Mod 2 - Intro a programacion/elaboracion_materiales/proc_bases/sipa_seleccion.xlsx",
   sheet = "T.2.1",
   range = "A2:H157"
 ) %>%
   mutate(
-    Período = ymd(Período) # Parsea fechas en formato "Año-Mes-Día"
+    Periodo = ymd(Periodo) # Parsea fechas en formato "Año-Mes-Día"
   )
 
 
 # T.3.1. Personas con trabajo registrado según modalidad ocupacional principal. 
 # Con estacionalidad. Total país. Índice base 100 = Ene-12
 
-data3 <- read_excel("Mod 2 - Intro a programacion/bases/sipa_seleccion.xlsx",
+data3 <- read_excel("Mod 2 - Intro a programacion/elaboracion_materiales/proc_bases/sipa_seleccion.xlsx",
                    sheet = "T.3.1",
                    range = "A2:H157"
 ) %>%
   mutate(
-    Período = ymd(Período) # Parsea fechas en formato "Año-Mes-Día"
+    Periodo = ymd(Periodo) # Parsea fechas en formato "Año-Mes-Día"
   )
 
 
@@ -45,19 +45,19 @@ data3 <- read_excel("Mod 2 - Intro a programacion/bases/sipa_seleccion.xlsx",
 # Por todo concepto (**),  en pesos, a valores corrientes. Total país.
 # ** Es la remuneración bruta (previa a las deducciones por cargas sociales) declarada por la empresa  para cada mes. Incluye adicionales de periodicidad no mensual, horas extraordinarias, viáticos, sueldo anual complementario y bonificación por vacaciones. No incluye indemnizaciones.				
 
-data4 <- read_excel("Mod 2 - Intro a programacion/bases/sipa_seleccion.xlsx",
+data4 <- read_excel("Mod 2 - Intro a programacion/elaboracion_materiales/proc_bases/sipa_seleccion.xlsx",
                    sheet = "A.4",
                    range = "A2:E193"
 ) %>%
   mutate(
-    Período = ymd(Período) # Parsea fechas en formato "Año-Mes-Día"
+    Periodo = ymd(Periodo) # Parsea fechas en formato "Año-Mes-Día"
   )
 
 # Pivot Longer ####
 
 data1_long <- data1 %>%
   pivot_longer(
-    cols = -Período,
+    cols = -Periodo,
     names_to = "Geografia", 
     values_to = "Valor"
   ) %>% 
@@ -65,36 +65,39 @@ data1_long <- data1 %>%
 
 data2_long <- data2 %>%
   pivot_longer(
-    cols = -Período,
+    cols = -Periodo,
     names_to = "Variable", 
     values_to = "Valor" 
   ) %>% 
-  mutate(Geografia = "Total Pais")
+  mutate(Variable = gsub("\\r\\n", "", Variable), # porque los encabesados traen saltos de línea
+         Geografia = "Total Pais")
 
 data3_long <- data3 %>%
   pivot_longer(
-    cols = -Período,
+    cols = -Periodo,
     names_to = "Variable",
     values_to = "Valor" 
   ) %>% 
-  mutate(Geografia = "Total Pais")
+  mutate(Variable = gsub("\\r\\n", "", Variable), # porque los encabesados traen saltos de línea
+         Geografia = "Total Pais")
 
 data4_long <- data4 %>%
   pivot_longer(
-    cols = -Período, 
+    cols = -Periodo, 
     names_to = "Variable",
     values_to = "Valor" 
   ) %>% 
-  mutate(Geografia = "Total Pais")
+  mutate(Variable = gsub("\\r\\n", "", Variable), # porque los encabesados traen saltos de línea
+         Geografia = "Total Pais")
 
 # Ahora uso bind_rows() de dplyr que es más flexible que rbind() de R Base.
 
 base_sipa <- bind_rows(data1_long, data2_long, data3_long, data4_long) %>%
-  select(Período, Variable, Geografia, Valor)
+  select(Periodo, Variable, Geografia, Valor)
 
 # Guardado ####
 
-write_csv(base_sipa, "Mod 2 - Intro a programacion/bases/base_sipa.csv")
+write_csv(base_sipa, "Mod 2 - Intro a programacion/elaboracion_materiales/proc_bases/base_sipa.csv")
 
 # Si hubiera que guardarlas por separado
 # write_csv(data1_long, "Mod 2 - Intro a programacion/bases/asalariados_registrados_provincia.csv")

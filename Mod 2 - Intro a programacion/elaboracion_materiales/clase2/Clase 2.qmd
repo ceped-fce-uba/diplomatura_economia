@@ -1,7 +1,7 @@
 ---
-title: "Clase 2 - Intro a Tidyverse"
+title: "Clase 2 - Manipulación de bases de datos I"
 author: "Diplomatura PEEC - UBA"
-output-file: "Clase 2 - Intro a Tidyverse" 
+output-file: "Clase 2 - Manipulación de bases de datos I" 
 format:
   html:
     embed-resources: true
@@ -25,6 +25,57 @@ editor: visual
 include-after-body: ../assets/footer.html
 ---
 
+:::: parallax-container
+::: {#parallax-image .parallax-image-container .parallax-scroll data-image="imgs/tidyverse.png"}
+:::
+::::
+
+```{=html}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all parallax elements
+  const parallaxElements = document.querySelectorAll('.parallax-image-container');
+  
+  parallaxElements.forEach(function(element) {
+    // Set background image from data attribute
+    const imagePath = element.getAttribute('data-image');
+    if (imagePath) {
+      element.style.backgroundImage = `url("${imagePath}")`;
+    }
+    
+    // Set initial background position
+    element.style.backgroundPosition = 'center -50px';
+  });
+  
+  // Add scroll event listener
+  window.addEventListener('scroll', function() {
+    // Calculate viewport position
+    const scrolled = window.pageYOffset;
+    
+    // Apply parallax effect to each element
+    parallaxElements.forEach(function(element) {
+      // Get the parallax container position
+      const container = element.parentElement;
+      const containerRect = container.getBoundingClientRect();
+      const containerTop = containerRect.top + scrolled;
+      
+      // Calculate how far the container is from the top of viewport
+      const distanceFromTop = containerTop - scrolled;
+      
+      // Only apply effect when container is in viewport
+      if (distanceFromTop < window.innerHeight && distanceFromTop + containerRect.height > 0) {
+        // Adjust the divisor (3) to control parallax intensity
+        const yPos = -50 + (scrolled - containerTop) / 3;
+        
+        // Apply parallax effect
+        element.style.backgroundPosition = `center ${yPos}px`;
+      }
+    });
+  });
+});
+</script>
+```
+
 ## Tidyverse
 
 Tidyverse es un conjunto de paquetes de R que comparten una filosofía de diseño común y son fáciles de usar en conjunto. Fue creado para facilitar la manipulación, visualización y análisis de datos de manera eficiente, integrando una serie de herramientas que permiten trabajar con datos de forma coherente y fluida. Entre los paquetes más conocidos de tidyverse se encuentran `ggplot2` para la visualización, `dplyr` para la manipulación de datos, `tidyr` para la organización de datos, y `readr` para la importación de datos, entre otros.
@@ -39,15 +90,19 @@ library(tidyverse)
 ```
 
 ```{r}
-#| echo: false
-#| warning: false
+#| echo: true
+#| warning: true
 library(tidyverse)
 
 ```
 
-Como ya se ha visto, se requiere instalar las librerías en primer lugar y por única vez, y luego convocarla al ambiente de R cada vez que se quiera utilizar las funciones que yacen dentro de esta. Una analogía a esta dinámica sería la acción de comprar y uso de un libro, la compra es única, pero para poder disponer de su contenido se requiere siempre de su apertura.
+No es necesario que le den mucha importancia a los mensajes de advertencia, no se trata de errores.
 
-A partir de este momento, trabajaremos las funciones a estudiar volcadas sobre una base de datos creada a partir de [información](https://www.argentina.gob.ar/sites/default/files/trabajoregistrado_2411_estadisticas.xlsx) del Sistema Integrado Previsional Argentino ([SIPA](https://www.argentina.gob.ar/situacion-y-evolucion-del-trabajo-registrado)).
+------------------------------------------------------------------------
+
+Como ya se ha visto, se requiere instalar las librerías en primer lugar y por única vez, y luego invocarla en el entorno de R cada vez que se quiera utilizar las funciones que yacen dentro de esta. Una analogía a esta dinámica sería la acción de comprar y usar un libro: lo compramos una sola vez, pero para poder disponer de su contenido se requiere siempre de su apertura.
+
+A partir de este momento, trabajaremos las funciones a estudiar volcadas sobre una base de datos creada a partir de [información](https://www.argentina.gob.ar/sites/default/files/trabajoregistrado_2411_estadisticas.xlsx) del Sistema Integrado Previsional Argentino ([SIPA](https://www.argentina.gob.ar/situacion-y-evolucion-del-trabajo-registrado)). En este caso tenemos una base preprocesada guardada en formato `.csv`, del inglés *comma-separated values*, lo cual se traduce a valores separados por coma. Es una forma muy eficiente (y común) de guardar información.
 
 ```{r}
 OCUPADOS  <- c(6105953, 2543717, 10931300,
@@ -60,6 +115,77 @@ SECTOR  <-  c("Privado_Registrado","Público","Total",
               "Privado_Registrado","Público","Total",
               "Privado_Registrado","Público","Total")
 Datos <- data.frame(OCUPADOS, FECHA, SECTOR)
+```
+
+```{r}
+base_sipa <- read_csv("bases/base_sipa.csv", 
+                 show_col_types = FALSE)
+         
+str(base_sipa) #str es una abreviatura de structure
+```
+```{r}
+unique(base_sipa$Variable)
+```
+Función clave de dplyr (mejor meter un "De ahora en más full dplyr"):
+```{r}
+remuneracion_media <- filter(base_sipa,
+                             Variable == "Remuneración promedio - con estacionalidad")
+```
+
+
+### Levantar archivos de excel
+
+En la práctica, es posible que se encuentren más seguido en situación de levantar archivos de Excel. Esto tiene sus particularidades y todo un paquete dedicado a ello: `readxl`. Éste es parte de la familia del tidyverse pero por no ser del núcleo duro del ecosistema tienen que importarlo aparte. Verán que la sintaxis es similar y que su uso es intuitivo.
+
+```{r}
+library(readxl) #en general, pero nostros ya importamos el tidyverse
+
+base_ipc <- read_excel("bases/ipc_ceped_data.xlsx", sheet = "Hoja1")
+```
+
+Podemos ver las primeras 5 filas de la tabla:
+```{r}
+head(base_ipc)
+```
+Una función clave del paquete `dplyr` del tidyverse es `select()`, cuya finalidad es seleccionar un subconjunto de columnas. En este caso vamos a seleccionar las únicas dos columnas que necesitamos de la base del Índice de Precios al Consumidor (IPC).
+```{r}
+ipc_mensual <- select(base_ipc, fecha, valor)
+```
+
+Otra función importante: `rename()`, con la cual renombramos columnas a partir de la sintaxis nombre_nuevo = nombre_viejo. Reescribamos la base del IPC mensual con este cambio:
+
+```{r}
+ipc_mensual <- rename(ipc_mensual, ipc = valor)
+```
+
+Ahora, estas dos acciones las podríamos haber hecho con una sola línea, lo cual es más elegante:
+```{r}
+ipc_mensual <- select(base_ipc, fecha, ipc = valor)
+```
+
+
+## Dataframes y Tibbles
+
+Acá un repaso sobre qué son
+
+## Pruebas SIPA
+
+La opción automática para explorar un dataset es la función `summary()`, que arroja un resumen genérico.
+
+```{r}
+summary(SIPA)
+```
+
+Una alternativa, del paquete `dplyr` es `summarize()`, con la cual pueden calcular medidas de resumen de columnas específicas.
+
+```{r}
+SIPA %>%
+  summarize(
+    min_fecha = min(Período),
+    max_fecha = max(Período),
+    min_anio = min(year(Período)),
+    max_anio = max(year(Período))
+  )
 ```
 
 ## Dplyr
@@ -194,7 +320,7 @@ Otra implementación muy importante del paquete dplyr son las funciones para uni
 #| fig-cap: "Diagrama de tipos de join estilo SQL. *Fuente: [intro2r.library.duke.edu/join.html](https://intro2r.library.duke.edu/join.html)*"
 #| fig-cap-location: bottom
 
-knitr::include_graphics("joins.png")
+knitr::include_graphics("imgs/joins.png")
 ```
 
 ### left_join()
@@ -233,6 +359,15 @@ IS_Indice_Gral <- IS_join %>%
 IS_Indice_Gral
 ```
 
+### Ejemplo con base del SIP
+
+```{r}
+remuneracion_con_ipc <- remuneracion_media %>%
+  left_join(ipc_mensual, by = c("Periodo" = "fecha"))
+```
+
+Y acá podriamos calcular la remuneración promedio en términos reales
+
 ## Tidyr
 
 El paquete tidyr esta pensado para facilitar el emprolijamiento de los datos. Veremos las funciones pivot_longer y pivot_wider que nos permitirán pivotear la base según como queramos ordenar los datos para trabajarlos posteriormente o bien para presentarlos como tabla de resultados.
@@ -240,7 +375,7 @@ El paquete tidyr esta pensado para facilitar el emprolijamiento de los datos. Ve
 ```{r}
 #| echo: false
 
-knitr::include_graphics("wide_long.png")
+knitr::include_graphics("imgs/wide_long.png")
 ```
 
 ### pivot_longer()

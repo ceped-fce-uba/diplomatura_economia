@@ -1,7 +1,7 @@
 ---
-title: "Introducción al Software libre R"
+title: "Introducción a R y RStudio"
 author: "Diplomatura PEEC - UBA"
-output-file: "Clase 1 - Intro a R" 
+output-file: "Clase 1 - Introducción a R y RStudio" 
 format:
   html:
     embed-resources: true
