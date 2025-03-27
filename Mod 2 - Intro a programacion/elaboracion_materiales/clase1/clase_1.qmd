@@ -1,5 +1,6 @@
 ---
 title: "Introducción a R y RStudio"
+subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio desde los datos - UBA"
 output-file: "Clase 1 - Introducción a R y RStudio" 
 format:
   html:
