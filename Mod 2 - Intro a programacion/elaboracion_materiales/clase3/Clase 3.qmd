@@ -46,42 +46,15 @@ Hasta el momento se ha avanzado sobre funciones que componen el paquete `tidyver
 
 Este instrumento o herramienta es fundamental para los flujos de trabajo, ya que es el operador a través del cual se concatenan las operaciones u ordenes que están codificadas. Su esencia se encuentra en la posibilidad de realizar múltiples operaciones, de forma secuencial y velozmente, al mismo tiempo que dicho conjunto de operaciones quedan escritas en una secuencia de código. Se trata únicamente de una transformación sintáctica: nos permite ordenar el código
 
-```{=html}
-<table>
-  <tr>
-    <th>Pipe del Tidyverse</th>
-    <th>Sin Pipe</th>
-  </tr>
-  <tr>
-    <td>
-      <pre><code class="r">
-library(dplyr)
-df %>% 
-  group_by(category) %>% 
-  summarize(media = mean(valor))
-      </code></pre>
-    </td>
-    <td>
-      <pre><code class="r">
-summarize(group_by(df, category), media = mean(valor))
-      </code></pre>
-    </td>
-  </tr>
-</table>
-```
-
 ## Flujo de trabajo y base de datos
 
 En esta clase abarcaremos el análisis y la práctica de flujos más complejos con `tidyverse`, a partir del uso de una base de datos de SIPA. Para ello, se procederá a importar dicha base y contar con ella en el ambiente de R.
 
 ```{r}
 SIPA <- read_csv("bases/base_sipa.csv", 
-                 show_col_types = FALSE) %>%
+                 show_col_types = FALSE)
   # Convert Periodo to proper date format immediately
-  mutate(Periodo = ymd(Periodo),
-         Año = year(Periodo),
-         Mes = month(Periodo, label = TRUE, abbr = TRUE),
-         Trimestre = quarter(Periodo))
+  
 ```
 
 ### Explorar la base
@@ -116,11 +89,11 @@ Una vez que se cuenta con la variable `Año`, se procederá a estudiar diferente
 Un primer procesamiento de utilidad refiere a la utilización de la función `group_by()`, la cual permite "iterar" algún proceso lógico para todos los valores que toma alguna variable de nuestro dataset. Por ejemplo:
 
 ```{r}
-# flujo1 <- SIPA %>% 
-#   group_by(Año, Variable) %>% 
-#   summarise(Promedio = mean(Valor))
-# 
-# flujo1
+flujo1 <- SIPA %>% 
+ group_by(Año, Variable) %>% 
+ summarise(Promedio = mean(Valor))
+
+flujo1
 
 ```
 
@@ -131,12 +104,12 @@ Por ende, el código puede leerse como: creese la columna `Promedio`, la cual de
 Este tipo de cálculos generales, también pueden especificarse para algún valor, o rango de valores, de las variables para las cuales se hace el agrupamiento (en este caso `Año` y `Variable`). Por ejemplo, acotemos el cálculo solo para una de las categorías dentro de `Variables`.
 
 ```{r}
-# flujo2 <- SIPA %>%
-#   filter(Variable == "Empleo asalariado en el sector privado") %>% 
-#   group_by(Año) %>% 
-#   summarise(Promedio = mean(Valor))
-# 
-# flujo2
+flujo2 <- SIPA %>%
+  filter(Variable == "Empleo asalariado en el sector privado") %>% 
+  group_by(Año) %>% 
+  summarise(Promedio = mean(Valor))
+
+flujo2
 ```
 
 En este caso, se incluye un filtro para `Variable`, el cual busca acotar el cálculo para todos los casos contenidos en la categoría *"Empleo asalariado en el sector privado"*.
@@ -146,15 +119,39 @@ Por lo tanto, el código puede leerse como: calculese el promedio de la columna 
 A su vez, es importante señalar que en este tipo de procesamientos, R ordena las filas desde el valor más bajo al más alto de la primera columna, por defecto. Sin embargo, el orden puede modificarse al especificar un orden particular con la función `arrange()`. Por ejemplo:
 
 ```{r}
-# flujo3 <- SIPA %>%
-#   filter(Variable == "Empleo en casas particulares") %>% 
-#   group_by(Año) %>% 
-#   summarise(Promedio = mean(Valor)) %>% 
-#   arrange(-Año)
+flujo3 <- SIPA %>%
+  filter(Variable == "Empleo en casas particulares") %>% 
+  group_by(Año) %>% 
+  summarise(Promedio = mean(Valor)) %>% 
+  arrange(-Año)
+
+flujo3
 
 ```
 
 En este caso, se repite el procesamiento previo, pero luego de estimar el promedio se ordena a las filas desde el mayor valor de la variable `Año` al menor. Notar que esto es así porque se especificó un `-` delante del nombre de la variable al interior de la función `arrange()`, en caso de no incluir este signo el orden irá del menor valor al mayor.
+
+
+```{r}
+mutate(Periodo = ymd(Periodo),
+         Año = year(Periodo),
+         Mes = month(Periodo, label = TRUE, abbr = TRUE),
+         Trimestre = quarter(Periodo))
+```
+
+
+
+### Ejemplo con base del SIPA
+
+```{r}
+remuneracion_con_ipc <- remuneracion_media %>%
+  left_join(ipc_mensual, by = c("Periodo" = "fecha"))
+```
+
+Y acá podriamos calcular la remuneración promedio en términos reales
+
+
+
 
 Ideas para la primera parte:
 

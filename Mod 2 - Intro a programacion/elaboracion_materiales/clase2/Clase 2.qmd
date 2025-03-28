@@ -65,82 +65,6 @@ SECTOR  <-  c("Privado_Registrado","Público","Total",
 Datos <- data.frame(OCUPADOS, FECHA, SECTOR)
 ```
 
-```{r}
-base_sipa <- read_csv("bases/base_sipa.csv", 
-                 show_col_types = FALSE)
-         
-str(base_sipa) #str es una abreviatura de structure
-```
-
-```{r}
-unique(base_sipa$Variable)
-```
-
-Función clave de dplyr (mejor meter un "De ahora en más full dplyr"):
-
-```{r}
-remuneracion_media <- filter(base_sipa,
-                             Variable == "Remuneración promedio - con estacionalidad")
-```
-
-### Levantar archivos de excel
-
-En la práctica, es posible que se encuentren más seguido en situación de levantar archivos de Excel. Esto tiene sus particularidades y todo un paquete dedicado a ello: `readxl`. Éste es parte de la familia del tidyverse pero por no ser del núcleo duro del ecosistema tienen que importarlo aparte. Verán que la sintaxis es similar y que su uso es intuitivo.
-
-```{r}
-library(readxl) #en general, pero nostros ya importamos el tidyverse
-
-base_ipc <- read_excel("bases/ipc_ceped_data.xlsx", sheet = "Hoja1")
-```
-
-Podemos ver las primeras 5 filas de la tabla:
-
-```{r}
-head(base_ipc)
-```
-
-Una función clave del paquete `dplyr` del tidyverse es `select()`, cuya finalidad es seleccionar un subconjunto de columnas. En este caso vamos a seleccionar las únicas dos columnas que necesitamos de la base del Índice de Precios al Consumidor (IPC).
-
-```{r}
-ipc_mensual <- select(base_ipc, fecha, valor)
-```
-
-Otra función importante: `rename()`, con la cual renombramos columnas a partir de la sintaxis nombre_nuevo = nombre_viejo. Reescribamos la base del IPC mensual con este cambio:
-
-```{r}
-ipc_mensual <- rename(ipc_mensual, ipc = valor)
-```
-
-Ahora, estas dos acciones las podríamos haber hecho con una sola línea, lo cual es más elegante:
-
-```{r}
-ipc_mensual <- select(base_ipc, fecha, ipc = valor)
-```
-
-## Dataframes y Tibbles
-
-Acá un repaso sobre qué son
-
-## Pruebas SIPA
-
-La opción automática para explorar un dataset es la función `summary()`, que arroja un resumen genérico.
-
-```{r}
-summary(base_sipa)
-```
-
-Una alternativa, del paquete `dplyr` es `summarize()`, con la cual pueden calcular medidas de resumen de columnas específicas.
-
-```{r}
-base_sipa %>%
-  summarize(
-    min_fecha = min(Periodo),
-    max_fecha = max(Periodo),
-    min_anio = min(year(Periodo)),
-    max_anio = max(year(Periodo))
-  )
-```
-
 ## Dplyr
 
 El caracter principal para utilizar este paquete es `%>%` (Alt + Shift + M), llamado pipe (en inglés, tubería).
@@ -311,15 +235,6 @@ IS_Indice_Gral <- IS_join %>%
   summarise(Indice_Gral = weighted.mean(INDICE,w = PONDERADOR))
 IS_Indice_Gral
 ```
-
-### Ejemplo con base del SIP
-
-```{r}
-remuneracion_con_ipc <- remuneracion_media %>%
-  left_join(ipc_mensual, by = c("Periodo" = "fecha"))
-```
-
-Y acá podriamos calcular la remuneración promedio en términos reales
 
 ## Tidyr
 

@@ -25,10 +25,10 @@ editor: visual
 include-after-body: ../assets/footer.html
 ---
 
-:::: parallax-container
+::: parallax-container
 ::: {#parallax-image .parallax-image-container .parallax-scroll data-image="imgs/R.jpg"}
 :::
-::::
+:::
 
 ```{=html}
 <script>
@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 ```
-
 ## ¿Qué es R?
 
 R es un lenguaje de programación y entorno de software libre que ha revolucionado el análisis estadístico y la visualización de datos. Desarrollado durante los años 90 en la Universidad de Auckland, está inspirado en el lenguaje S creado en los años 70, pero con una arquitectura orientada a la colaboración científica y académica.
@@ -564,7 +563,7 @@ También es útil organizar las partes del script en capítulos. Para eso
 
 ### Scripts:
 
-Los scripts en R son archivos de texto (.R) que permiten estructurar el código de manera modular. Esto significa que cada segmento del análisis o cada tarea específica se puede desarrollar de forma independiente, facilitando la confección, organización y la reutilización del código. Además, esta estructura modular confiere una gran flexibilidad, ya que permite ejecutar o modificar bloques de código sin necesidad de reestructurar todo el proyecto, lo cual es ideal para realizar experimentos rápidos o pruebas puntuales. Sumado a esto, el uso de scripts posibilita documentar detalladamente cada paso del proceso, lo que resulta de gran ayuda para la depuración y para revisar el trabajo hecho.
+Los scripts en R son archivos de texto (.R) que permiten estructurar el código de manera modular, una hoja donde se escribe código. Esto significa que cada segmento del análisis, o cada tarea específica, se puede desarrollar de forma independiente, facilitando la confección, organización y la reutilización del código. Además, esta estructura modular confiere una gran flexibilidad, ya que permite ejecutar o modificar bloques de código sin necesidad de reestructurar todo el proyecto, lo cual es ideal para realizar experimentos rápidos o pruebas puntuales. Sumado a esto, el uso de scripts posibilita documentar detalladamente cada paso del proceso, lo que resulta de gran ayuda para la depuración y para revisar el trabajo hecho.
 
 ### Proyectos R:
 
@@ -576,7 +575,7 @@ La forma típica de comenzar a trabajar en R es haciendo doble clic en el archiv
 
 ### Su uso conjunto:
 
-Les recomendamos trabajar con un `.Rproj` para cada análisis o proyecto. Al hacerlo, se centraliza la configuración del entorno, las rutas de acceso y demás ajustes, lo que garantiza uniformidad durante todo el proceso. Sobre esa base, se recomienda dividir el código en diferentes scripts, asignando a cada uno tareas específicas —por ejemplo, uno para la limpieza de datos, otro para el análisis exploratorio y un tercero para la generación de gráficos—. Esta separación no solo simplifica el mantenimiento y la reutilización del código, sino que también mejora la colaboración en equipo, permitiendo que cada colaborador se familiarice rápidamente con la estructura y el flujo de trabajo.
+Les recomendamos trabajar con un `.Rproj` (un proyecto) para cada análisis o trabajo. Al hacerlo, se centraliza la configuración del entorno, las rutas de acceso y demás ajustes, lo que garantiza uniformidad durante todo el proceso. Sobre esa base, se recomienda dividir el código en diferentes scripts, asignando a cada uno tareas específicas —por ejemplo, uno para la limpieza de datos, otro para el análisis exploratorio y un tercero para la generación de gráficos—. Esta separación no solo simplifica el mantenimiento y la reutilización del código, sino que también mejora la colaboración en equipo, permitiendo que cada colaborador se familiarice rápidamente con la estructura y el flujo de trabajo.
 
 ## Para la clase 2
 
@@ -601,14 +600,14 @@ carpeta_resultados <- paste("C:/Users/.../Documents/R/resultados/")
 
 **Es importante notar que se utiliza la barra `/` en lugar de `\` (que sale de copiar y pegar el directorio)**
 
-el nombre completo del archivo puede ser
+El nombre completo del archivo puede ser
 
 ```{r}
 archivo_datos      <- paste0(carpeta_fuentes, "archivo_fuentes.txt")
 archivo_resultados <- paste0(carpeta_resultados, "archivo_resultados.txt")
 ```
 
-luego, para leer un excel, se escribe:
+Luego, para leer un excel, se escribe:
 
 ```{{r}}
 tabla <- read_xlsx(file = archivo_datos,sheetName = "hoja 1") #como es una variable, ya no lleva comillas
