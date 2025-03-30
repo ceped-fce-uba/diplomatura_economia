@@ -147,6 +147,38 @@ div.callout-important {
   }
 }
 
+// Enhanced Practice Callout
+div.callout-practice {
+  border-left-color: #1f497d !important;
+  background-color: rgba(31, 73, 125, 0.05);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(31, 73, 125, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 7px 14px rgba(31, 73, 125, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  .callout-header {
+    background-color: rgba(31, 73, 125, 0.15) !important;
+    border-bottom: 1px solid rgba(31, 73, 125, 0.2);
+    color: #1f497d !important;
+    font-weight: 600;
+  }
+  
+  .callout-body {
+    padding: 1rem;
+  }
+  
+  // Optional: Style the icon if needed
+  .iconify {
+    color: #1f497d;
+    margin-right: 0.3rem;
+    vertical-align: middle;
+  }
+}
+
 // Code folding
 .code-fold-btn-container {
   margin-right: 4px;

@@ -148,6 +148,62 @@ div.callout-important {
   }
 }
 
+// Enhanced Practice Callout
+div.callout-practice {
+  border-left-color: #1f497d;
+  background-color: rgba(31, 73, 125, 0.05);
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  
+  // Add subtle top border accent
+  border-top: 1px solid rgba(31, 73, 125, 0.3);
+  
+  // Better shadow for depth
+  box-shadow: 0 4px 6px rgba(31, 73, 125, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  
+  // Hover effect for interactivity
+  &:hover {
+    box-shadow: 0 7px 14px rgba(31, 73, 125, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  .callout-header {
+    background-color: rgba(31, 73, 125, 0.12);
+    border-bottom: 1px solid rgba(31, 73, 125, 0.2);
+    color: #1f497d;
+    font-weight: 600;
+    padding: 0.8rem 1rem;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+  }
+  
+  .callout-body {
+    padding: 1rem;
+  }
+}
+
+// Enhanced icon styling
+div.callout-practice::before {
+  content: "🛠️" !important;
+  font-size: 1.5em !important;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  display: inline-block;
+  animation: toolWiggle 3s ease-in-out infinite;
+}
+
+// Add a subtle animation to the icon
+@keyframes toolWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+// Hide original icon
+div.callout-practice .callout-icon::before {
+  display: none !important;
+}
+
 // Code folding
 .code-fold-btn-container {
   margin-right: 4px;

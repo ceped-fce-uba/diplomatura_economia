@@ -1,6 +1,6 @@
 ---
 title: "Introducción a R y RStudio"
-subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio desde los datos - UBA"
+subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio - UBA"
 output-file: "Clase 1 - Introducción a R y RStudio" 
 format:
   html:
@@ -21,14 +21,14 @@ format:
     echo: true
 execute:
   freeze: auto
-editor: visual
+editor: source
 include-after-body: ../assets/footer.html
 ---
 
-::: parallax-container
+:::: parallax-container
 ::: {#parallax-image .parallax-image-container .parallax-scroll data-image="imgs/R.jpg"}
 :::
-:::
+::::
 
 ```{=html}
 <script>
@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 ```
+
 ## ¿Qué es R?
 
 R es un lenguaje de programación y entorno de software libre que ha revolucionado el análisis estadístico y la visualización de datos. Desarrollado durante los años 90 en la Universidad de Auckland, está inspirado en el lenguaje S creado en los años 70, pero con una arquitectura orientada a la colaboración científica y académica.
@@ -85,6 +86,7 @@ El Comprehensive R Archive Network (CRAN), fundado en 1997, constituye el reposi
 
 ```{r}
 #| echo: false
+#| purl: false
 
 knitr::include_graphics("imgs/CRAN.png")
 ```
@@ -106,18 +108,65 @@ Con el tiempo, el enfoque tidy ha ganado popularidad, inspirando otros paquetes 
 
 A su vez, en los últimos años R ha experimentado cambios tendientes a generar mayor interoperabilidad con Python, y expansión hacia tecnologías como Quarto.
 
+::: {.callout-note .callout-practice icon="false"}
+## 🛠️ Momento de práctica
+
+Les proponemos tomarnos 10' para hacer el ejercicio 1 de la guía práctica
+:::
+
 ### Diferencias con STATA y SPSS
 
--   Gratuito
+-   Gratuito y de código abierto
 -   Únicamente funciona por líneas de código (No hay botones para ejecutar comandos)
 -   Posibilita trabajar con múltiples bases de microdatos al mismo tiempo, sin mayor dificultad (No requiere abrir cada base, trabajarla por separado y luego cerrarla)
 -   Totalmente automatizable
 -   Extensible a otros lenguajes y usos (como esta presentación)
+-   Muy superior en capacidad de visualización
 -   Más veloz
 
 ## Paneles
 
-**FOTO + DESCRIPCIÒN**
+La interfaz de usuario de RStudio tiene 4 paneles principales:
+
+-   **Panel de Código**
+
+-   **Panel de Consola**
+
+-   **Panel de Entorno**
+
+-   **Panel de Salida**
+
+```{r}
+#| echo: false
+#| purl: false
+
+knitr::include_graphics("imgs/paneles.jpeg")
+```
+
+### Panel de Código
+
+En el panel de código es donde van a trabajar sobre los scripts. Se ubica normalmente en la parte superior izquierda.
+
+Les permite, si quieren, abrir scripts en ventanas separadas, lo cual resulta útil para distribuir el trabajo entre múltiples monitores. Dicha función se activa con el botón a la izquierda del ícono de guardado.
+
+
+### Panel de Consola
+
+Por defecto la consola se encuentra en la esquina inferior izquierda. Es aquí donde se ejectua el código: pueden escribir en un script y mandarlo a la consola, o, ejecutarlo directamente allí.
+
+Además, contiene una pestaña para correr comandos en la terminal del sistema operativo que sus computadoras.
+
+### Panel de Entorno
+
+Ubicado en la esquina superior derecha, este panel por defecto contiene las pestañas de **Entorno**, **Historial**, **Conexiones**. Las pentañas **Git** y **Build** aparecen cuando uno trabaja con control de versiones con Git (cómo aprenderemos al final de la diplomatura) y cuando uno está construyendo un paquete, respectivamente.
+
+Aquí podrán observar los objetos de R actualmente guardados y accesibles su sesión de R.
+
+### Panel de Salida
+
+Lo verán abajo y a la derecha. Contiene las pestañas de **Archivos**, **Gráficos**, **Paquetes**, **Ayuda**, **Visor** y **Presentación**.
+
+La pestaña que más nos interesará será la de **Archivos** (el resto se activarán automáticamente cuando, por ejemplo, creen y visualicen un gráfico). Ésta les proporcionará una exploración interactiva del Proyecto R actual junto con todo el directorio. Encontrarán opciones para añadir nuevas carpetas, nuevos archivos en blanco, eliminar/renombrar archivos, así como un panel de configuración (icono de engranaje) para funciones adicionales.
 
 ## Lógica sintáctica del lenguaje
 
@@ -455,35 +504,30 @@ Los paquetes, en cambio, cuentan con funciones que ya fueron definidas y tan sol
 
 R tiene formatos de archivos propios:
 
--   Rdata
 -   RDS
+-   RData
 
-### Rdata
-
-```{r}
-x <- 1:15
-y <- list(a = 1, b = TRUE, c = "oops")
-#Para guardar (en este caso, en la carpeta output)
-save(x, y, file = "xy.RData")
-#Para leer
-load('xy.RData')
-```
-
-Los archivos de tipo RData permiten grabar una imagen de todos los objetos R que querramos.
+Lo cierto es que les vamos a recomendar utilizar el formato RDS, en el cual se guarda un único objeto. Además, al momento de cargar el objeto en una nueva sesión de R pueden asignarlo al nombre de variable que necesiten/quieran.
 
 ### RDS
 
+R trae por defecto algunas bases de datos listas para usar. Una de ellas son los resultados de un experimento acerca del efecto de dos somníferos. Ésta fue usada como ejemplo por un químico de la cervecería Guiness en un artículo muy famoso donde introduce una distribución de probabilidades hoy conocida como t de Student. William Gosset (ese era su verdadero nombre) la tenía mucho más difícil porque en 1908 todavía no existían ni R ni RStudio.
+
 ```{r}
-X
+sleep
 ```
 
 ```{r}
-saveRDS(x, "x.RDS")
-Z <- readRDS("x.RDS")
-Z
+#| eval: false
+
+saveRDS(sleep, "sleep.rds")
+
+# Cargamos para verificar
+sleep_data <- readRDS("sleep.rds")
+sleep_data
 ```
 
-Los archivos de tipo RDS no guardan el nombre del objeto, por lo que podemos nombrarlos cuando los cargamos (aconsejable)
+Los archivos de tipo RDS no guardan el nombre del objeto, lo cual es algo positivo. Podemos nombrarlos a gusto cuando los cargamos.
 
 ### Otros formatos
 
@@ -579,69 +623,22 @@ Les recomendamos trabajar con un `.Rproj` (un proyecto) para cada análisis o tr
 
 ## Para la clase 2
 
-En la misma carpeta en la encontraron esta presentación hay una guía práctica. Allá van a encontrar ejercicios de diferente dificultad, sus respuestas, y nuestras recomendaciones.
-
-## Extras
-
-A continuación les dejamos algunas cosas más avanzadas: [Lo cierto es que si trabajan siempre con un `.Rproj` entonces no deberían tener que preocuparse por esto que sigue.]{.aside}
-
-### Directorios
-
-Siempre que escribimos el nombre del archivo, R lo busca en el working directory. Para saber cual es el directorio de trabajo utilizamos la función `getwd()`. Para redefinir el directorio de trabajo, utilizamos la función `setwd`
-
-No es aconsejable utilizar el directorio de trabajo, si nos olvidamos de definirlo, tiramos los archivos en cualquier lado
-
-Lo más práctico es definir los directorios de trabajo como valores. y pegar el nombre del archivo con las carpetas.
-
-```{r}
-carpeta_fuentes    <- paste("C:/Users/.../Documents/R/fuentes/")
-carpeta_resultados <- paste("C:/Users/.../Documents/R/resultados/")
-```
-
-**Es importante notar que se utiliza la barra `/` en lugar de `\` (que sale de copiar y pegar el directorio)**
-
-El nombre completo del archivo puede ser
-
-```{r}
-archivo_datos      <- paste0(carpeta_fuentes, "archivo_fuentes.txt")
-archivo_resultados <- paste0(carpeta_resultados, "archivo_resultados.txt")
-```
-
-Luego, para leer un excel, se escribe:
-
-```{{r}}
-tabla <- read_xlsx(file = archivo_datos,sheetName = "hoja 1") #como es una variable, ya no lleva comillas
-```
-
-### Directorios autorreferenciales
-
-Si bien excede los alcances de este curso, dejamos un chunk de código que puede resultar sumamente útil para crear un directorio de trabajo para un proyecto nuevo.
-
-```{{r}}
-#install.packages(rstudioapi)
-script.dir <- paste0(dirname(rstudioapi::getActiveDocumentContext()$path),"/")
-bases.dir  <-  paste0(dirname(script.dir),"/Fuentes/")
-#dir.create(bases.dir)
-resultados.dir <- paste0(dirname(script.dir),"/Resultados/")
-#dir.create(resultados.dir)
-#chequeo
-dir.exists(bases.dir)
-```
-
-```{{r}}
-dir.exists(resultados.dir)
-```
-
-La primera línea encuentra la carpeta donde esta guardado el script (si no esta guardado no funciona).La segunda línea crea el nombre del directorio Fuentes. La tercera línea (anulada) crea el directorio Fuentes. La cuarta línea crea el nombre del directorio Resultados. La quinta línea (anulada) crea el directorio Resultados.
+En la misma carpeta en la encontraron esta presentación hay una guía práctica. Allá van a encontrar ejercicios de diferente dificultad, sus respuestas, y nuestras recomendaciones. Si terminaron los ejercicios y quieren profundizar en sus conocimientos un poco más, también les dejamos un archivo con extras.
 
 ## Referencias {.unnumbered}
 
 ```{=html}
 <div id="refs" class="references csl-bib-body hanging-indent">
-
   <div id="ref-r-core" class="csl-entry">
-    R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+    R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Recuperado de <a href="https://www.R-project.org/">https://www.R-project.org/</a>
   </div>
-
+  
+  <div id="ref-rstudio-guide" class="csl-entry">
+    Posit Team. (2025). <i>RStudio IDE User Guide</i>. Posit Software, PBC. Recuperado de <a href="https://docs.posit.co/ide/user/">https://docs.posit.co/ide/user/</a>
+  </div>
+  
+  <div id="ref-student1908" class="csl-entry">
+    Student [pseu. William Sealy Gosset]. (1908). <i>The probable error of a mean</i>. <i>Biometrika</i>, <b>6</b>(1), 1–25.
+  </div>
 </div>
 ```

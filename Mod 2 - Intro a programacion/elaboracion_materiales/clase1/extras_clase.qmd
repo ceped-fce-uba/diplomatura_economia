@@ -1,0 +1,90 @@
+---
+title: "Introducción a R y RStudio"
+subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio - UBA"
+output-file: "Extras Clase 1" 
+format:
+  html:
+    embed-resources: true
+    code-tools: false
+    code-copy: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/teoria_claro.scss
+      dark: ../assets/teoria_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+execute:
+  freeze: auto
+editor: source
+include-after-body: ../assets/footer.html
+---
+
+Hay contenidos que no queríamos dejar de ofrecerles aunque sea de este modo. Estos son temas que no vamos a cubrir en clase pero que pueden leer si les interesa profundizar un poco más. Se trata de cosas que no vamos a necesitar a lo largo de la diplomatura pero que son partes importantes del R. No duden en consultarnos si tienen alguna duda.
+
+
+## Directorios
+
+Siempre que escribimos el nombre del archivo, R lo busca en el working directory. Para saber cual es el directorio de trabajo utilizamos la función `getwd()`. Para redefinir el directorio de trabajo, utilizamos la función `setwd`. [Lo cierto es que si trabajan siempre con un `.Rproj` entonces no deberían tener que preocuparse por esto que sigue.]{.aside}
+
+No es aconsejable utilizar el directorio de trabajo, si nos olvidamos de definirlo, tiramos los archivos en cualquier lado
+
+Lo más práctico es definir los directorios de trabajo como valores. y pegar el nombre del archivo con las carpetas.
+
+```{r}
+carpeta_fuentes    <- paste("C:/Users/.../Documents/R/fuentes/")
+carpeta_resultados <- paste("C:/Users/.../Documents/R/resultados/")
+```
+
+**Es importante notar que se utiliza la barra `/` en lugar de `\` (que sale de copiar y pegar el directorio)**
+
+El nombre completo del archivo puede ser
+
+```{r}
+archivo_datos      <- paste0(carpeta_fuentes, "archivo_fuentes.txt")
+archivo_resultados <- paste0(carpeta_resultados, "archivo_resultados.txt")
+```
+
+Luego, para leer un excel, se escribe:
+
+```{{r}}
+tabla <- read_xlsx(file = archivo_datos,sheetName = "hoja 1") #como es una variable, ya no lleva comillas
+```
+
+### Directorios autorreferenciales
+
+Si bien excede los alcances de este curso, dejamos un chunk de código que puede resultar sumamente útil para crear un directorio de trabajo para un proyecto nuevo.
+
+```{{r}}
+#install.packages(rstudioapi)
+script.dir <- paste0(dirname(rstudioapi::getActiveDocumentContext()$path),"/")
+bases.dir  <-  paste0(dirname(script.dir),"/Fuentes/")
+#dir.create(bases.dir)
+resultados.dir <- paste0(dirname(script.dir),"/Resultados/")
+#dir.create(resultados.dir)
+#chequeo
+dir.exists(bases.dir)
+```
+
+```{{r}}
+dir.exists(resultados.dir)
+```
+
+La primera línea encuentra la carpeta donde esta guardado el script (si no esta guardado no funciona).La segunda línea crea el nombre del directorio Fuentes. La tercera línea (anulada) crea el directorio Fuentes. La cuarta línea crea el nombre del directorio Resultados. La quinta línea (anulada) crea el directorio Resultados.
+
+## Referencias {.unnumbered}
+
+```{=html}
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+  <div id="ref-r-core" class="csl-entry">
+    R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+  </div>
+
+</div>
+```
