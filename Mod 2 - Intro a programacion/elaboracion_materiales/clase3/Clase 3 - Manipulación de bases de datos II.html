@@ -3090,6 +3090,10 @@ vertical-align: -.125em;
   <ul class="collapse">
   <li><a href="#explorar-la-base" id="toc-explorar-la-base" class="nav-link" data-scroll-target="#explorar-la-base">Explorar la base</a></li>
   <li><a href="#primera-concatenación-desde-el-group_by" id="toc-primera-concatenación-desde-el-group_by" class="nav-link" data-scroll-target="#primera-concatenación-desde-el-group_by">Primera concatenación: desde el group_by()</a></li>
+  <li><a href="#segunda-concatenación-left_join" id="toc-segunda-concatenación-left_join" class="nav-link" data-scroll-target="#segunda-concatenación-left_join">Segunda concatenación: left_join()</a></li>
+  </ul></li>
+  <li><a href="#ggplot" id="toc-ggplot" class="nav-link" data-scroll-target="#ggplot">ggplot</a>
+  <ul class="collapse">
   <li><a href="#recursos-adicionales" id="toc-recursos-adicionales" class="nav-link" data-scroll-target="#recursos-adicionales">Recursos adicionales</a></li>
   </ul></li>
   <li><a href="#bibliografía" id="toc-bibliografía" class="nav-link" data-scroll-target="#bibliografía">Bibliografía</a></li>
@@ -3103,12 +3107,20 @@ vertical-align: -.125em;
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Clase 3 - Manipulación de bases de datos II</h1>
+<p class="subtitle lead">Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED - FCE - UBA)</p>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">DOCENTES:</div>
+    <div class="quarto-title-meta-contents">
+             <p>Vladimiro S. Torres </p>
+             <p>Juan Camilo Gutman </p>
+          </div>
+  </div>
     
   
     
@@ -3132,54 +3144,28 @@ vertical-align: -.125em;
 <section id="el-operador-pipe-como-conector-fundamental" class="level3">
 <h3 class="anchored" data-anchor-id="el-operador-pipe-como-conector-fundamental">El operador pipe (%&gt;%) como conector fundamental</h3>
 <p>Este instrumento o herramienta es fundamental para los flujos de trabajo, ya que es el operador a través del cual se concatenan las operaciones u ordenes que están codificadas. Su esencia se encuentra en la posibilidad de realizar múltiples operaciones, de forma secuencial y velozmente, al mismo tiempo que dicho conjunto de operaciones quedan escritas en una secuencia de código. Se trata únicamente de una transformación sintáctica: nos permite ordenar el código</p>
-<table class="caption-top table" data-quarto-postprocess="true">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">Pipe del Tidyverse</td>
-<td data-quarto-table-cell-role="th">Sin Pipe</td>
-</tr>
-<tr class="even">
-<td><div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(category) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">media =</span> <span class="fu">mean</span>(valor))</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      </span></code></pre></div></td>
-<td><div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarize</span>(<span class="fu">group_by</span>(df, category), <span class="at">media =</span> <span class="fu">mean</span>(valor))</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>      </span></code></pre></div></td>
-</tr>
-</tbody>
-</table>
 </section>
 </section>
 <section id="flujo-de-trabajo-y-base-de-datos" class="level2">
 <h2 class="anchored" data-anchor-id="flujo-de-trabajo-y-base-de-datos">Flujo de trabajo y base de datos</h2>
 <p>En esta clase abarcaremos el análisis y la práctica de flujos más complejos con <code>tidyverse</code>, a partir del uso de una base de datos de SIPA. Para ello, se procederá a importar dicha base y contar con ella en el ambiente de R.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>SIPA <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;bases/base_sipa.csv&quot;</span>, </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert Periodo to proper date format immediately</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Periodo =</span> <span class="fu">ymd</span>(Periodo),</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>         Año <span class="ot">=</span> <span class="fu">year</span>(Periodo),</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">Mes =</span> <span class="fu">month</span>(Periodo, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">Trimestre =</span> <span class="fu">quarter</span>(Periodo))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>SIPA <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;bases/base_sipa.csv&quot;</span>, </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert Periodo to proper date format immediately</span></span></code></pre></div>
 </div>
 <section id="explorar-la-base" class="level3">
 <h3 class="anchored" data-anchor-id="explorar-la-base">Explorar la base</h3>
 <p>En primer lugar, se puede observar con que variables cuenta la base.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(SIPA)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(SIPA)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] &quot;Periodo&quot;   &quot;Variable&quot;  &quot;Geografia&quot; &quot;Valor&quot;     &quot;Año&quot;       &quot;Mes&quot;      
-[7] &quot;Trimestre&quot;</code></pre>
+<pre><code>[1] &quot;Periodo&quot;   &quot;Variable&quot;  &quot;Geografia&quot; &quot;Valor&quot;    </code></pre>
 </div>
 </div>
 <p>Así, dado que una columna se llama “Variable”, puede observarse al interior de esta qué etiquetas aparecen y cuál la frecuencia de cada una de estas.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(SIPA<span class="sc">$</span>Variable)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(SIPA<span class="sc">$</span>Variable)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Asalariados registrados en el sector privado 
@@ -3210,56 +3196,129 @@ Asalariados registrados en el sector privado
 </div>
 <p>De este modo, es posible incluir una variable de defina el año de cada observación, a fin de obtener datos que den cuenta de una frecuencia anual y no solo mensual.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>SIPA <span class="ot">&lt;-</span> SIPA <span class="sc">%&gt;%</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(Año <span class="ot">=</span> <span class="fu">year</span>(Periodo))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>SIPA <span class="ot">&lt;-</span> SIPA <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Anio =</span> <span class="fu">year</span>(Periodo))</span></code></pre></div>
 </div>
 <p>La función <code>year()</code> forma parte del paquete <code>lubridate</code>, el cual es de gran utilidad para trabajar con el formato fecha de variables al interior de una base de datos. El input para <code>year()</code> es una variable de clase fecha de nuestro data set, y su output es el año al cual corresponde el input. Al mismo tiempo, como puede verse, dicha fecha se utiliza al interior de la función <code>mutate()</code>, la cual como ya se ha visto opera creando variables nuevas o reescribiendo las ya existentes en caso de indicar el mismo nombre.</p>
-<p>Por tanto, el comando puede leerse cómo: creese una variable llamada <code>Año</code> que tenga por contenido el año de cada uno de las fechas al interior de la variable <code>Periodo</code>. Así, R irá fila por fila tomando como input el contenido de la variable <code>Perìodo</code> y devolviendo como output el año al cual corresponde cada uno de los valores al interior de <code>Periodo</code>.</p>
-<p>Una vez que se cuenta con la variable <code>Año</code>, se procederá a estudiar diferentes cálculos posibles.</p>
+<p>Por tanto, el comando puede leerse cómo: creese una variable llamada <code>Anio</code> que tenga por contenido el año de cada uno de las fechas al interior de la variable <code>Periodo</code>. Así, R irá fila por fila tomando como input el contenido de la variable <code>Perìodo</code> y devolviendo como output el año al cual corresponde cada uno de los valores al interior de <code>Periodo</code>.</p>
+<p>Una vez que se cuenta con la variable <code>Anio</code>, se procederá a estudiar diferentes cálculos posibles.</p>
 </section>
 <section id="primera-concatenación-desde-el-group_by" class="level3">
 <h3 class="anchored" data-anchor-id="primera-concatenación-desde-el-group_by">Primera concatenación: desde el group_by()</h3>
 <p>Un primer procesamiento de utilidad refiere a la utilización de la función <code>group_by()</code>, la cual permite “iterar” algún proceso lógico para todos los valores que toma alguna variable de nuestro dataset. Por ejemplo:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flujo1 &lt;- SIPA %&gt;% </span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   group_by(Año, Variable) %&gt;% </span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   summarise(Promedio = mean(Valor))</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># flujo1</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>flujo1 <span class="ot">&lt;-</span> SIPA <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">group_by</span>(Anio, Variable) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">summarise</span>(<span class="at">Promedio =</span> <span class="fu">mean</span>(Valor))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>flujo1</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 163 × 3
+# Groups:   Anio [16]
+    Anio Variable                                     Promedio
+   &lt;dbl&gt; &lt;chr&gt;                                           &lt;dbl&gt;
+ 1  2009 Asalariados registrados en el sector privado     233.
+ 2  2009 Remuneración mediana - con estacionalidad       2398.
+ 3  2009 Remuneración mediana - sin estacionalidad       2237.
+ 4  2009 Remuneración promedio - con estacionalidad      3224.
+ 5  2009 Remuneración promedio - sin estacionalidad      2953.
+ 6  2010 Asalariados registrados en el sector privado     238.
+ 7  2010 Remuneración mediana - con estacionalidad       3064.
+ 8  2010 Remuneración mediana - sin estacionalidad       2849.
+ 9  2010 Remuneración promedio - con estacionalidad      4073.
+10  2010 Remuneración promedio - sin estacionalidad      3728.
+# ℹ 153 more rows</code></pre>
 </div>
-<p>En este caso, el objetivo está en agrupar un procesamiento determinado para cada valor que tomen las columnas <code>Año</code> y <code>Variable</code>. El procesamiento en cuestión es calcular el promedio del contenido de la columna <code>Valor</code>.</p>
-<p>Por ende, el código puede leerse como: creese la columna <code>Promedio</code>, la cual debe contener el promedio del contenido de la columna <code>Valor</code> para cada combinación de <code>Año</code> y <code>Variable</code>.</p>
-<p>Este tipo de cálculos generales, también pueden especificarse para algún valor, o rango de valores, de las variables para las cuales se hace el agrupamiento (en este caso <code>Año</code> y <code>Variable</code>). Por ejemplo, acotemos el cálculo solo para una de las categorías dentro de <code>Variables</code>.</p>
+</div>
+<p>En este caso, el objetivo está en agrupar un procesamiento determinado para cada valor que tomen las columnas <code>Anio</code> y <code>Variable</code>. El procesamiento en cuestión es calcular el promedio del contenido de la columna <code>Valor</code>.</p>
+<p>Por ende, el código puede leerse como: creese la columna <code>Promedio</code>, la cual debe contener el promedio del contenido de la columna <code>Valor</code> para cada combinación de <code>Anio</code> y <code>Variable</code>.</p>
+<p>Este tipo de cálculos generales, también pueden especificarse para algún valor, o rango de valores, de las variables para las cuales se hace el agrupamiento (en este caso <code>Anio</code> y <code>Variable</code>). Por ejemplo, acotemos el cálculo solo para una de las categorías dentro de <code>Variables</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flujo2 &lt;- SIPA %&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   filter(Variable == &quot;Empleo asalariado en el sector privado&quot;) %&gt;% </span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   group_by(Año) %&gt;% </span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   summarise(Promedio = mean(Valor))</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># flujo2</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>flujo2 <span class="ot">&lt;-</span> SIPA <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Variable <span class="sc">==</span> <span class="st">&quot;Empleo asalariado en el sector privado&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Anio) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Promedio =</span> <span class="fu">mean</span>(Valor))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>flujo2</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 2
+    Anio Promedio
+   &lt;dbl&gt;    &lt;dbl&gt;
+ 1  2012    3083.
+ 2  2013    3106.
+ 3  2014    3107.
+ 4  2015    3166.
+ 5  2016    3143.
+ 6  2017    3165.
+ 7  2018    3169.
+ 8  2019    3097.
+ 9  2020    2973.
+10  2021    3003.
+11  2022    3135.
+12  2023    3234.
+13  2024    3180.</code></pre>
+</div>
 </div>
 <p>En este caso, se incluye un filtro para <code>Variable</code>, el cual busca acotar el cálculo para todos los casos contenidos en la categoría <em>“Empleo asalariado en el sector privado”</em>.</p>
-<p>Por lo tanto, el código puede leerse como: calculese el promedio de la columna <code>Valor</code>, para todo el conjunto de datos que compartan el mismo valor de la columna <code>Año</code>, pero solo para la categorìa <em>“Empleo asalariado en el sector privado”</em> de la columna <code>Variable</code>.</p>
+<p>Por lo tanto, el código puede leerse como: calculese el promedio de la columna <code>Valor</code>, para todo el conjunto de datos que compartan el mismo valor de la columna <code>Anio</code>, pero solo para la categorìa <em>“Empleo asalariado en el sector privado”</em> de la columna <code>Variable</code>.</p>
 <p>A su vez, es importante señalar que en este tipo de procesamientos, R ordena las filas desde el valor más bajo al más alto de la primera columna, por defecto. Sin embargo, el orden puede modificarse al especificar un orden particular con la función <code>arrange()</code>. Por ejemplo:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flujo3 &lt;- SIPA %&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   filter(Variable == &quot;Empleo en casas particulares&quot;) %&gt;% </span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   group_by(Año) %&gt;% </span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   summarise(Promedio = mean(Valor)) %&gt;% </span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   arrange(-Año)</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>flujo3 <span class="ot">&lt;-</span> SIPA <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Variable <span class="sc">==</span> <span class="st">&quot;Empleo en casas particulares&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Anio) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Promedio =</span> <span class="fu">mean</span>(Valor)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>Anio)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>flujo3</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 2
+    Anio Promedio
+   &lt;dbl&gt;    &lt;dbl&gt;
+ 1  2024     284.
+ 2  2023     294.
+ 3  2022     297.
+ 4  2021     298.
+ 5  2020     305.
+ 6  2019     313.
+ 7  2018     305.
+ 8  2017     293.
+ 9  2016     285.
+10  2015     278.
+11  2014     287.
+12  2013     270.
+13  2012     248.</code></pre>
+</div>
 </div>
 <p>En este caso, se repite el procesamiento previo, pero luego de estimar el promedio se ordena a las filas desde el mayor valor de la variable <code>Año</code> al menor. Notar que esto es así porque se especificó un <code>-</code> delante del nombre de la variable al interior de la función <code>arrange()</code>, en caso de no incluir este signo el orden irá del menor valor al mayor.</p>
-<p>Ideas para la primera parte:</p>
-<ol type="1">
-<li>Tomar series en niveles, pasarlas a logs y después visualizar</li>
-<li></li>
-</ol>
-<p>Ideas para la visualización:</p>
-<ol type="1">
-<li>Mirar boxplots</li>
-</ol>
-<p>Al final mostrar por encima el HTML que hizo Vladi para EPH</p>
+<p>Un procesamiento aledaño a lo previo, en busca de manipular el tiempo con otro nivel de periodicidad, sería repetir los procesamientos bajo frecuencias mensuales o trimestrales. La creación de dichas variables de tiempo, sigue una lógica idéntica a la vista para la variable anio, pero con sus funciones correspondientes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>SIPA <span class="ot">&lt;-</span> SIPA <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Mes =</span> <span class="fu">month</span>(Periodo),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">Trimestre =</span> <span class="fu">quarter</span>(Periodo))</span></code></pre></div>
+</div>
 </section>
+<section id="segunda-concatenación-left_join" class="level3">
+<h3 class="anchored" data-anchor-id="segunda-concatenación-left_join">Segunda concatenación: left_join()</h3>
+<p>Si queremos ahora trabajar con precios además de ingresos, en busca de llegar a alguna medida real de estos últimos, requerimos de contar con dicha información en nuestro ambiente de R. Veamos entonces cómo se importa una base con dicha información, y como podemos hacer un <code>join</code> con nuestra base de SIPA.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ipc_mensual <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">&quot;../clase2/bases/ipc_ceped_data.xlsx&quot;</span>)</span></code></pre></div>
+</div>
+<p>Para poder unir dos dataset, necesitamos que ambos cuenten con un <strong>denominador común</strong>, algo que opere como polo de atracción entre ambos objetos. En este caso, y muchas veces, dicho denominador común es la fecha.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#OJO TODAVÍA NO FUNCIONA</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>remuneracion_con_ipc <span class="ot">&lt;-</span> remuneracion_media <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ipc_mensual, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;Periodo&quot;</span> <span class="ot">=</span> <span class="st">&quot;fecha&quot;</span>))</span></code></pre></div>
+</div>
+<p>Y acá podriamos calcular la remuneración promedio en términos reales</p>
+</section>
+</section>
+<section id="ggplot" class="level2">
+<h2 class="anchored" data-anchor-id="ggplot">ggplot</h2>
+<p>Graficar la serie real</p>
+<p>Tomar series en niveles, pasarlas a logs y después visualizar</p>
+<p>Mirar boxplots</p>
+<p>gráficos de densidad</p>
+<p>Al final mostrar por encima el HTML que hizo Vladi para EPH</p>
 <section id="recursos-adicionales" class="level3">
 <h3 class="anchored" data-anchor-id="recursos-adicionales">Recursos adicionales</h3>
 <p>Para quienes quieran profundizar en estos conceptos:</p>

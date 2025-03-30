@@ -1,5 +1,10 @@
 ---
 title: "Clase 2 - Manipulación de bases de datos I"
+subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED - FCE - UBA)"
+author-title: "DOCENTES:" 
+authors:
+  - name: Vladimiro S. Torres
+  - name: Juan Camilo Gutman
 output-file: "Clase 2 - Manipulación de bases de datos I" 
 format:
   html:
@@ -20,7 +25,7 @@ format:
     echo: true
 execute:
   freeze: auto
-editor: visual
+editor: source
 include-after-body: ../assets/footer.html
 ---
 
