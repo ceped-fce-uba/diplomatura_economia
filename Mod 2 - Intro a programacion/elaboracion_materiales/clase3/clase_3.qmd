@@ -57,9 +57,22 @@ En esta clase abarcaremos el análisis y la práctica de flujos más complejos c
 
 ```{r}
 SIPA <- read_csv("bases/base_sipa.csv", 
-                 show_col_types = FALSE)
-  # Convert Periodo to proper date format immediately
+                 show_col_types = FALSE) # Convert Periodo to proper date format immediately
 ```
+
+Un típico control, a penas se importa una base de trabajo, es analizar la clase de la variable donde se indica la fecha o la periodicidad de la información. En muchos casos puede suceder que esta no sea interpretada por R como un variable de tipo fecha, sino de otra naturaleza.
+
+```{r}
+class(SIPA$Periodo)
+
+SIPA <- SIPA %>% 
+  mutate(Periodo = as.Date(Periodo))
+
+class(SIPA$Periodo)
+  
+```
+
+En este caso se revisó la clase de la variable, y se la modificó de modo tal que R interprete su contenido como una fecha. A partir de aquí, se procede a explorar la base de datos.
 
 ### Explorar la base
 
@@ -145,23 +158,70 @@ SIPA <- SIPA %>%
 
 ### Segunda concatenación: left_join()
 
-Si queremos ahora trabajar con precios además de ingresos, en busca de llegar a alguna medida real de estos últimos, requerimos de contar con dicha información en nuestro ambiente de R. Veamos entonces cómo se importa una base con dicha información, y como podemos hacer un `join` con nuestra base de SIPA.
+Un proceso cotidiano con bases de datos es el de pegarlas o unirlas. En este caso, en busca de trabajar con precios y arribar a medidas de ingreso real, pegaremos una base de precios a nuestra base de SIPA. Para ello, se requiere contar con dicha información en nuestro ambiente de R. Veamos entonces cómo se importa una base con dicha información, y como luego podemos hacer un `join` con nuestra base de SIPA.
 
 ```{r}
 ipc_mensual <- read_xlsx("../clase2/bases/ipc_ceped_data.xlsx")
+
+class(ipc_mensual$fecha)
+
+ipc_mensual <- ipc_mensual %>% 
+  mutate(fecha = as.Date(fecha))
+
+class(ipc_mensual$fecha)
 ```
 
-Para poder unir dos dataset, necesitamos que ambos cuenten con un **denominador común**, algo que opere como polo de atracción entre ambos objetos. En este caso, y muchas veces, dicho denominador común es la fecha.
+Notar que fue necesario revisa nuevamente la clase de la variable fecha. Si bien esto puede resultar reiterativo, es un procedimiento muy tìpico en el manejo cotidiano de bases de datos.
+
+Ahora bien, para poder unir dos dataset, necesitamos que ambos cuenten con un **denominador común**, algo que opere como polo de atracción entre ambos objetos. En este caso, y muchas veces, dicho denominador común será la fecha. 
+
+Antes de pegar ambas bases, nos quedaremos únicamente con la parte del dataset de SIPA donde yacen las remuneraciones medias (sin estacionalidad). Además, crearemos un número índice a partir de la serie de remuneraciones promedio.
+
+```{r}
+remuneracion_media <- SIPA %>% 
+  filter(Variable == "Remuneración promedio - sin estacionalidad") %>% 
+  mutate(indice_remuneraciones = Valor/Valor[Periodo == "2009-01-01"]*100)
+```
+
+Creamos también una variable con el número indice de precios de igual base que para los ingresos (base 100 = ene-2009).
+
+```{r}
+ipc_mensual <- ipc_mensual %>% 
+  mutate(indice_ipc_2009 = valor/valor[fecha == "2009-01-01"]*100)
+```
+
+Con dichas variables creadas, **pero sobre todo con el mismo formato de fecha para ambas bases de datos**, procedemos a unir las bases.
 
 ```{r}
 #| eval: false
 
-#OJO TODAVÍA NO FUNCIONA
-remuneracion_con_ipc <- remuneracion_media %>%
+remuneracion_real <- remuneracion_media %>%
   left_join(ipc_mensual, by = c("Periodo" = "fecha"))
 ```
 
-Y acá podriamos calcular la remuneración promedio en términos reales
+Notar que el objeto creado es un objeto distinto, el cual resulta del pegado de las dos bases: `remuneracion_media` e `ipc_mensual`. En particular, la lógica sintáctica de la operación se puede leer de la siguiente manera: creese el objeto `remuneracion_con_ipc`, tomando `remuneracion_media` y aplicandole el operador `left_join()` para unirlo con el objeto `ipc_mensual`. Hágase dicha operación mediante la concatenación de la variable `Periodo` del data set `remuneracion_media`, de la variable `fecha` de la base `ipc_mensual`, cuyo contenido es equivalente. 
+
+Una vez comprendida la operación, lo valioso de contar con ingresos y precios expresados en números indices, es que estos pueden dividirse para obtener un número indice que exprese la evolución del ingreso real.
+
+```{r}
+remuneracion_real <- remuneracion_real %>% 
+  mutate(indice_real = indice_remuneraciones/indice_ipc_2009*100,
+         Trimestre        = quarter(Periodo)) %>% 
+  select(Periodo, Anio = ANO4, Trimestre, Mes = sub, indice_real) 
+```
+
+En este caso, además de crear la variable `indice_real`, se crea la variable trimestre, donde también se suma la función `select()` en busca de limpiar el data set de las variables que fue acumulando. Así, l base de datos queda conformada por 5 variables: `Periodo, Anio, Trimestre, Mes, indice_real`.
+
+Por último, antes de arribar a la introducción a la visualización, se estimarán promedios anuales del salario a fin de de poder comparar unos con otros, calcular variaciones interanuales, y exportar un excel con la información elaborada.
+
+```{r}
+remuneracion_real_anual <- remuneracion_real %>% 
+  group_by(Anio) %>% 
+  summarise(Promedio_Anual = mean(indice_real),
+            Variacion = (Promedio_Anual/lag(Promedio_Anual, 1))-1)
+```
+
+
 
 ## ggplot
 
