@@ -1,6 +1,6 @@
 ---
 title: "Introducción a R y RStudio"
-subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED - FCE - UBA"
+subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED - FCE - UBA)"
 author-title: "DOCENTES:" 
 authors:
   - name: Vladimiro S. Torres
