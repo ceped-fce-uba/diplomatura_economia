@@ -112,12 +112,6 @@ Con el tiempo, el enfoque tidy ha ganado popularidad, inspirando otros paquetes 
 
 A su vez, en los últimos años R ha experimentado cambios tendientes a generar mayor interoperabilidad con Python, y expansión hacia tecnologías como Quarto.
 
-::: {.callout-note .callout-practice icon="false"}
-## 🛠️ Momento de práctica
-
-Les proponemos tomarnos 10' para hacer el ejercicio 1 de la guía práctica
-:::
-
 ### Diferencias con STATA y SPSS
 
 -   Gratuito y de código abierto
@@ -184,7 +178,7 @@ Y <- 1
 
 Este operador tiene un atajo en el teclado: `Alt + -`
 
-Al definir un elemento, el mismo queda guardado en el ambiente del programa, y podrá ser utilizado posteriormente para observar su contenido o para realizar una operación con el mismo
+Al definir un elemento, el mismo queda guardado en el entorno del programa, y podrá ser utilizado posteriormente para observar su contenido o para realizar una operación con el mismo
 
 ```{r}
 Y
@@ -197,7 +191,7 @@ X = 2
 X
 ```
 
-El caracter **unidireccional** de `<-` implica que es posible redefinir objetos ya creados en el ambiente de R, reemplazándolos por el contenido de otro. Por ejemplo:
+El caracter **unidireccional** de `<-` implica que es posible redefinir objetos ya creados en el entorno de R, reemplazándolos por el contenido de otro. Por ejemplo:
 
 ```{r}
 Y <- X
@@ -243,6 +237,8 @@ Z
 
 ### Aritmética
 
+R funciona como calculadora. Hagamos unas operaciones de ejemplo:
+
 ```{r}
 #suma
 
@@ -268,10 +264,16 @@ D <- 4*3
 D
 ```
 
+::: {.callout-note .callout-practice icon="false"}
+## 🛠️ Momento de práctica
+
+Les proponemos tomarnos 10' para hacer el ejercicio 1 de la guía práctica
+:::
+
 ### Caracteres especiales
 
 -   R es sensible a mayúsculas y minúsculas, tanto para los nombres de las variables, como para las funciones y parámetros.
--   Los **espacios en blanco** y los **carriage return** (enter) no son considerados por el lenguaje. Los podemos aprovechar para emprolijar el código y que la lectura sea más simple.
+-   Los **espacios en blanco** y los **carriage return** (los "enter") no son considerados por el lenguaje. Los podemos aprovechar para emprolijar el código y que la lectura sea más simple.
 -   El numeral `#` se utiliza para hacer comentarios. Todo lo que se escribe después del `#` no es interpretado por R. Se debe utilizar un `#` por cada línea de código que se desea anular
 -   Los corchetes `[]` se utilizan para acceder a un objeto:
     -   en un vector \[n° orden\]
@@ -400,7 +402,7 @@ Datos <- data.frame(INDICE, FECHA, SECTOR)
 Datos
 ```
 
-Notar que el nuevo objeto creado se encuentra dentro de la sección de **Data** en el interior de nuestro **ambiente de R**. Tal como en un vector se ubica a los elementos mediante `[]`, en un dataframe se obtienen sus elementos de la forma \`\[fila, columna\]\`\`.
+Notar que el nuevo objeto creado se encuentra dentro de la sección de **Data** en el interior de nuestro **entorno de R**. Tal como en un vector se ubica a los elementos mediante `[]`, en un dataframe se obtienen sus elementos de la forma \`\[fila, columna\]\`\`.
 
 Otra opción es seleccionar la columna, mediante el operador `$`, y luego seleccionar dentro de esa columna, por el número de orden.
 
@@ -437,73 +439,6 @@ Para acceder un elemento de una lista, podemos utilizar el operador \$, que se p
 lista1$DF$FECHA[2]
 ```
 
-### Loops, condicionales y funciones
-
-Un loop es una estructura de código que nos permite recorrer iterativamente un conjunto de comandos, variando algún elemento. Por ejemplo:
-
-```{r}
-for(i in 1:10){
-  Cuadrados<- i^2
-  print(Cuadrados)
-}
-```
-
-La interpretación de este loop es: para i, que toma valor de 1 a 10, imprimí cada resultado de la acción `i^2`
-
-También se puede tomar una lista de valores cualesquiera. Por ejemplo reutilizar datos de un dataframe:
-
-```{r}
-Datos
-```
-
-```{r}
-unique(Datos$SECTOR)
-```
-
-```{r}
-for(variable in unique(Datos$SECTOR)){
-  print(Datos[Datos$SECTOR == variable,])
-}
-```
-
-Las estructuras condiconales nos permites ejecutar código de forma condicional a que se cumpla determinada condición.
-
-```{r}
-resultado <- ifelse(test = class(A) == "character", yes =  paste0("Esto es un caracter"),
-       no = paste0("Esto no era un caracter"))
-resultado
-```
-
-Otra función para condicionar la ejecución de una porción del código es `if(condicion){codigo a ejecutar si se cumple la condición}`
-
-Las funciones nos permiten automatizar todas aquellas partes del código que se repiten mucho. Una vez diseñadas, funcionan igual que cualquier comando. La facilidad para crear las funciones es en buena medida la explicación de que haya tantas contribuciones de usuarios a la expansión del lenguaje.
-
-```{r}
-funcion_prueba <- function(a,b) {
-  print(paste(a, b, sep = " "))
-  
-}
-
-funcion_prueba(a = "soy la primera parte de un string.", b = "Y yo la segunda parte")
-```
-
-También podemos asignar un valor por default.
-
-```{r}
-funcion_prueba <- function(a = "Soy una primera parte default.",b) {
-  print(paste(a, b, sep = " "))
-  
-}
-
-funcion_prueba(b = "A mi no me defaulteas")
-```
-
-Las funciones que creamos en un script propio viven dentro del ambiente donde se las define. Es decir, es necesario volver a correr la definición cada vez que la queremos utilizar.
-
-Vale mencionar que lo que ocurre en una función, queda en la función excepto que explícitamente pidamos que devuelva el resultado, con el comando `print()` o `return()`.
-
-Los paquetes, en cambio, cuentan con funciones que ya fueron definidas y tan solo con convocar el paquete al ambiente de R, estas se encuentran operativas.
-
 ## Lectura y guardado: formatos existentes
 
 R tiene formatos de archivos propios:
@@ -533,7 +468,7 @@ sleep_data
 
 Los archivos de tipo RDS no guardan el nombre del objeto, lo cual es algo positivo. Podemos nombrarlos a gusto cuando los cargamos.
 
-### Otros formatos
+### Formatos no específicos a R
 
 Hay **muchas funciones** para leer archivos de tipo .txt y .csv. La mayoría sólo cambia los parámetros que vienen por default.
 
@@ -627,7 +562,7 @@ Les recomendamos trabajar con un `.Rproj` (un proyecto) para cada análisis o tr
 
 ## Para la clase 2
 
-En la misma carpeta en la encontraron esta presentación hay una guía práctica. Allá van a encontrar ejercicios de diferente dificultad, sus respuestas, y nuestras recomendaciones. Si terminaron los ejercicios y quieren profundizar en sus conocimientos un poco más, también les dejamos un archivo con extras.
+En la misma carpeta en la encontraron esta presentación hay una guía práctica. Allí van a encontrar ejercicios de diferente dificultad, sus respuestas, y nuestras recomendaciones. Si terminaron los ejercicios y quieren profundizar en sus conocimientos un poco más, también les dejamos un archivo con extras.
 
 ## Referencias {.unnumbered}
 

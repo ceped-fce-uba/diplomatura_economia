@@ -22,7 +22,7 @@ format:
     echo: true
 execute:
   freeze: auto
-editor: visual
+editor: source
 include-after-body: ../assets/footer.html
 ---
 
@@ -30,17 +30,27 @@ include-after-body: ../assets/footer.html
 
 Antes de arrancar, algunas claves que nos parecen importantes:
 
--   Aprender R no es una prueba de memoria. Siempre van a tener a mano scripts viejos o ajenos para guiarse, así como foros de ayuda y "chats" de IA.
+-   No necesitan saber todo sobre R para usarlo de manera productiva. Con conocer sus fundamentos y la sintaxis básica de los paquetes más importantes pueden llegar muy lejos.
 
--   No necesitan saber todo sobre R para usarlo de manera productiva. Buscar en Google no es hacer trampa, sino todo lo contrario: saber buscar y aprovechar los motores de búsqueda se convierte en una habilidad en si misma. Eso sí, hay que aprender a separar la paja del trigo, poder verificar si lo que encontramos hace lo que necesitamos.
+-   Aprender R no es una prueba de memoria. Casi siempre van a tener a mano scripts viejos o ajenos para guiarse, así como foros de ayuda (por ej. Stack Overflow) e inteligencias artificiales.
 
--   Casi siempre hay muchas formas distintas de resolver un mismo problema
+-   Siguiendo con lo anterior, buscar en Google no es hacer trampa, sino todo lo contrario: saber buscar y aprovechar los motores de búsqueda es una habilidad en si misma, importantísima. Eso sí, el conocimiento previo de ustedes se vuelve crucial a la hora de discernir qué les sirve y qué no.
 
--   Podríamos poner un link a un google forms para que nos cuenten su experiencia con R u otro software estadístico, o alguna expectativa que tengan, o alguna cosa.
+-   El uso más productivo de la inteligencia artificial es a partir del conocimiento conceptual de la herramienta. La clave es saber hacer las preguntas correctas y para ello es imprescindible saber sintaxis, conocer las funciones y las potencialidades de cada lenguaje. Estamos a favor del uso de Chat GPT y similares, pero les recomendamos no usarlo en esta instancia formativa. En última instancia, pueden pasarle un código para que les señale errores o les de alguna pista de como resolver algo, sin que resuelva sus problemas mágicamente.
+
+-   Sepan que puede haber muchas formas de resolver un mismo problema. Ahí aparece la creatividad de cada unx.
 
 ## Ejercicios
 
 ### 1. Uso básico de RStudio
+
+```{r}
+#| column: margin
+#| echo: false
+#| out.extra: 'style="margin-top: -40px;"'
+
+knitr::include_graphics("imgs/RProj.png")
+```
 
 -   Verifiquen que están trabajando dentro del RProject de la clase 1. De no ser así, pueden abrirlo en la esquina superior derecha (y revisar la nota de clase, dónde les explicamos sobre los proyectos de RStudio).
 -   Para empezar, reiniciar R desde la barra de herramientas de RStudio ("Session" –\> "Restart R").
