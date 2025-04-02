@@ -217,10 +217,30 @@ Por último, antes de arribar a la introducción a la visualización, se estimar
 ```{r}
 remuneracion_real_anual <- remuneracion_real %>% 
   group_by(Anio) %>% 
-  summarise(Promedio_Anual = mean(indice_real),
-            Variacion = (Promedio_Anual/lag(Promedio_Anual, 1))-1)
+  summarise(Promedio_Anual = mean(indice_real))
 ```
 
+Ahora añadimos la variable de `Variacion`, a partir de dividir la variable creada sobre ella misma pero con un `lag()` y restándole la unidad.
+
+```{r}
+remuneracion_real_anual <- remuneracion_real_anual %>% 
+  mutate(Variacion = Promedio_Anual/lag(Promedio_Anual)-1)
+```
+
+Notar que en este caso las variaciones quedan escritas como decimales, para anotar estas en formato porcentaje pueden multiplicarse los valores por 100 dentro del cómputo, e incluso puede pedirse que solo muestre dos decimales. A saber:
+
+```{r}
+remuneracion_real_anual <- remuneracion_real_anual %>% 
+  mutate(Variacion = round((Promedio_Anual/lag(Promedio_Anual)-1)*100, digits = 2))
+```
+
+Aquí, la función `round()` es la que indica acotar la cantidad de decimales, y el parametro `digits = 2` luego del cien y la coma quien señala la cantidad de decimales a estimar.
+
+Por último procedemos a exportar en formato Excel nuestro objeto `remuneracion_real_anual` del ambiente de R.
+
+```{r}
+write_excel_csv(remuneracion_real_anual, "Remuneración Real Anual 2009-2024.xlsx")
+```
 
 
 ## ggplot
