@@ -25,6 +25,8 @@ format:
 execute:
   freeze: auto
 editor: source
+  markdown: 
+    wrap: 72
 include-after-body: ../assets/footer.html
 ---
 
@@ -111,7 +113,6 @@ flujo1 <- SIPA %>%
  summarise(Promedio = mean(Valor))
 
 flujo1
-
 ```
 
 En este caso, el objetivo está en agrupar un procesamiento determinado para cada valor que tomen las columnas `Anio` y `Variable`. El procesamiento en cuestión es calcular el promedio del contenido de la columna `Valor`.
@@ -143,7 +144,6 @@ flujo3 <- SIPA %>%
   arrange(-Anio)
 
 flujo3
-
 ```
 
 En este caso, se repite el procesamiento previo, pero luego de estimar el promedio se ordena a las filas desde el mayor valor de la variable `Año` al menor. Notar que esto es así porque se especificó un `-` delante del nombre de la variable al interior de la función `arrange()`, en caso de no incluir este signo el orden irá del menor valor al mayor.
@@ -173,7 +173,7 @@ class(ipc_mensual$fecha)
 
 Notar que fue necesario revisa nuevamente la clase de la variable fecha. Si bien esto puede resultar reiterativo, es un procedimiento muy tìpico en el manejo cotidiano de bases de datos.
 
-Ahora bien, para poder unir dos dataset, necesitamos que ambos cuenten con un **denominador común**, algo que opere como polo de atracción entre ambos objetos. En este caso, y muchas veces, dicho denominador común será la fecha. 
+Ahora bien, para poder unir dos dataset, necesitamos que ambos cuenten con un **denominador común**, algo que opere como polo de atracción entre ambos objetos. En este caso, y muchas veces, dicho denominador común será la fecha.
 
 Antes de pegar ambas bases, nos quedaremos únicamente con la parte del dataset de SIPA donde yacen las remuneraciones medias (sin estacionalidad). Además, crearemos un número índice a partir de la serie de remuneraciones promedio.
 
@@ -199,7 +199,7 @@ remuneracion_real <- remuneracion_media %>%
   left_join(ipc_mensual, by = c("Periodo" = "fecha"))
 ```
 
-Notar que el objeto creado es un objeto distinto, el cual resulta del pegado de las dos bases: `remuneracion_media` e `ipc_mensual`. En particular, la lógica sintáctica de la operación se puede leer de la siguiente manera: creese el objeto `remuneracion_con_ipc`, tomando `remuneracion_media` y aplicandole el operador `left_join()` para unirlo con el objeto `ipc_mensual`. Hágase dicha operación mediante la concatenación de la variable `Periodo` del data set `remuneracion_media`, de la variable `fecha` de la base `ipc_mensual`, cuyo contenido es equivalente. 
+Notar que el objeto creado es un objeto distinto, el cual resulta del pegado de las dos bases: `remuneracion_media` e `ipc_mensual`. En particular, la lógica sintáctica de la operación se puede leer de la siguiente manera: creese el objeto `remuneracion_con_ipc`, tomando `remuneracion_media` y aplicandole el operador `left_join()` para unirlo con el objeto `ipc_mensual`. Hágase dicha operación mediante la concatenación de la variable `Periodo` del data set `remuneracion_media`, de la variable `fecha` de la base `ipc_mensual`, cuyo contenido es equivalente.
 
 Una vez comprendida la operación, lo valioso de contar con ingresos y precios expresados en números indices, es que estos pueden dividirse para obtener un número indice que exprese la evolución del ingreso real.
 
@@ -242,8 +242,75 @@ Por último procedemos a exportar en formato Excel nuestro objeto `remuneracion_
 write_excel_csv(remuneracion_real_anual, "Remuneración Real Anual 2009-2024.xlsx")
 ```
 
+## Introducción a la visualización
 
-## ggplot
+Una parte importante del uso de R consiste en las herramientas de visualización que este provee. Para ello, a partir de aquí trabajaremos sobre la librería `ggplot`. la cual forma parte del entorno `tidyverse` y su uso se encuentra ampliamente difundido entre la comunidad de usuarios/as de R.
+
+Para comenzar, además de analizar a la estructura de la lógica sintáctica, trabajaremos sobre un concepto central de `ggplot` que es la asignaciòn de atributos estèticos a los valores que toma una determinada variable. Dicho de otra forma, como mostrar de modo perceptible a la vista la diferencia entre valores: generalmente lo hacemos describiendo posiciones de un valor x y un valor y, pero también puedo definir un tamaño, una forma, o un color.
+
+![](imagen 1.png){width="50%"}
+
+`ggplot` tiene su sintaxis propia. La idea central es pensar los gráficos como una sucesión de capas, que se construyen una a la vez.
+
+¿Cómo funciona esto en la práctica?
+
+-   El comando `ggplot()` nos permite definir los **datos** y las **variables** (x,y,color,forma,etc).
+
+-   El operador `+` nos permite incorporar nuevas capas al gráfico.
+
+-   Las sucesivas capas nos permiten definir:
+
++ Uno o más tipos de gráficos (de columnas, `geom_col()`, de línea, `geom_line()`, de puntos,`geom_point()`, boxplot, `geom_boxplot()`). 
++ Títulos `labs()`.
++ Estilo del gráfico `theme()`. 
++ Escalas de los ejes `scale_y_continuous`, `scale_x_discrete`.
++ División en subconjuntos `facet_wrap()`, `facet_grid()`. 
+
+ggplot tiene muchos comandos, y no tiene sentido saberlos de memoria, es siempre útil reutilizar gráficos viejos y tener a mano el [machete](https://posit.co/).
+
+Usaremos el paquete de R [ggplot2](https://ggplot2.tidyverse.org/), que incluye funciones para realizar una gran variedad de visualizaciones.
+
+```{r}
+library(ggplot2)
+```
+
+A modo de ejemplo, y para mostrar una serie que pueda resultarnos familiar, tomaremos nuestra base de SIPA y filtraremos por **empleo asalariado en el sector privado** para visualizar dicha variable a través del tiempo. 
+
+```{r}
+SIPA_viz <- SIPA %>% 
+  filter(Variable == "Empleo asalariado en el sector privado", Valor > 200) %>% 
+  mutate(Periodo = paste0(Anio,".", Mes))
+```
+
+Así, si por ejemplo le pasamos un dataframe a ggplot(), sin agregar nada más, obtenemos un gráfico vacío:
+
+```{r}
+ggplot(SIPA_viz)
+```
+
+Esto es porque necesitamos definir al menos una geometría (el recurso visual con el que vamos a mostrar la información, como líneas, puntos, barras, etc.) y al menos una asignación estética (especificar cuales variables queremos mostrar, y que atributo estético va a representar sus valores, como el color, el tamaño, la transparencia, etc.).
+
+`ggplot()` implementa un marco teórico para la creación de visualizaciones, “la gramática de los gráficos”. Ésta permite expresar en forma concisa los componentes de un gráfico:
+
+![](imagen 2.png){width="50%"}
+
+Si se asigna la variable `Periodo` a la posición en el eje de las `x`, la variable `Valor` a las `y`, y se añade `geom_line()` para mostrar los datos, se puede obtener el siguiente gráfico:
+
+```{r}
+ggplot(SIPA_viz, aes(x = Periodo, y = Valor, group = 1)) +
+  geom_line()
+```
+
+
+
+
+
+
+
+
+
+
+
 
 Graficar la serie real
 
