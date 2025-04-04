@@ -82,11 +82,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 ## ¿Qué es R?
 
-R es un lenguaje de programación y entorno de software libre que ha revolucionado el análisis estadístico y la visualización de datos. Desarrollado durante los años 90 en la Universidad de Auckland, está inspirado en el lenguaje S creado en los años 70, pero con una arquitectura orientada a la colaboración científica y académica.
+R es un lenguaje de programación y entorno de software libre que ha revolucionado el análisis estadístico y la visualización de datos. Desarrollado durante los años 90 en la Universidad de Auckland (Nueva Zelanda), está inspirado en el lenguaje S creado en los años 70, pero con una arquitectura orientada a la colaboración científica y académica.
 
-En 1995, R fue lanzado como software de código abierto, alcanzando su versión 1.0 en el año 2000. Desde entonces, ha experimentado un crecimiento exponencial, consolidándose como herramienta fundamental para profesionales e investigadores en múltiples disciplinas que requieren análisis de datos robustos.
+En 1995, R fue lanzado como software de código abierto, alcanzando su versión 1.0 en el año 2000. Desde entonces, ha experimentado un crecimiento exponencial, consolidándose como herramienta fundamental para profesionales e investigadores en múltiples disciplinas que requieren análisis de datos robustos. Si quieren saber más al respecto pueden llamar a la función `contributors()`en la consola de R.
 
-El Comprehensive R Archive Network (CRAN), fundado en 1997, constituye el repositorio principal de paquetes para R. Actualmente alberga más de 19.000 paquetes que abarcan desde modelos estadísticos tradicionales hasta implementaciones avanzadas de machine learning y sistemas de visualización de datos de alto rendimiento. CRAN garantiza la estabilidad y compatibilidad del ecosistema R, aunque su riguroso proceso de validación ha dado lugar a prácticas complementarias en la comunidad. Muchos desarrolladores publican versiones preliminares de sus paquetes en plataformas como GitHub, donde la comunidad puede examinarlos y contribuir a su mejora antes de su incorporación oficial al repositorio CRAN.
+El Comprehensive R Archive Network (CRAN), fundado en 1997, constituye el repositorio principal de paquetes para R. Actualmente alberga más de 22.000 paquetes que abarcan desde modelos estadísticos tradicionales hasta implementaciones avanzadas de machine learning y sistemas de visualización de datos de alto rendimiento. CRAN garantiza la estabilidad y compatibilidad del ecosistema R, aunque su riguroso proceso de validación ha dado lugar a prácticas complementarias en la comunidad. Muchos desarrolladores publican versiones preliminares de sus paquetes en plataformas como GitHub, donde la comunidad puede examinarlos y contribuir a su mejora antes de su incorporación oficial al repositorio CRAN.
 
 ```{r}
 #| echo: false
