@@ -99,7 +99,7 @@ SIPA <- SIPA %>%
 
 La función `year()` forma parte del paquete `lubridate`, el cual es de gran utilidad para trabajar con el formato fecha de variables al interior de una base de datos. El input para `year()` es una variable de clase fecha de nuestro data set, y su output es el año al cual corresponde el input. Al mismo tiempo, como puede verse, dicha fecha se utiliza al interior de la función `mutate()`, la cual como ya se ha visto opera creando variables nuevas o reescribiendo las ya existentes en caso de indicar el mismo nombre.
 
-Por tanto, el comando puede leerse cómo: creese una variable llamada `Anio` que tenga por contenido el año de cada uno de las fechas al interior de la variable `Periodo`. Así, R irá fila por fila tomando como input el contenido de la variable `Perìodo` y devolviendo como output el año al cual corresponde cada uno de los valores al interior de `Periodo`.
+Por tanto, el comando puede leerse cómo: creese una variable llamada `Anio` que tenga por contenido el año de cada uno de las fechas al interior de la variable `Periodo`. Así, R irá fila por fila tomando como input el contenido de la variable `Periodo` y devolviendo como output el año al cual corresponde cada uno de los valores al interior de `Periodo`.
 
 Una vez que se cuenta con la variable `Anio`, se procederá a estudiar diferentes cálculos posibles.
 
@@ -171,7 +171,7 @@ ipc_mensual <- ipc_mensual %>%
 class(ipc_mensual$fecha)
 ```
 
-Notar que fue necesario revisa nuevamente la clase de la variable fecha. Si bien esto puede resultar reiterativo, es un procedimiento muy tìpico en el manejo cotidiano de bases de datos.
+Notar que fue necesario revisa nuevamente la clase de la variable fecha. Si bien esto puede resultar reiterativo, es un procedimiento muy típico en el manejo cotidiano de bases de datos.
 
 Ahora bien, para poder unir dos dataset, necesitamos que ambos cuenten con un **denominador común**, algo que opere como polo de atracción entre ambos objetos. En este caso, y muchas veces, dicho denominador común será la fecha.
 
@@ -248,7 +248,7 @@ Una parte importante del uso de R consiste en las herramientas de visualización
 
 Para comenzar, además de analizar a la estructura de la lógica sintáctica, trabajaremos sobre un concepto central de `ggplot` que es la asignaciòn de atributos estèticos a los valores que toma una determinada variable. Dicho de otra forma, como mostrar de modo perceptible a la vista la diferencia entre valores: generalmente lo hacemos describiendo posiciones de un valor x y un valor y, pero también puedo definir un tamaño, una forma, o un color.
 
-![](imagen 1.png){width="50%"}
+![](imagen%201.png){width="50%"}
 
 `ggplot` tiene su sintaxis propia. La idea central es pensar los gráficos como una sucesión de capas, que se construyen una a la vez.
 
@@ -260,11 +260,15 @@ Para comenzar, además de analizar a la estructura de la lógica sintáctica, tr
 
 -   Las sucesivas capas nos permiten definir:
 
-+ Uno o más tipos de gráficos (de columnas, `geom_col()`, de línea, `geom_line()`, de puntos,`geom_point()`, boxplot, `geom_boxplot()`). 
-+ Títulos `labs()`.
-+ Estilo del gráfico `theme()`. 
-+ Escalas de los ejes `scale_y_continuous`, `scale_x_discrete`.
-+ División en subconjuntos `facet_wrap()`, `facet_grid()`. 
+-   Uno o más tipos de gráficos (de columnas, `geom_col()`, de línea, `geom_line()`, de puntos,`geom_point()`, boxplot, `geom_boxplot()`).
+
+-   Títulos `labs()`.
+
+-   Estilo del gráfico `theme()`.
+
+-   Escalas de los ejes `scale_y_continuous`, `scale_x_discrete`.
+
+-   División en subconjuntos `facet_wrap()`, `facet_grid()`.
 
 ggplot tiene muchos comandos, y no tiene sentido saberlos de memoria, es siempre útil reutilizar gráficos viejos y tener a mano el [machete](https://posit.co/).
 
@@ -274,39 +278,60 @@ Usaremos el paquete de R [ggplot2](https://ggplot2.tidyverse.org/), que incluye 
 library(ggplot2)
 ```
 
-A modo de ejemplo, y para mostrar una serie que pueda resultarnos familiar, tomaremos nuestra base de SIPA y filtraremos por **empleo asalariado en el sector privado** para visualizar dicha variable a través del tiempo. 
+A modo de ejemplo, y para mostrar una serie que pueda resultarnos familiar, tomaremos nuestra base de SIPA y filtraremos por **empleo asalariado en el sector privado** para visualizar dicha variable a través del tiempo.
 
 ```{r}
-SIPA_viz <- SIPA %>% 
-  filter(Variable == "Empleo asalariado en el sector privado", Valor > 200) %>% 
-  mutate(Periodo = paste0(Anio,".", Mes))
+#SIPA_viz <- SIPA %>% 
+#  filter(Variable == "Empleo asalariado en el sector privado", Valor > 200) %>% 
+#  mutate(Periodo = paste0(Anio,".", Mes),
+#         Mes = as.factor(Mes)) %>% 
+#  select(Periodo, Valor, Anio, Mes)
+```
+
+```{r}
+temp_arg <- read.csv("bases/city_temperature_arg.csv")
+
+
+
+temp_mex <- read.csv("bases/city_temperature_mex.csv")
 ```
 
 Así, si por ejemplo le pasamos un dataframe a ggplot(), sin agregar nada más, obtenemos un gráfico vacío:
 
 ```{r}
-ggplot(SIPA_viz)
+ggplot(temp_arg)
 ```
 
 Esto es porque necesitamos definir al menos una geometría (el recurso visual con el que vamos a mostrar la información, como líneas, puntos, barras, etc.) y al menos una asignación estética (especificar cuales variables queremos mostrar, y que atributo estético va a representar sus valores, como el color, el tamaño, la transparencia, etc.).
 
 `ggplot()` implementa un marco teórico para la creación de visualizaciones, “la gramática de los gráficos”. Ésta permite expresar en forma concisa los componentes de un gráfico:
 
-![](imagen 2.png){width="50%"}
+![](imagen%202.png){width="50%"}
 
 Si se asigna la variable `Periodo` a la posición en el eje de las `x`, la variable `Valor` a las `y`, y se añade `geom_line()` para mostrar los datos, se puede obtener el siguiente gráfico:
 
 ```{r}
-ggplot(SIPA_viz, aes(x = Periodo, y = Valor, group = 1)) +
+ggplot(temps_beirut, aes(x = day(), y = temperature)) +
   geom_line()
 ```
 
 
+```{r}
+ggplot(SIPA_viz, aes(x = Periodo, y = Valor, group = 1)) +
+  geom_point()
+```
 
 
+```{r}
+ggplot(SIPA_viz, aes(x = Mes, y = Valor)) +
+  geom_boxplot()
+```
 
 
-
+```{r}
+ggplot(SIPA_viz, aes(x = Mes, y = Valor, color = Anio)) +
+  geom_line()
+```
 
 
 
