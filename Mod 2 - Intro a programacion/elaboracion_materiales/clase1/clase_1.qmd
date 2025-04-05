@@ -26,7 +26,14 @@ format:
 execute:
   freeze: auto
 editor: source
-include-after-body: ../assets/footer.html
+knitr: 
+  opts_chunk: 
+    dev: [svglite, darksvglite]
+    fig.ext: [.light.png, .dark.png]
+include-after-body:
+  - text: |
+      <script type="application/javascript" src="../assets/light-dark.js"></script>
+  - ../assets/footer.html
 ---
 
 :::: parallax-container
@@ -92,7 +99,7 @@ El Comprehensive R Archive Network (CRAN), fundado en 1997, constituye el reposi
 #| echo: false
 #| purl: false
 
-knitr::include_graphics("imgs/CRAN.png")
+knitr::include_graphics("imgs/paquetes_cran_acum.light.png")
 ```
 
 En 2011, la empresa Posit (antes RStudio) lanzó RStudio, un entorno de desarrollo integrado que transformó la accesibilidad y usabilidad de R. Su interfaz gráfica facilitó la escritura de código, la depuración y la gestión de proyectos, consolidándose como la herramienta estándar para trabajar con R.
