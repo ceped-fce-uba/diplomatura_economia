@@ -231,26 +231,6 @@ remuneracion_real_anual <- remuneracion_real_anual %>%
   mutate(Variacion = round((Promedio_Anual/lag(Promedio_Anual)-1)*100, digits = 2))
 ```
 
-```{r}
-#PROBANDO
-
-library(plotly)
-
-plot_remun <- remuneracion_real %>%
-  filter(year(Periodo) >= 2020) %>%
-  ggplot(aes(x = Periodo, y = indice_real)) +
-  geom_line(color = 'steelblue', size = 1) +
-  geom_point(color = 'steelblue', size = 2.5) +
-  scale_x_date(date_breaks = "2 month",
-               date_labels = "%b %Y") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45,
-                                  hjust = 1)
-        )
-  
-
-plot_remun %>% ggplotly()
-```
 
 Aquí, la función `round()` es la que indica acotar la cantidad de decimales, y el parametro `digits = 2` luego del cien y la coma quien señala la cantidad de decimales a estimar.
 
@@ -298,22 +278,14 @@ Usaremos el paquete de R [ggplot2](https://ggplot2.tidyverse.org/), que incluye 
 library(ggplot2)
 ```
 
-A modo de ejemplo, y para mostrar una serie que pueda resultarnos familiar, tomaremos nuestra base de SIPA y filtraremos por **empleo asalariado en el sector privado** para visualizar dicha variable a través del tiempo.
+A modo de ejemplo, y para mostrar una base de datos diferente con datos intuitivos, utilizaremos bases de la temperatura diaria de [kaggle](https://www.kaggle.com/sudalairajkumar/daily-temperature-of-major-cities) para Argentina y México. Específicamente para Buenos Aires y tres ciudades de México (Guadalajara, México DF y Monterrey).
 
 ```{r}
-#SIPA_viz <- SIPA %>% 
-#  filter(Variable == "Empleo asalariado en el sector privado", Valor > 200) %>% 
-#  mutate(Periodo = paste0(Anio,".", Mes),
-#         Mes = as.factor(Mes)) %>% 
-#  select(Periodo, Valor, Anio, Mes)
-```
-
-```{r}
-temp_arg <- read.csv("bases/city_temperature_arg.csv")
-
-
+temp_arg <- read.csv("bases/city_temperature_arg.csv") 
+#hay que filtrar las bases por que tienen datos mising computados como -99
 
 temp_mex <- read.csv("bases/city_temperature_mex.csv")
+
 ```
 
 Así, si por ejemplo le pasamos un dataframe a ggplot(), sin agregar nada más, obtenemos un gráfico vacío:
@@ -328,11 +300,11 @@ Esto es porque necesitamos definir al menos una geometría (el recurso visual co
 
 ![](imagen%202.png){width="50%"}
 
-Si se asigna la variable `Periodo` a la posición en el eje de las `x`, la variable `Valor` a las `y`, y se añade `geom_line()` para mostrar los datos, se puede obtener el siguiente gráfico:
+Si se asigna la variable `Month` a la posición en el eje de las `x`, la variable `temp_prom` a las `y`, y se añade `geom_point()` para mostrar los datos, se puede obtener el siguiente gráfico:
 
 ```{r}
-ggplot(temps_beirut, aes(x = day(), y = temperature)) +
-  geom_line()
+ggplot(temp_arg, aes(x = Month, y = temp_prom)) +
+  geom_point()
 ```
 
 
@@ -341,7 +313,7 @@ ggplot(SIPA_viz, aes(x = Periodo, y = Valor, group = 1)) +
   geom_point()
 ```
 
-
+Mirar boxplots
 ```{r}
 ggplot(SIPA_viz, aes(x = Mes, y = Valor)) +
   geom_boxplot()
@@ -354,16 +326,46 @@ ggplot(SIPA_viz, aes(x = Mes, y = Valor, color = Anio)) +
 ```
 
 
+base para salario real
 
+```{r}
+#SIPA_viz <- SIPA %>% 
+#  filter(Variable == "Empleo asalariado en el sector privado", Valor > 200) %>% 
+#  mutate(Periodo = paste0(Anio,".", Mes),
+#         Mes = as.factor(Mes)) %>% 
+#  select(Periodo, Valor, Anio, Mes)
+```
 
 
 Graficar la serie real
 
+
+```{r}
+#PROBANDO
+
+library(plotly)
+
+plot_remun <- remuneracion_real %>%
+  filter(year(Periodo) >= 2020) %>%
+  ggplot(aes(x = Periodo, y = indice_real)) +
+  geom_line(color = 'steelblue', size = 1) +
+  geom_point(color = 'steelblue', size = 2.5) +
+  scale_x_date(date_breaks = "2 month",
+               date_labels = "%b %Y") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45,
+                                  hjust = 1)
+        )
+  
+
+plot_remun %>% ggplotly()
+```
+
 Tomar series en niveles, pasarlas a logs y después visualizar
 
-Mirar boxplots
 
-gráficos de densidad
+
+gráficos de densidad: enut
 
 Al final mostrar por encima el HTML que hizo Vladi para EPH
 
