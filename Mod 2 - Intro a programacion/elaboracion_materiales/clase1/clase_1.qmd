@@ -198,6 +198,8 @@ X = 2
 X
 ```
 
+No deben confundir el operador de asignación `=` con el operador lógico `==` que veremos en la sección siguiente.
+
 El caracter **unidireccional** de `<-` implica que es posible redefinir objetos ya creados en el entorno de R, reemplazándolos por el contenido de otro. Por ejemplo:
 
 ```{r}
@@ -431,21 +433,6 @@ Datos$FECHA[3,2]
 
 Nótese que el último comando tiene un número incorrecto de dimensiones, porque estamos refiriendonos 2 veces a la columna FECHA.
 
-### Listas
-
-Contienen una concatenación de objetos de cualquier tipo. Así como un vector contiene valores, un dataframe contiene vectores, una lista puede contener dataframes, pero también vectores, o valores, y todo ello a la vez
-
-```{r}
-lista1 <- list(A, B, C, D, E, FECHA, DF = Datos, INDICE, SECTOR)
-lista1
-```
-
-Para acceder un elemento de una lista, podemos utilizar el operador \$, que se puede usar a su vez de forma iterativa
-
-```{r}
-lista1$DF$FECHA[2]
-```
-
 ## Lectura y guardado: formatos existentes
 
 R tiene formatos de archivos propios:
@@ -533,7 +520,7 @@ R tiene por default el encoding **“ISO-8859-1”**, sin embargo el más habitu
 
 ## Organización scripts
 
-Por último, es aconsejable mantener en todos los script una misma estructura del tipo:
+Es aconsejable mantener en todos los script una misma estructura del tipo:
 
 1.  Limpiar la memoria rm(list=ls())
 2.  Cargar librerías
@@ -567,7 +554,7 @@ La forma típica de comenzar a trabajar en R es haciendo doble clic en el archiv
 
 Les recomendamos trabajar con un `.Rproj` (un proyecto) para cada análisis o trabajo. Al hacerlo, se centraliza la configuración del entorno, las rutas de acceso y demás ajustes, lo que garantiza uniformidad durante todo el proceso. Sobre esa base, se recomienda dividir el código en diferentes scripts, asignando a cada uno tareas específicas —por ejemplo, uno para la limpieza de datos, otro para el análisis exploratorio y un tercero para la generación de gráficos—. Esta separación no solo simplifica el mantenimiento y la reutilización del código, sino que también mejora la colaboración en equipo, permitiendo que cada colaborador se familiarice rápidamente con la estructura y el flujo de trabajo.
 
-## Para la clase 2
+## De cara a la clase 2
 
 En la misma carpeta en la encontraron esta presentación hay una guía práctica. Allí van a encontrar ejercicios de diferente dificultad, sus respuestas, y nuestras recomendaciones. Si terminaron los ejercicios y quieren profundizar en sus conocimientos un poco más, también les dejamos un archivo con extras.
 

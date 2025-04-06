@@ -31,6 +31,22 @@ include-after-body: ../assets/footer.html
 
 Hay contenidos que no queríamos dejar de ofrecerles aunque sea de este modo. Estos son temas que no vamos a cubrir en clase pero que pueden leer si les interesa profundizar un poco más. Se trata de cosas que no vamos a necesitar a lo largo de la diplomatura pero que son partes importantes del R. No duden en consultarnos si tienen alguna duda.
 
+## Listas
+
+Contienen una concatenación de objetos de cualquier tipo. Así como un vector contiene valores, un dataframe contiene vectores, una lista puede contener dataframes, pero también vectores, o valores, y todo ello a la vez
+
+```{r}
+lista1 <- list(A, B, C, D, E, FECHA, DF = Datos, INDICE, SECTOR)
+lista1
+```
+
+Para acceder un elemento de una lista, podemos utilizar el operador \$, que se puede usar a su vez de forma iterativa
+
+```{r}
+lista1$DF$FECHA[2]
+```
+
+
 
 ## Directorios
 
