@@ -5,7 +5,7 @@ author-title: "DOCENTES:"
 authors:
   - name: Vladimiro S. Torres
   - name: Juan Camilo Gutman
-output-file: "Clase 1 - Introducción a R y RStudio" 
+output-file: "Clase 1 - Introduccion a R y RStudio" 
 format:
   html:
     embed-resources: true
@@ -300,7 +300,7 @@ typeof(A)
 
 ::: {.callout-warning appearance="simple"}
 ## Advertencia
-Los lenguajes de programación, incluyendo a R, fueron mayormente desarrollados en países donde utilizan el punto (.) como separador decimal, que lo establecieron como estándar. Por eso hoy en día se estandarizó e
+Los lenguajes de programación, incluyendo a R, fueron mayormente desarrollados en países donde utilizan el punto (.) como separador decimal, por lo que se estandarizó de esa forma. Si utilizan la coma (,) se encontrarán con errores.
 :::
 
 #### Integer (Enteros)
