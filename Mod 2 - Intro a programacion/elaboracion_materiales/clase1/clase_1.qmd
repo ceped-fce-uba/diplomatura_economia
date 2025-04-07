@@ -178,7 +178,7 @@ La pestaña que más nos interesará será la de **Archivos** (el resto se activ
 Les proponemos tomarnos 10' para hacer el ejercicio 1 de la guía práctica
 :::
 
-## Lógica sintáctica del lenguaje
+## Lógica sintáctica básica
 
 ### Definir objetos
 
@@ -232,13 +232,9 @@ Y <- X
 Y # En este caso Y fue redefinida con el contenido de X
 ```
 
-### R Base
+## Aritmética básica
 
-Con R base nos referimos a los comandos básicos que vienen incorporados en el R, sin necesidad de cargar librerías.
-
-### Aritmética básica
-
-R funciona como calculadora. Hagamos unas operaciones de ejemplo:
+R, viene precargado con comandos básicos incorporados (a ellos los llamamos los comandos de **R base**, que no hay que cargar como las librerías). Un ejemplo de las funciones incluidas en R base son las operaciones aritméticas básicas:
 
 ```{r}
 A <- 2 + 2 # Suma
@@ -260,17 +256,18 @@ D <- 4*3 # Multiplicación
 D
 ```
 
+## Caracteres y objetos
 
 ### Caracteres especiales
 
 -   R es sensible a mayúsculas y minúsculas, tanto para los nombres de las variables, como para las funciones y parámetros.
 -   Los **espacios en blanco** y los **carriage return** (los "enter") no son considerados por el lenguaje. Los podemos aprovechar para emprolijar el código y que la lectura sea más simple.
 -   El numeral `#` se utiliza para hacer comentarios. Todo lo que se escribe después del `#` no es interpretado por R. Se debe utilizar un `#` por cada línea de código que se desea anular
--   Los corchetes `[]` se utilizan para acceder a un objeto:
+-   Los corchetes `[]` se utilizan para acceder a los elementos de un objeto:
     -   en un vector \[n° orden\]
     -   en una matriz \[fila, columna\]
     -   en una lista \[n° elemento\]
--   El signo `$` también es un método de acceso, que permite llamar al elemento por su nombre, en dataframes y listas.
+-   El signo `$` también es un método de acceso, que permite llamar al elemento por su nombre, por ejemplo a las columnas de dataframes.
 -   Los paréntesis `()` se utilizan en las funciones para definir los parámetros.
 -   Las comas `,` se utilizan para separar los elementos.
 
@@ -279,7 +276,7 @@ D
 R posee diversos tipos de datos que permiten representar diferentes tipos de información. Entender estos tipos es fundamental para cualquier análisis.
 
 
-### Tipos Numéricos
+#### Tipos Numéricos
 
 R tiene varios tipos numéricos:
 
@@ -290,13 +287,15 @@ A <- 1
 class(A)
 typeof(A)
 ```
-Double es una abreviación de "doble precisión" y el nombre tiene que ver con la historia de las ciencias de la computación (¡lo cual excede los límites de este curso!). En la práctica van a trabajar siempre con este tipo de dato numérico.
+Double es una abreviación de "doble precisión" y el nombre tiene que ver con la historia de las ciencias de la computación (¡lo cual excede los límites de este curso!). 
 
 ```{r}
 A <- 1.5 # Un ejemplo con decimales
 class(A)
 typeof(A)
 ```
+
+Este es el tipo numérico por defecto. En la práctica es con lo que siempre van a estar trabajando.
 
 ::: {.callout-warning appearance="simple"}
 ## Advertencia
@@ -317,8 +316,28 @@ Se usan en bases de datos enormes o en aplicaciones específicas.
 
 #### Character (Cadenas de caracteres)
 
+Sencillamente es texto.
+
 ```{r}
 A <- "osea, digamos"
+class(A)
+```
+### Logical (Lógicos)
+
+Los valores lógicos son TRUE o FALSE. Son pilares fundamentales de la programación.
+
+```{r}
+verdadero <- TRUE
+falso <- FALSE
+class(verdadero)
+```
+
+Van a usarlos con frecuencia en parámetros de funciones.
+
+#### Date (Fecha)
+
+```{r}
+A <- as.Date("2017-01-01")
 class(A)
 ```
 
@@ -330,13 +349,6 @@ class(A)
 ```
 
 La diferencia entre un **character** y un **factor** es que el último tiene **solo algunos valores permitidos** (levels), y se le puede dar un orden.
-
-**Date**
-
-```{r}
-A <- as.Date("2017-01-01")
-class(A)
-```
 
 ### Resumen de Tipos Básicos
 | Tipo | Descripción | Ejemplo | Función creadora |
@@ -435,18 +447,11 @@ También podemos cambiar el texto del segundo elemento de E, por el texto “var
 E[2] <- "var"
 ```
 
-### Listas
-
-```{r}
-# Algo muy básico al menos
-```
-
 ### Matrices
 
 ```{r}
 # Algo simple
 ```
-
 
 ### Data Frames (DF)
 
@@ -493,80 +498,95 @@ Datos$FECHA[3,2]
 
 Nótese que el último comando tiene un número incorrecto de dimensiones, porque estamos refiriendonos 2 veces a la columna FECHA.
 
+### Listas
+
+Contienen una colección de objetos de cualquier tipo. Así como un vector contiene valores, un dataframe contiene vectores, una lista puede contener dataframes, pero también vectores, o valores, y todo ello a la vez
+
+```{r}
+lista1 <- list(1, 2, "tres")
+lista1
+```
+
+No vamos a necesitar manejar listas para los fines de este curso.
+
 ### Estructuras de Datos
 | Estructura | Descripción | Características |
 |------------|-------------|-----------------|
 | Vector | Colección de elementos del mismo tipo | Unidimensional, homogéneo |
-| List | Colección de elementos de diferentes tipos | Heterogénea, anidable |
-| Matrix | Tabla de elementos del mismo tipo | Bidimensional, homogénea |
+| Matriz | Tabla de elementos del mismo tipo | Bidimensional, homogénea |
 | Data Frame | Tabla de datos de diferentes tipos | Columnas pueden ser de diferentes tipos |
+| Lista | Colección de elementos de diferentes tipos | Heterogénea, anidable |
 
 ## Lectura y guardado: formatos existentes
 
-R tiene formatos de archivos propios:
+R tiene formatos de archivo propios, a saber, `RData` y `RDS`. Pueden leer un poco más sobre ellos en la nota de clase extra.
 
--   RDS
--   RData
+### Formatos de archivo generales
 
-Lo cierto es que les vamos a recomendar utilizar el formato RDS, en el cual se guarda un único objeto. Además, al momento de cargar el objeto en una nueva sesión de R pueden asignarlo al nombre de variable que necesiten/quieran.
+#### CSV
 
-### RDS
-
-R trae por defecto algunas bases de datos listas para usar. Una de ellas son los resultados de un experimento acerca del efecto de dos somníferos. Ésta fue usada como ejemplo por un químico de la cervecería Guiness en un artículo muy famoso donde introduce una distribución de probabilidades hoy conocida como t de Student. William Gosset (ese era su verdadero nombre) la tenía mucho más difícil porque en 1908 todavía no existían ni R ni RStudio.
-
-```{r}
-sleep
-```
-
-```{r}
-#| eval: false
-
-saveRDS(sleep, "sleep.rds")
-
-# Cargamos para verificar
-sleep_data <- readRDS("sleep.rds")
-sleep_data
-```
-
-Los archivos de tipo RDS no guardan el nombre del objeto, lo cual es algo positivo. Podemos nombrarlos a gusto cuando los cargamos.
-
-### Formatos no específicos a R
-
-Hay **muchas funciones** para leer archivos de tipo .txt y .csv. La mayoría sólo cambia los parámetros que vienen por default.
+Del inglés *comma-separated values*, lo cual se traduce a valores separados por coma. Es una forma muy eficiente (y común) de guardar información. Hay **muchas funciones** para leer archivos de tipo .csv Nosotros vamos a usar mucho la función `read_csv()` del paquete `readr` (si instalaron tidyverse y sus paquetes núcleo entonces lo tienen descargado).
 
 Es importante tener en cuenta:
 
--   encabezado
--   delimitador (,, tab, ;)
--   separador decimal
+-   Los encabezados
+-   El delimitador (,, tab, ;)
+-   El separador decimal
 
 ```{{r}}
 dataframe <- read.delim(file, header = TRUE, sep = "\t", quote = "\"", dec = ".", fill = TRUE, comment.char = "", ...) 
 ```
 
+```{r}
+#| echo: FALSE
+
+library(readr)
+  
+SIPA <- read_csv("bases/base_sipa.csv")
+```
+
+```{r}
+#| eval: FALSE
+
+library(readr)
+  
+SIPA <- read_csv("bases/base_sipa.csv")
+```
+
+
 ### Excel
 
-Ejemplo: Levantar la base de SIPA con la que trabajaremos en la Clase 2
+Para abrir archivos de excel usaremos la función `readlxl` de la librería `readxl`.
 
-```{{r}}
-#install.packages("openxlsx")
-library(openxlsx)
+```{r}
+#| eval: FALSE
 
-base_sipa <- read.xlsx() #a definir
+install.packages("readxl")
 ```
 
-```{{r}}
-#View(base_sipa)
-names(base_sipa)
+
+```{r}
+#| echo: FALSE
+
+library(readxl)
+
+ipc_mensual <- read_xlsx("../clase1/bases/ipc_ceped_data.xlsx")
+names(ipc_mensual)
 ```
 
-```{{r}}
-head(base_sipa)[,1:5]
+```{r}
+#| eval: FALSE
+
+library(readxl)
+
+ipc_mensual <- read_xlsx("bases/ipc_ceped_data.xlsx")
+names(ipc_mensual)
 ```
 
-### .txt
+```{r}
+head(ipc_mensual)
+```
 
-Ejemplo de alguna
 
 ### SPSS, STATA, SAS
 
@@ -576,15 +596,6 @@ Podemos utilizar la librería haven, y los comandos:
 -   read_dta()
 -   read_sas()
 
-### Encoding
-
-Tanto a la hora de leer y escribir archivos, como al trabajar un mismo script desde distintas computadoras, debemos ser cuidadosos con el encoding seteado. El encoding es el sistema mediante el cual el sistema interpreta los caracteres del lenguaje natural. Hay muchos encodings diferentes, que interpretan distinto algunos caracteres, como tildes y signos de puntuación. Por ende, si el encoding seteado no es el mismo que el de nuestro script/tabla pueden generarse errores. En medida de lo posible, al escribir nuestros scripts es recomendable evitar estos caracteres.
-
-R tiene por default el encoding **“ISO-8859-1”**, sin embargo el más habitual en América Latina es “UTF-8”.
-
--   Lectura de archivos : Aglunas de las funciones del tipo read_table, read_xlsx permiten establecer como uno de sus parametros el encoding deseado
--   Encoding utilizado para abrir un script:File -\> Reopen with Encoding
--   Encoding default con el que se guardan nuestros Scripts: Tools -\> Global Options -\> Code -\> Saving
 
 ## Organización scripts
 

@@ -57,7 +57,7 @@ En esta clase abarcaremos el análisis y la práctica de flujos más complejos c
 
 ```{r}
 SIPA <- read_csv("bases/base_sipa.csv", 
-                 show_col_types = FALSE) # Convert Periodo to proper date format immediately
+                 show_col_types = FALSE)
 ```
 
 Un típico control, a penas se importa una base de trabajo, es analizar la clase de la variable donde se indica la fecha o la periodicidad de la información. En muchos casos puede suceder que esta no sea interpretada por R como un variable de tipo fecha, sino de otra naturaleza.

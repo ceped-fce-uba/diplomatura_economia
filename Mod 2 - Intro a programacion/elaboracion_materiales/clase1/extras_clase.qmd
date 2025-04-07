@@ -31,22 +31,131 @@ include-after-body: ../assets/footer.html
 
 Hay contenidos que no queríamos dejar de ofrecerles aunque sea de este modo. Estos son temas que no vamos a cubrir en clase pero que pueden leer si les interesa profundizar un poco más. Se trata de cosas que no vamos a necesitar a lo largo de la diplomatura pero que son partes importantes del R. No duden en consultarnos si tienen alguna duda.
 
-## Listas
+## Más sobre las listas
 
-Contienen una concatenación de objetos de cualquier tipo. Así como un vector contiene valores, un dataframe contiene vectores, una lista puede contener dataframes, pero también vectores, o valores, y todo ello a la vez
-
-```{r}
-lista1 <- list(A, B, C, D, E, FECHA, DF = Datos, INDICE, SECTOR)
-lista1
-```
-
-Para acceder un elemento de una lista, podemos utilizar el operador \$, que se puede usar a su vez de forma iterativa
+Las listas son estructuras de datos muy importantes en el mundo de la programación. Sólo queremos ilustrar sus capacidades con un ejemplo:
 
 ```{r}
-lista1$DF$FECHA[2]
+lista1 <- list(1, "texto", DF = sleep, c(1,2,3) ) # Sleep es un dataframe que viene cargado en R base.
 ```
 
+Para acceder un elemento de una lista, podemos utilizar el operador `$` , que se puede usar a su vez de forma iterativa.
 
+```{r}
+lista1$DF # Accedemos al dataframe que, en el contexto de la lista, llamamos DF.
+```
+
+```{r}
+lista1$DF$ID
+```
+
+## Formatos de archivo específicos a R
+
+R tiene formatos de archivos propios:
+
+-   RDS
+-   RData
+
+Lo cierto es que les vamos a recomendar utilizar el formato RDS, en el cual se guarda un único objeto. Además, al momento de cargar el objeto en una nueva sesión de R pueden asignarlo al nombre de variable que necesiten/quieran.
+
+### RDS
+
+R trae por defecto algunas bases de datos listas para usar. Una de ellas son los resultados de un experimento acerca del efecto de dos somníferos. Ésta fue usada como ejemplo por un químico de la cervecería Guiness en un artículo muy famoso donde introduce una distribución de probabilidades hoy conocida como t de Student. William Gosset (ese era su verdadero nombre) la tenía mucho más difícil porque en 1908 todavía no existían ni R ni RStudio.
+
+```{r}
+sleep
+```
+
+```{r}
+#| eval: false
+
+saveRDS(sleep, "sleep.rds")
+
+# Cargamos para verificar
+sleep_data <- readRDS("sleep.rds")
+sleep_data
+```
+
+Los archivos de tipo RDS no guardan el nombre del objeto, lo cual es algo positivo. Podemos nombrarlos a gusto cuando los cargamos.
+
+### Rdata
+
+```{r}
+#| eval: FALSE
+
+x <- 1:15
+y <- list(a = 1, b = TRUE, c = "oops")
+#Para guardar
+save(x, y, file = "xy.RData")
+#Para leer
+load('xy.RData')
+```
+
+Los archivos de tipo RData permiten grabar una imagen de todos los objetos R que querramos.
+
+### Loops, condicionales y funciones
+
+Un loop es una estructura de código que nos permite recorrer iterativamente un conjunto de comandos, variando algún elemento. Por ejemplo:
+
+```{r}
+for(i in 1:10){
+  cuadrados<- i^2
+  print(cuadrados)
+}
+```
+
+La interpretación de este loop es: para i, que toma valor de 1 a 10, imprimí cada resultado de la acción `i^2`
+
+---------------------------------------
+
+
+Las estructuras condiconales nos permites ejecutar código de forma condicional a que se cumpla determinada condición.
+
+```{r}
+resultado <- ifelse(test = class(A) == "character", yes =  paste0("Esto es un caracter"),
+       no = paste0("Esto no era un caracter"))
+resultado
+```
+
+Otra función para condicionar la ejecución de una porción del código es `if(condicion){codigo a ejecutar si se cumple la condición}`
+
+Las funciones nos permiten automatizar todas aquellas partes del código que se repiten mucho. Una vez diseñadas, funcionan igual que cualquier comando. La facilidad para crear las funciones es en buena medida la explicación de que haya tantas contribuciones de usuarios a la expansión del lenguaje.
+
+```{r}
+funcion_prueba <- function(a,b) {
+  print(paste(a, b, sep = " "))
+  
+}
+
+funcion_prueba(a = "soy la primera parte de un string.", b = "Y yo la segunda parte")
+```
+
+También podemos asignar un valor por default.
+
+```{r}
+funcion_prueba <- function(a = "Soy una primera parte default.",b) {
+  print(paste(a, b, sep = " "))
+  
+}
+
+funcion_prueba(b = "A mi no me defaulteas")
+```
+
+Las funciones que creamos en un script propio viven dentro del ambiente donde se las define. Es decir, es necesario volver a correr la definición cada vez que la queremos utilizar.
+
+Vale mencionar que lo que ocurre en una función, queda en la función excepto que explícitamente pidamos que devuelva el resultado, con el comando `print()` o `return()`.
+
+Los paquetes, en cambio, cuentan con funciones que ya fueron definidas y tan solo con convocar el paquete al ambiente de R, estas se encuentran operativas.
+
+### Encoding
+
+Tanto a la hora de leer y escribir archivos, como al trabajar un mismo script desde distintas computadoras, debemos ser cuidadosos con el encoding seteado. El encoding es el sistema mediante el cual el sistema interpreta los caracteres del lenguaje natural. Hay muchos encodings diferentes, que interpretan distinto algunos caracteres, como tildes y signos de puntuación. Por ende, si el encoding seteado no es el mismo que el de nuestro script/tabla pueden generarse errores. En medida de lo posible, al escribir nuestros scripts es recomendable evitar estos caracteres.
+
+R tiene por default el encoding **“ISO-8859-1”**, sin embargo el más habitual en América Latina es “UTF-8”.
+
+-   Lectura de archivos : Aglunas de las funciones del tipo read_table, read_xlsx permiten establecer como uno de sus parametros el encoding deseado
+-   Encoding utilizado para abrir un script:File -\> Reopen with Encoding
+-   Encoding default con el que se guardan nuestros Scripts: Tools -\> Global Options -\> Code -\> Saving
 
 ## Directorios
 
