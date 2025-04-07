@@ -19,7 +19,7 @@ $h4-font-size: $font-size-base * 1.2;
 
 // Colors for code blocks
 $code-block-bg: #2d2d2d;
-$code-color: #f8a4c2;
+$code-color: #75AADB;
 
 // TOC styles
 $toc-color: $body-color;
@@ -379,3 +379,39 @@ blockquote {
   .st { color: #7ec699; }  // String
   .va { color: #f08d49; }  // Variable
 }
+
+// Add this section to style R output
+.cell-output {
+  background-color: #2a2a2a;
+  border-left: 3px solid #4a5568;
+  color: #e0e0e0; // Light color for output text
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+  font-size: 0.9em;
+  border-radius: 0 0.5rem 0.5rem 0;
+  
+  pre {
+    color: #e0e0e0; // Ensure text in pre blocks is visible
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  // For data frames and tables in output
+  .gt_table {
+    color: #e0e0e0;
+  }
+  
+  // For plots and figures
+  img {
+    margin: 0.5rem 0;
+    border-radius: 0.25rem;
+  }
+}
+
+.co { color: #b3b3b3; }  // Lighter gray for better contrast
+
+

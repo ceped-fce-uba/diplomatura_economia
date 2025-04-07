@@ -54,14 +54,14 @@ knitr::include_graphics("imgs/RProj.png")
 
 -   Verifiquen que están trabajando dentro del RProject de la clase 1. De no ser así, pueden abrirlo en la esquina superior derecha (y revisar la nota de clase, dónde les explicamos sobre los proyectos de RStudio).
 -   Para empezar, reiniciar R desde la barra de herramientas de RStudio ("Session" –\> "Restart R").
--   Desde el panel de archivos de RStudio (parte inferior a la derecha), crear un nuevo script cuyo nombre sea practica_01.R
+-   Prueben crear un nuevo script: desde el panel de archivos de RStudio (parte inferior a la derecha), hay un ícono de hoja en blanco con un símbolo de suma verde. Pónganle un nombre informativo (es una buena práctica). Allí es donde vamos a trabajar.
 
 ### 2. Repaso de funciones básicas
 
 ::: {.callout-tip appearance="simple"}
 ## Tip
 
-Recuerden, para su comodidad, el atajo de teclado **Alt + -** para escribir el operador de asignación `<-`
+Recuerden el atajo de teclado **Alt + -** para escribir el operador de asignación `<-`
 :::
 
 a)  Crear un objeto llamado *OBJETO,* cuyo contenido sea la cadena de caracteres "texto"
