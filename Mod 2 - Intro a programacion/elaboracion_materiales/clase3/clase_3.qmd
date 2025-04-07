@@ -344,9 +344,10 @@ Graficar la serie real
 #PROBANDO
 
 library(plotly)
+library(htmlwidgets)
 
 plot_remun <- remuneracion_real %>%
-  filter(year(Periodo) >= 2020) %>%
+  filter(year(Periodo) >= 2019) %>%
   ggplot(aes(x = Periodo, y = indice_real)) +
   geom_line(color = 'steelblue', size = 1) +
   geom_point(color = 'steelblue', size = 2.5) +
@@ -358,7 +359,12 @@ plot_remun <- remuneracion_real %>%
         )
   
 
-plot_remun %>% ggplotly()
+plotly_remun <- plot_remun %>%
+  ggplotly()
+
+htmlwidgets::saveWidget(plotly_remun, "remuneracion_desde_2019.html")
+
+plotly_remun
 ```
 
 Tomar series en niveles, pasarlas a logs y después visualizar
