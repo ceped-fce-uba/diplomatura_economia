@@ -47,14 +47,15 @@ Antes de arrancar, algunas claves que nos parecen importantes:
 ```{r}
 #| column: margin
 #| echo: false
-#| out.extra: 'style="margin-top: -40px;"'
+#| out.extra: 'style="margin-top: +80px;"'
 
 knitr::include_graphics("imgs/RProj.png")
 ```
 
+-   El ritual de iniciación de todo nuevo usuario de R es imprimir algún saludo en la consola. Escriban `print("hola")` en el panel de la esquna inferior izquierda y denle enter. Recibirán el saludo de R como un eco. Bienvenidos a esta enorme comunidad.
 -   Verifiquen que están trabajando dentro del RProject de la clase 1. De no ser así, pueden abrirlo en la esquina superior derecha (y revisar la nota de clase, dónde les explicamos sobre los proyectos de RStudio).
--   Para empezar, reiniciar R desde la barra de herramientas de RStudio ("Session" –\> "Restart R").
--   Prueben crear un nuevo script: desde el panel de archivos de RStudio (parte inferior a la derecha), hay un ícono de hoja en blanco con un símbolo de suma verde. Pónganle un nombre informativo (es una buena práctica). Allí es donde vamos a trabajar.
+-   Reinicien R desde la barra de herramientas de RStudio ("Session" –\> "Restart R").
+-   Creen un nuevo script: desde el panel de archivos de RStudio (parte inferior a la derecha), hay un ícono de hoja en blanco con un símbolo de suma verde. Pónganle un nombre informativo (es una buena práctica). Allí es donde vamos a trabajar.
 
 ### 2. Repaso de funciones básicas
 

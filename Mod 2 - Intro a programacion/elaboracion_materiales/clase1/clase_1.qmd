@@ -154,7 +154,6 @@ En el panel de código es donde van a trabajar sobre los scripts. Se ubica norma
 
 Les permite, si quieren, abrir scripts en ventanas separadas, lo cual resulta útil para distribuir el trabajo entre múltiples monitores. Dicha función se activa con el botón a la izquierda del ícono de guardado.
 
-
 ### Panel de Consola
 
 Por defecto la consola se encuentra en la esquina inferior izquierda. Es aquí donde se ejectua el código: pueden escribir en un script y mandarlo a la consola, o, ejecutarlo directamente allí.
@@ -172,6 +171,12 @@ Aquí podrán observar los objetos de R actualmente guardados y accesibles su se
 Lo verán abajo y a la derecha. Contiene las pestañas de **Archivos**, **Gráficos**, **Paquetes**, **Ayuda**, **Visor** y **Presentación**.
 
 La pestaña que más nos interesará será la de **Archivos** (el resto se activarán automáticamente cuando, por ejemplo, creen y visualicen un gráfico). Ésta les proporcionará una exploración interactiva del Proyecto R actual junto con todo el directorio. Encontrarán opciones para añadir nuevas carpetas, nuevos archivos en blanco, eliminar/renombrar archivos, así como un panel de configuración (icono de engranaje) para funciones adicionales.
+
+::: {.callout-note .callout-practice icon="false"}
+## 🛠️ Momento de práctica
+
+Les proponemos tomarnos 10' para hacer el ejercicio 1 de la guía práctica
+:::
 
 ## Lógica sintáctica del lenguaje
 
@@ -191,93 +196,70 @@ Al definir un elemento, el mismo queda guardado en el entorno del programa, y po
 Y
 ```
 
-El operador `=` es equivalente a `<-`, pero en la práctica no se utiliza para la definición de objetos.
+El operador `=` es equivalente a `<-`, pero por convenciones de R no se utiliza para la definición de objetos. Quienes sepan algo de Python estarán más acostumbrados a usar `=` pero les recomendamos fervientemente adaptarse a la flecha.
 
 ```{r}
-X = 2
+X = 2 # Funciona a la perfección pero no es convencional.
 X
 ```
 
-No deben confundir el operador de asignación `=` con el operador lógico `==` que veremos en la sección siguiente.
+No deben confundir el operador de asignación `=` (del cual ya no hablaremos más) con el operador lógico `==` que veremos en la sección siguiente.
+
+------------------------------------------------------------------------
 
 El caracter **unidireccional** de `<-` implica que es posible redefinir objetos ya creados en el entorno de R, reemplazándolos por el contenido de otro. Por ejemplo:
 
 ```{r}
+Y <- X # Sobreescribimos el contenido de Y con el contenido de X
+
+Y
+```
+
+La **sobreescritura** es un concepto clave de R. Y al mismo tiempo que es muy útil tienen que tener mucho cuidado de no sobreescribir objetos que no querían modificar.
+
+::: {.callout-tip appearance="simple"}
+## Tip
+
+Pueden borrar objetos directamente con el comando `rm(objeto)` 
+:::
+
+------------------------------------------------------------------------
+
+También es probable que se encuentren con la flecha que apunta en sentido contrario al anterior. Se usa menos pero para algunas operaciones es cómodo asignar al final. Lógicamente asigna en el sentido de la flecha.
+
+```{r}
 Y <- X
-Y #En este caso Y fue redefinida con el contenido de X
+Y # En este caso Y fue redefinida con el contenido de X
 ```
 
 ### R Base
 
 Con R base nos referimos a los comandos básicos que vienen incorporados en el R, sin necesidad de cargar librerías.
 
-### Operadores lógicos
-
--   `>` **Mayor**
--   `>=` **Mayor o igual**
--   `<` **Menor**
--   `<=` **Menor o igual**
--   `==` **Igual que**
--   `!=` **Distinto que**
-
-```{r}
-Y <- 1
-X <- 2
-
-Y > X
-```
-
-```{r}
-Y >= X
-```
-
-```{r}
-Y == X
-```
-
-```{r}
-Y != X
-```
-
-```{r}
-Z <- Y != X
-Z
-```
-
-### Aritmética
+### Aritmética básica
 
 R funciona como calculadora. Hagamos unas operaciones de ejemplo:
 
 ```{r}
-#suma
-
-A <- 2+2
+A <- 2 + 2 # Suma
 A
 ```
 
 ```{r}
-#resta
-B <- 10-5
+B <- 10 - 5 # Resta
 B
 ```
 
 ```{r}
-#cociente
-C <- 15/3
+C <- 15/3 # División
 C
 ```
 
 ```{r}
-#multiplicación
-D <- 4*3
+D <- 4*3 # Multiplicación
 D
 ```
 
-::: {.callout-note .callout-practice icon="false"}
-## 🛠️ Momento de práctica
-
-Les proponemos tomarnos 10' para hacer el ejercicio 1 de la guía práctica
-:::
 
 ### Caracteres especiales
 
@@ -294,28 +276,49 @@ Les proponemos tomarnos 10' para hacer el ejercicio 1 de la guía práctica
 
 ### Objetos:
 
--   Valor
--   Vector
--   Matriz
--   Data Frame
--   Lista
--   Valores
+R posee diversos tipos de datos que permiten representar diferentes tipos de información. Entender estos tipos es fundamental para cualquier análisis.
 
-### Valores
 
-Los valores tienen distintos tipos:
+### Tipos Numéricos
 
-**Numeric**
+R tiene varios tipos numéricos:
+
+#### Double (Números con decimales)
 
 ```{r}
 A <- 1
 class(A)
+typeof(A)
 ```
-
-**character**
+Double es una abreviación de "doble precisión" y el nombre tiene que ver con la historia de las ciencias de la computación (¡lo cual excede los límites de este curso!). En la práctica van a trabajar siempre con este tipo de dato numérico.
 
 ```{r}
-A <- paste('Soy', 'una', 'concatenación', 'de', 'caracteres', sep = " ")
+A <- 1.5 # Un ejemplo con decimales
+class(A)
+typeof(A)
+```
+
+::: {.callout-warning appearance="simple"}
+## Advertencia
+Los lenguajes de programación, incluyendo a R, fueron mayormente desarrollados en países donde utilizan el punto (.) como separador decimal, que lo establecieron como estándar. Por eso hoy en día se estandarizó e
+:::
+
+#### Integer (Enteros)
+
+Los enteros son números sin decimales, que ocupan aproximadamente la mitad del espacio de los números con decimales. 
+
+```{r}
+A <- 10L  # La L indica que queremos un entero
+class(A)
+typeof(A)
+```
+
+Se usan en bases de datos enormes o en aplicaciones específicas.
+
+#### Character (Cadenas de caracteres)
+
+```{r}
+A <- "osea, digamos"
 class(A)
 ```
 
@@ -334,6 +337,59 @@ La diferencia entre un **character** y un **factor** es que el último tiene **s
 A <- as.Date("2017-01-01")
 class(A)
 ```
+
+### Resumen de Tipos Básicos
+| Tipo | Descripción | Ejemplo | Función creadora |
+|------|-------------|---------|------------------|
+| Integer | Números enteros | `1L, 2L, 3L` | `as.integer()` |
+| Double | Números con decimales | `1.5, 2.0, 3.14` | `as.numeric()` |
+| Logical | Valores verdadero/falso | `TRUE, FALSE` | `as.logical()` |
+| Character | Texto | `"hola", "R"` | `as.character()` |
+| Factor | Categorías | `factor(c("bajo", "medio", "alto"))` | `factor()` |
+| Date | Fechas | `as.Date("2023-01-15")` | `as.Date()`, `ymd()` |
+
+### Operadores lógicos
+
+-   `>` **Mayor**
+-   `>=` **Mayor o igual**
+-   `<` **Menor**
+-   `<=` **Menor o igual**
+-   `==` **Igual que**
+-   `!=` **Distinto que**
+
+Antes de que se den cuenta se van a acostumbrar al `!=` o al `>=`, que seguramente ahora les parezcan extraños.
+
+```{r}
+Y <- 1
+X <- 2
+
+Y > X # Y es mayor que X
+```
+
+```{r}
+Y >= X # Y es mayor or igual que X
+```
+
+```{r}
+Y == X # Y es igual a X
+```
+
+```{r}
+Y != X # Y es diferente de X
+```
+
+```{r}
+Z <- Y != X
+Z
+```
+
+::: {.callout-note .callout-practice icon="false"}
+## 🛠️ Momento de práctica
+
+Les proponemos tomarnos 10' para hacer el ejercicio 2 de la guía práctica
+:::
+
+## Estructuras de datos
 
 ### Vectores
 
@@ -373,20 +429,24 @@ elemento2 <- E[2]
 elemento2
 ```
 
-para borrar un objeto, utilizamos el comando `rm()`
-
-```{r}
-#| error: true
-
-rm(elemento2)
-elemento2
-```
-
 También podemos cambiar el texto del segundo elemento de E, por el texto “var”
 
 ```{r}
 E[2] <- "var"
 ```
+
+### Listas
+
+```{r}
+# Algo muy básico al menos
+```
+
+### Matrices
+
+```{r}
+# Algo simple
+```
+
 
 ### Data Frames (DF)
 
@@ -432,6 +492,14 @@ Datos$FECHA[3,2]
 ```
 
 Nótese que el último comando tiene un número incorrecto de dimensiones, porque estamos refiriendonos 2 veces a la columna FECHA.
+
+### Estructuras de Datos
+| Estructura | Descripción | Características |
+|------------|-------------|-----------------|
+| Vector | Colección de elementos del mismo tipo | Unidimensional, homogéneo |
+| List | Colección de elementos de diferentes tipos | Heterogénea, anidable |
+| Matrix | Tabla de elementos del mismo tipo | Bidimensional, homogénea |
+| Data Frame | Tabla de datos de diferentes tipos | Columnas pueden ser de diferentes tipos |
 
 ## Lectura y guardado: formatos existentes
 
