@@ -204,7 +204,8 @@ Les proponemos tomarnos 10' para hacer el ejercicio 1 de la guía práctica
 La definición de objetos se realiza a través del operador `<-`. De este modo, es posible asignar la definición a un elemento:
 
 ```{r}
-Y <- 1
+
+Y <- 1 # Creamos una variable llamada Y cuyo contenido será el número 1
 ```
 
 Este operador tiene un atajo en el teclado: `Alt + -`
@@ -219,6 +220,7 @@ El operador `=` es equivalente a `<-`, pero por convenciones de R no se utiliza 
 
 ```{r}
 X = 2 # Funciona a la perfección pero no es convencional.
+
 X
 ```
 
@@ -248,6 +250,7 @@ También es probable que se encuentren con la flecha que apunta en sentido contr
 
 ```{r}
 Y <- X
+
 Y # En este caso Y fue redefinida con el contenido de X
 ```
 
@@ -302,7 +305,7 @@ R tiene varios tipos numéricos:
 #### Double (Números con decimales)
 
 ```{r}
-A <- 1
+A <- 1 # Asignamos un número cualquiera
 class(A)
 typeof(A)
 ```
@@ -338,7 +341,7 @@ Se usan en bases de datos enormes o en aplicaciones específicas.
 Sencillamente es texto.
 
 ```{r}
-A <- "osea, digamos"
+A <- "osea, digamos" # Asignamos texto
 class(A)
 ```
 ### Logical (Lógicos)
@@ -346,8 +349,8 @@ class(A)
 Los valores lógicos son TRUE o FALSE. Son pilares fundamentales de la programación.
 
 ```{r}
-verdadero <- TRUE
-falso <- FALSE
+verdadero <- TRUE # Verdadero en inglés, todo en mayúsculas
+falso <- FALSE    # Falso en inglés, todo en mayúsculas
 class(verdadero)
 ```
 
@@ -456,14 +459,14 @@ E <- c("Ingreso", "Variación", "Indice")
 para acceder a algún elemento del vector, podemos buscarlo por su número de orden, entre `[]`
 
 ```{r}
-elemento2 <- E[2]
+elemento2 <- E[2] # Accedemos al segundo elemento del vector para asignarlo
 elemento2
 ```
 
 También podemos cambiar el texto del segundo elemento de E, por el texto “var”
 
 ```{r}
-E[2] <- "var"
+E[2] <- "var" # Sobreescribimos el segundo elemento del vector
 ```
 
 ### Data Frames (DF)
@@ -563,6 +566,7 @@ names(SIPA)
 
 ```{r}
 #| echo: FALSE
+#| purl: FALSE
 
 library(readr)
   
@@ -598,6 +602,7 @@ names(ipc_mensual)
 
 ```{r}
 #| echo: FALSE
+#| purl: FALSE
 
 library(readxl)
 
@@ -625,6 +630,7 @@ eph_T324 <- read_delim(file = "bases/usu_individual_T324.txt",
 ```{r}
 #| echo: FALSE
 #| warning: TRUE
+#| purl: FALSE
 
 eph_T324 <- read_delim(file = "../../Clase 1 - Intro a R/bases/usu_individual_T324.txt",
                   delim = ";",

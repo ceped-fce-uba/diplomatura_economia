@@ -16,7 +16,7 @@ extractor_codigo <- function(
   output_folders <- c(
     "1" = "Clase 1 - Intro a R",
     "2" = "Clase 2 - Intro a tidyverse",
-    "3" = "Clase 3 - Tidyverse avanzado y visualización",
+    "3" = "Clase 3 - Tidyverse avanzado y visualizacion",
     "4" = "Clase 4 - Visualizacion avanzada"
   )
   
