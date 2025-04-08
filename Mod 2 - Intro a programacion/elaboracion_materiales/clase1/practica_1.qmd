@@ -176,14 +176,3 @@ mean(base$population)
 
 min(base$life)
 ```
-
-
-### 4. Ejercicio avanzado
-
-
-
-```{r}
-# Si no pudieron cargar la base y necesitan la respuesta... ¡vayan a la nota de clase! 
-# Hablen con sus compañeros y/o apóyense en los docentes.
-```
-
