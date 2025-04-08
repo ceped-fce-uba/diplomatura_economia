@@ -1,0 +1,314 @@
+---
+title: "Clase 2 - Manipulación de bases de datos I"
+subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED - FCE - UBA)"
+author-title: "DOCENTES:" 
+authors:
+  - name: Vladimiro S. Torres
+  - name: Juan Camilo Gutman
+output-file: "Clase 2 - Manipulación de bases de datos I" 
+format:
+  html:
+    embed-resources: true
+    code-tools: false
+    code-copy: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/teoria_claro.scss
+      dark: ../assets/teoria_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+execute:
+  freeze: auto
+editor: source
+include-after-body: ../assets/footer.html
+---
+
+## Tidyverse
+
+Tidyverse es un conjunto de paquetes de R que comparten una filosofía de diseño común y son fáciles de usar en conjunto. Fue creado para facilitar la manipulación, visualización y análisis de datos de manera eficiente, integrando una serie de herramientas que permiten trabajar con datos de forma coherente y fluida. Entre los paquetes más conocidos de tidyverse se encuentran `ggplot2` para la visualización, `dplyr` para la manipulación de datos, `tidyr` para la organización de datos, y `readr` para la importación de datos, entre otros.
+
+La idea central del tidyverse es promover un enfoque "tidy", donde los datos se organizan en un formato adecuado para el análisis (es decir, en "tidy data"), lo que facilita su uso en las diferentes etapas del proceso de análisis.
+
+```{r}
+#| eval: false
+install.packages("tidyverse")
+library(tidyverse)
+
+```
+
+```{r}
+#| echo: true
+#| warning: true
+library(tidyverse)
+
+```
+
+No es necesario que le den mucha importancia a los mensajes de advertencia, no se trata de errores.
+
+------------------------------------------------------------------------
+
+Como ya se ha visto, se requiere instalar las librerías en primer lugar y por única vez, y luego invocarla en el entorno de R cada vez que se quiera utilizar las funciones que yacen dentro de esta. Una analogía a esta dinámica sería la acción de comprar y usar un libro: lo compramos una sola vez, pero para poder disponer de su contenido se requiere siempre de su apertura.
+
+A partir de este momento, trabajaremos las funciones a estudiar volcadas sobre una base de datos creada a partir de [información](https://www.argentina.gob.ar/sites/default/files/trabajoregistrado_2411_estadisticas.xlsx) del Sistema Integrado Previsional Argentino ([SIPA](https://www.argentina.gob.ar/situacion-y-evolucion-del-trabajo-registrado)). En este caso tenemos una base preprocesada guardada en formato `.csv`,
+
+```{r}
+OCUPADOS  <- c(6105953, 2543717, 10931300,
+               6103382, 2598154, 10982740,
+               6112372, 2602057, 10992215)
+FECHA  <-  c("Ene-12", "Ene-12", "Ene-12",
+             "Feb-12", "Feb-12", "Feb-12",
+             "Mar-12", "Mar-12", "Mar-12")
+SECTOR  <-  c("Privado_Registrado","Público","Total",
+              "Privado_Registrado","Público","Total",
+              "Privado_Registrado","Público","Total")
+Datos <- data.frame(OCUPADOS, FECHA, SECTOR)
+```
+
+## Dplyr
+
+El caracter principal para utilizar este paquete es `%>%` (Alt + Shift + M), llamado pipe (en inglés, tubería).
+
+Los `%>%` toman el set de datos a su izquierda, y los transforman mediante las ordenes a su derecha, en los cuales los elementos de la izquierda están implícitos.
+
+Veamos las principales funciones que pueden utilizarse con la lógica de este paquete:
+
+### filter()
+
+Permite filtrar la tabla acorde al cumplimiento de condiciones lógicas
+
+```{r}
+Datos %>% 
+ filter(SECTOR == "Total")
+```
+
+En este caso, se exige filtrar por todos los casos cuya categoría sea idéntica a "Total". A su vez, es posible agregar condiciones:
+
+```{r}
+Datos %>% 
+  filter(SECTOR == "Total", OCUPADOS > 10931300)
+```
+
+Nótese que en este caso al separar con una `,` las condiciones se exige el cumplimiento de ambas. En caso de desear que se cumpla una sola condición debe utilizarse el caracter `|`.
+
+```{r}
+Datos %>% 
+  filter(OCUPADOS > 10931300 | SECTOR == "Privado_Registrado")
+```
+
+### rename()
+
+Permite renombrar una columna de la tabla o base de datos, a través de la siguiente lógica: `Data %>% rename(nuevo_nombre = viejo_nombre)`
+
+```{r}
+Datos %>% 
+  rename(Periodo = FECHA)
+```
+
+Nótese que a diferencia del ejemplo de la función **filter** donde utilizábamos **==** para comprobar una condición lógica, en este caso se utiliza sólo un **=** ya que lo estamos haciendo es asignar un nombre.
+
+### mutate()
+
+Permite crear una nueva variable a la tabla o base de datos, que puede ser el resultado de operaciones sobre otras variables de la misma base.
+
+En caso de especificar el nombre de una columna existente, el resultado de la operación realizada reemplazará la información de la columna con dicho nombre.
+
+```{r}
+Datos <- Datos %>% 
+  mutate(Promedio = mean(OCUPADOS))
+Datos
+```
+
+### case_when()
+
+Permite definir el contenido de una variable, donde el valor particular depende de una **condición establecida al interior de esta función**. En caso de no cumplir ninguna de las condiciones establecidas la variable tomara valor **NA**.
+
+La sintaxis de la función es `case_when(condición lógica1 ~ valor asignado1)`.
+
+```{r}
+Datos <- Datos %>% 
+  mutate(caso_cuando = case_when(SECTOR == "Privado_Registrado"    ~ OCUPADOS*2,
+                                 SECTOR == "Público"               ~ OCUPADOS*3,
+                                 SECTOR == "Privado_No_Registrado" ~ OCUPADOS*5 ))
+Datos
+```
+
+### select()
+
+Permite especificar la serie de columnas que se desea conservar de una base de datos. También pueden especificarse las columnas que se desean descartar (agregándoles un -, o sin nombrarlas al interior de la función). Muy útil para agilizar el trabajo en bases de datos de gran tamaño.
+
+```{r}
+Datos2 <- Datos %>% 
+  select(OCUPADOS, FECHA, SECTOR)
+Datos2
+```
+
+Notar que puede elegirse el orden de las columnas (variables) al escribirlas.
+
+```{{r}}
+Datos <- Datos %>% 
+  select(-c(Doble, caso_cuando))
+Datos
+```
+
+### arrange()
+
+Permite ordenar la tabla por los valores de determinada/s variable/s. Es útil cuando deben hacerse otras operaciones que requieran del ordenamiento previo de la tabla.
+
+```{r}
+Datos <- Datos %>% 
+  arrange(SECTOR, OCUPADOS)
+Datos
+```
+
+El orden en el cual aparecen las variables es el orden bajo el cual R va ordenando los resultados.
+
+### summarise()
+
+Crea un nuevo objeto de tipo data framme, es decir puede utilizarse para crear tablas que sinteticen la información o grandes bases de datos con algún cálculo extra.
+
+```{r}
+Datos %>% 
+  summarise(Indprom = mean(OCUPADOS))
+```
+
+### group_by()
+
+Esta función permite agrupar una operación para cada valor de una variable especificada. La función separa a la tabla según los valores de la variable indicada, y realiza las operaciones que se especifica continuación, de manera independiente para cada una de las “subtablas”.
+
+En nuestro ejemplo, se calcula la cantidad de ocupados sobre habitantes totales de Argentina por fecha (se asumen 45 millones de habitantes).
+
+```{r}
+Datos %>% 
+  group_by(FECHA) %>%
+  summarise("Ocupados por habitante" = OCUPADOS/45000000)
+```
+
+## Joins
+
+Otra implementación muy importante del paquete dplyr son las funciones para unir tablas (joins)
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 6
+#| out-width: "80%"
+#| fig-align: "center"
+#| fig-cap: "Diagrama de tipos de join estilo SQL. *Fuente: [intro2r.library.duke.edu/join.html](https://intro2r.library.duke.edu/join.html)*"
+#| fig-cap-location: bottom
+
+knitr::include_graphics("imgs/joins.png")
+```
+
+### left_join()
+
+Veamos un ejemplo de la función left_join (una de las más utilizadas en la práctica). Utilicemos una base similar a la anterior, pero en este caso serán datos del [Indice de Salarios](https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-31-61).
+
+```{r}
+INDICE  <- c(100,   100,   100,
+             101.8, 101.2, 100.73,
+             102.9, 102.4, 103.2)
+FECHA  <-  c("Oct-16", "Oct-16", "Oct-16",
+             "Nov-16", "Nov-16", "Nov-16",
+             "Dic-16", "Dic-16", "Dic-16")
+GRUPO  <-  c("Privado_Registrado","Público","Privado_No_Registrado",
+             "Privado_Registrado","Público","Privado_No_Registrado",
+             "Privado_Registrado","Público","Privado_No_Registrado")
+IS <- data.frame(INDICE, FECHA, GRUPO)
+```
+
+Para ello, crearemos en forma simultanea previamente un dataframe que contenga un Ponderador para cada uno de los Grupos del Dataframe IS.
+
+```{r}
+Ponderadores <- data.frame(GRUPO = c("Privado_Registrado","Público","Privado_No_Registrado"),
+                            PONDERADOR = c(50.16,29.91,19.93))
+IS_join <- IS %>% 
+  left_join(.,Ponderadores, by = "GRUPO")
+IS_join
+```
+
+Aprovecharemos el ejemplo para introducir la función weigthed.mean, y así calcular un Indice Ponderado.
+
+```{r}
+IS_Indice_Gral <- IS_join %>% 
+  group_by(FECHA) %>% 
+  summarise(Indice_Gral = weighted.mean(INDICE,w = PONDERADOR))
+IS_Indice_Gral
+```
+
+## Tidyr
+
+El paquete tidyr esta pensado para facilitar el emprolijamiento de los datos. Veremos las funciones pivot_longer y pivot_wider que nos permitirán pivotear la base según como queramos ordenar los datos para trabajarlos posteriormente o bien para presentarlos como tabla de resultados.
+
+```{r}
+#| echo: false
+
+knitr::include_graphics("imgs/wide_long.png")
+```
+
+### pivot_longer()
+
+Nos permite pivotear los datos en columnas hacia una única variable. El *“longer”* refiere a que ahora nuestro dataframe va a tener más filas (y menos columnas)
+
+```{r}
+
+```
+
+### pivot_wider()
+
+Es el opuesto de **pivot_longer**. Nos permite pivotear los datos de una variable para obtener múltiples columnas en función de alguna variable categórica que clasifique a la anterior. El “wider” refiere a que ahora nuestro dataframe va a tener menos filas (y más columnas, en función de la cantidad de categorías de la variable que use para pivotear)
+
+## Medidas de resumen de las variables en una base de datos
+
+Las funciones previamente presentadas responder a un conjunto de herramientas que tienen por finalidad operar sobre la base de datos que un usuario desea analizar. A continuación, se presentarán funciones cuya finalidad es analizar datos prexistentes en la base misma, sin el objetivo inmediato de realizar transformaciones sobre dichos datos.
+
+### summary()
+
+Resume la información de cada una de las variables de la base de datos, mostrando distintos momentos de la distribución para variables numéricas, y un conteo de casos para variables del tipo factor o character
+
+```{r}
+summary(Datos)
+```
+
+### unique()
+
+Permite ver los valores únicos que toma cierta variable en mi base de datos.
+
+```{r}
+unique(Datos$SECTOR)
+```
+
+### sample_n()
+
+Esta función está dentro del paquete tidyverse. Nos permite seleccionar de manera muy simple una muestra al azar de n casos de nuestra base de datos. Puede ser útil para una primera mirada de la base que trascienda a los primeros casos, o bien para procedimienos de muestreo aleatorio.
+
+```{r}
+sample_n(tbl = Datos,size = 9)
+```
+
+### table()
+
+Esta función puede utilizarse para hacer tabulados univariados o bivariados en variables discretas.
+
+```{r}
+table(Datos$SECTOR)
+```
+
+```{=html}
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+  <div id="ref-r-core" class="csl-entry">
+    R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+  </div>
+  
+  <div id="ref-ceped" class="csl-entry">
+    CEPED. (2022). Ceped.data. Portal de difusión de datos del Centro de Estudios sobre Población, Empleo y Desarrollo (CEPED-UBA), Universidad de Buenos Aires, Buenos Aires. Recuperado de <a href="https://www.ceped-data.shinyapps.io/">https://www.ceped-data.shinyapps.io/</a>
+  </div>
+  
+</div>
+```

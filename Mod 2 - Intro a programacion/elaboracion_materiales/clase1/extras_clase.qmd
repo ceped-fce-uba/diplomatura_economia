@@ -214,6 +214,10 @@ La primera línea encuentra la carpeta donde esta guardado el script (si no esta
   <div id="ref-r-core" class="csl-entry">
     R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
   </div>
-
+  
+  <div id="ref-student1908" class="csl-entry">
+    Student [pseu. William Sealy Gosset]. (1908). <i>The probable error of a mean</i>. <i>Biometrika</i>, <b>6</b>(1), 1–25.
+  </div>
+  
 </div>
 ```

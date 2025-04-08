@@ -172,6 +172,25 @@ Lo verán abajo y a la derecha. Contiene las pestañas de **Archivos**, **Gráfi
 
 La pestaña que más nos interesará será la de **Archivos** (el resto se activarán automáticamente cuando, por ejemplo, creen y visualicen un gráfico). Ésta les proporcionará una exploración interactiva del Proyecto R actual junto con todo el directorio. Encontrarán opciones para añadir nuevas carpetas, nuevos archivos en blanco, eliminar/renombrar archivos, así como un panel de configuración (icono de engranaje) para funciones adicionales.
 
+## Diferencia entre proyectos y scripts
+
+### Scripts:
+
+Los scripts en R son archivos de texto (.R) que permiten estructurar el código de manera modular, una hoja donde se escribe código. Esto significa que cada segmento del análisis, o cada tarea específica, se puede desarrollar de forma independiente, facilitando la confección, organización y la reutilización del código. Además, esta estructura modular confiere una gran flexibilidad, ya que permite ejecutar o modificar bloques de código sin necesidad de reestructurar todo el proyecto, lo cual es ideal para realizar experimentos rápidos o pruebas puntuales. Sumado a esto, el uso de scripts posibilita documentar detalladamente cada paso del proceso, lo que resulta de gran ayuda para la depuración y para revisar el trabajo hecho.
+
+### Proyectos R:
+
+Un proyecto en R es, esencialmente, un contenedor que agrupa todos los elementos necesarios para desarrollar un análisis o una aplicación, tales como el código, los datos, los resultados y las configuraciones específicas. Al abrir un proyecto, se establece automáticamente el directorio de trabajo y se cargan los ajustes predefinidos, lo que facilita el uso de rutas relativas (en inglés, *relative paths*) sin importar la ubicación de la carpeta del proyecto.
+
+Esta estructura organizada mejora la reproducibilidad y la colaboración, ya que permite compartir el trabajo o trasladarlo a diferentes computadoras sin que pierda coherencia. Además, los proyectos gestionan la integración con Git, un aspecto que profundizaremos en las últimas clases de la diplomatura.
+
+La forma típica de comenzar a trabajar en R es haciendo doble clic en el archivo `.Rproj`. También es posible (y muy cómodo) acceder a los proyectos abiertos recientemente desde la esquina superior derecha de la interfaz.
+
+### Su uso conjunto:
+
+Les recomendamos trabajar con un `.Rproj` (un proyecto) para cada análisis o trabajo. Al hacerlo, se centraliza la configuración del entorno, las rutas de acceso y demás ajustes, lo que garantiza uniformidad durante todo el proceso. Sobre esa base, se recomienda dividir el código en diferentes scripts, asignando a cada uno tareas específicas —por ejemplo, uno para la limpieza de datos, otro para el análisis exploratorio y un tercero para la generación de gráficos—. Esta separación no solo simplifica el mantenimiento y la reutilización del código, sino que también mejora la colaboración en equipo, permitiendo que cada colaborador se familiarice rápidamente con la estructura y el flujo de trabajo.
+
+
 ::: {.callout-note .callout-practice icon="false"}
 ## 🛠️ Momento de práctica
 
@@ -185,7 +204,8 @@ Les proponemos tomarnos 10' para hacer el ejercicio 1 de la guía práctica
 La definición de objetos se realiza a través del operador `<-`. De este modo, es posible asignar la definición a un elemento:
 
 ```{r}
-Y <- 1
+
+Y <- 1 # Creamos una variable llamada Y cuyo contenido será el número 1
 ```
 
 Este operador tiene un atajo en el teclado: `Alt + -`
@@ -200,6 +220,7 @@ El operador `=` es equivalente a `<-`, pero por convenciones de R no se utiliza 
 
 ```{r}
 X = 2 # Funciona a la perfección pero no es convencional.
+
 X
 ```
 
@@ -229,6 +250,7 @@ También es probable que se encuentren con la flecha que apunta en sentido contr
 
 ```{r}
 Y <- X
+
 Y # En este caso Y fue redefinida con el contenido de X
 ```
 
@@ -283,7 +305,7 @@ R tiene varios tipos numéricos:
 #### Double (Números con decimales)
 
 ```{r}
-A <- 1
+A <- 1 # Asignamos un número cualquiera
 class(A)
 typeof(A)
 ```
@@ -319,7 +341,7 @@ Se usan en bases de datos enormes o en aplicaciones específicas.
 Sencillamente es texto.
 
 ```{r}
-A <- "osea, digamos"
+A <- "osea, digamos" # Asignamos texto
 class(A)
 ```
 ### Logical (Lógicos)
@@ -327,8 +349,8 @@ class(A)
 Los valores lógicos son TRUE o FALSE. Son pilares fundamentales de la programación.
 
 ```{r}
-verdadero <- TRUE
-falso <- FALSE
+verdadero <- TRUE # Verdadero en inglés, todo en mayúsculas
+falso <- FALSE    # Falso en inglés, todo en mayúsculas
 class(verdadero)
 ```
 
@@ -344,14 +366,14 @@ class(A)
 **factor**
 
 ```{r}
-A <- factor("Soy un factor, con niveles fijos") 
+A <- factor("Alto", "Medio", "Bajo") 
 class(A)
 ```
 
-La diferencia entre un **character** y un **factor** es que el último tiene **solo algunos valores permitidos** (levels), y se le puede dar un orden.
+Un **factor** tiene **solo algunos valores permitidos** (levels), y se les puede dar un orden.
 
 ### Resumen de Tipos Básicos
-| Tipo | Descripción | Ejemplo | Función creadora |
+| Tipo | Descripción | Ejemplo | Función transformadora |
 |------|-------------|---------|------------------|
 | Integer | Números enteros | `1L, 2L, 3L` | `as.integer()` |
 | Double | Números con decimales | `1.5, 2.0, 3.14` | `as.numeric()` |
@@ -437,20 +459,14 @@ E <- c("Ingreso", "Variación", "Indice")
 para acceder a algún elemento del vector, podemos buscarlo por su número de orden, entre `[]`
 
 ```{r}
-elemento2 <- E[2]
+elemento2 <- E[2] # Accedemos al segundo elemento del vector para asignarlo
 elemento2
 ```
 
 También podemos cambiar el texto del segundo elemento de E, por el texto “var”
 
 ```{r}
-E[2] <- "var"
-```
-
-### Matrices
-
-```{r}
-# Algo simple
+E[2] <- "var" # Sobreescribimos el segundo elemento del vector
 ```
 
 ### Data Frames (DF)
@@ -498,6 +514,10 @@ Datos$FECHA[3,2]
 
 Nótese que el último comando tiene un número incorrecto de dimensiones, porque estamos refiriendonos 2 veces a la columna FECHA.
 
+### Tibbles
+
+Vamos a verlas más en profundidad para la clase 2. Por ahora les alcanza con saber que es un Data Frame con algunos agregados, como por ejemplo mostrar en consola los tipos de cada columna. Continúa siendo en el fondo un Data Frame.
+
 ### Listas
 
 Contienen una colección de objetos de cualquier tipo. Así como un vector contiene valores, un dataframe contiene vectores, una lista puede contener dataframes, pero también vectores, o valores, y todo ello a la vez
@@ -509,15 +529,15 @@ lista1
 
 No vamos a necesitar manejar listas para los fines de este curso.
 
-### Estructuras de Datos
+### Estructuras de Datos vistas
 | Estructura | Descripción | Características |
 |------------|-------------|-----------------|
 | Vector | Colección de elementos del mismo tipo | Unidimensional, homogéneo |
-| Matriz | Tabla de elementos del mismo tipo | Bidimensional, homogénea |
-| Data Frame | Tabla de datos de diferentes tipos | Columnas pueden ser de diferentes tipos |
+| Data Frame | Tabla de datos de diferentes tipos | Columnas que pueden ser de diferentes tipos |
+| Tibble | Un Data Frame mejorado  | Columnas que pueden ser de diferentes tipos |
 | Lista | Colección de elementos de diferentes tipos | Heterogénea, anidable |
 
-## Lectura y guardado: formatos existentes
+## Lectura de archivos
 
 R tiene formatos de archivo propios, a saber, `RData` y `RDS`. Pueden leer un poco más sobre ellos en la nota de clase extra.
 
@@ -525,25 +545,15 @@ R tiene formatos de archivo propios, a saber, `RData` y `RDS`. Pueden leer un po
 
 #### CSV
 
-Del inglés *comma-separated values*, lo cual se traduce a valores separados por coma. Es una forma muy eficiente (y común) de guardar información. Hay **muchas funciones** para leer archivos de tipo .csv Nosotros vamos a usar mucho la función `read_csv()` del paquete `readr` (si instalaron tidyverse y sus paquetes núcleo entonces lo tienen descargado).
+Del inglés *comma-separated values*, lo cual se traduce a valores separados por coma. Es una forma muy eficiente (y común) de guardar información. Hay muchas funciones para leer archivos de tipo .csv Nosotros vamos a usar mucho la función `read_csv()` del paquete `readr` (si instalaron tidyverse y sus paquetes núcleo entonces lo tienen descargado).
 
 Es importante tener en cuenta:
 
 -   Los encabezados
--   El delimitador (,, tab, ;)
+-   El delimitador (`,`, `tab`, `;`)
 -   El separador decimal
 
-```{{r}}
-dataframe <- read.delim(file, header = TRUE, sep = "\t", quote = "\"", dec = ".", fill = TRUE, comment.char = "", ...) 
-```
-
-```{r}
-#| echo: FALSE
-
-library(readr)
-  
-SIPA <- read_csv("bases/base_sipa.csv")
-```
+Para el caso de los CSV, como dice el nombre, ya se sabe que deberían venir separados por comas.
 
 ```{r}
 #| eval: FALSE
@@ -551,7 +561,24 @@ SIPA <- read_csv("bases/base_sipa.csv")
 library(readr)
   
 SIPA <- read_csv("bases/base_sipa.csv")
+names(SIPA)
 ```
+
+```{r}
+#| echo: FALSE
+#| purl: FALSE
+
+library(readr)
+  
+SIPA <- read_csv("bases/base_sipa.csv")
+names(SIPA)
+```
+
+```{r}
+
+head(SIPA)
+```
+
 
 
 ### Excel
@@ -564,16 +591,6 @@ Para abrir archivos de excel usaremos la función `readlxl` de la librería `rea
 install.packages("readxl")
 ```
 
-
-```{r}
-#| echo: FALSE
-
-library(readxl)
-
-ipc_mensual <- read_xlsx("../clase1/bases/ipc_ceped_data.xlsx")
-names(ipc_mensual)
-```
-
 ```{r}
 #| eval: FALSE
 
@@ -584,7 +601,45 @@ names(ipc_mensual)
 ```
 
 ```{r}
+#| echo: FALSE
+#| purl: FALSE
+
+library(readxl)
+
+ipc_mensual <- read_xlsx("../clase1/bases/ipc_ceped_data.xlsx")
+names(ipc_mensual)
+```
+
+
+```{r}
 head(ipc_mensual)
+```
+
+### Formato .txt
+
+Otro formato con el que se van a encontrar es el formato txt. Seguiremos usando el paquete `readr` cargado anteriormente, ahora la función `read_delim()`.
+
+```{r}
+#| eval: FALSE
+
+eph_T324 <- read_delim(file = "bases/usu_individual_T324.txt",
+                  delim = ";",
+                  col_names = TRUE)
+```
+
+```{r}
+#| echo: FALSE
+#| purl: FALSE
+
+eph_T324 <- read_delim(file = "../../Clase 1 - Intro a R/bases/usu_individual_T324.txt",
+                  delim = ";",
+                  col_names = TRUE)
+```
+
+No le tengan miedo a las advertencias (warnings) que probablemente les van a aparecer. No son errores. Solo es el paquete siendo transparente respecto a cómo procesa los datos. Si pueden, investiguen de qué les está hablando.
+
+```{r}
+head(eph_T324)
 ```
 
 
@@ -607,31 +662,14 @@ Es aconsejable mantener en todos los script una misma estructura del tipo:
 4.  Definir funciones
 5.  Levantar archivos … procesamiento ….
 
-<!-- -->
-
 n.  grabar resultados
 
 También es útil organizar las partes del script en capítulos. Para eso
 
 `### escribimos el título del capitulo encerrado entre tres o más numerales ###`
 
-## Diferencia entre proyectos y scripts
+lo cual da un efecto visual que separa secciones.
 
-### Scripts:
-
-Los scripts en R son archivos de texto (.R) que permiten estructurar el código de manera modular, una hoja donde se escribe código. Esto significa que cada segmento del análisis, o cada tarea específica, se puede desarrollar de forma independiente, facilitando la confección, organización y la reutilización del código. Además, esta estructura modular confiere una gran flexibilidad, ya que permite ejecutar o modificar bloques de código sin necesidad de reestructurar todo el proyecto, lo cual es ideal para realizar experimentos rápidos o pruebas puntuales. Sumado a esto, el uso de scripts posibilita documentar detalladamente cada paso del proceso, lo que resulta de gran ayuda para la depuración y para revisar el trabajo hecho.
-
-### Proyectos R:
-
-Un proyecto en R es, esencialmente, un contenedor que agrupa todos los elementos necesarios para desarrollar un análisis o una aplicación, tales como el código, los datos, los resultados y las configuraciones específicas. Al abrir un proyecto, se establece automáticamente el directorio de trabajo y se cargan los ajustes predefinidos, lo que facilita el uso de rutas relativas (en inglés, *relative paths*) sin importar la ubicación de la carpeta del proyecto.
-
-Esta estructura organizada mejora la reproducibilidad y la colaboración, ya que permite compartir el trabajo o trasladarlo a diferentes computadoras sin que pierda coherencia. Además, los proyectos gestionan la integración con Git, un aspecto que profundizaremos en las últimas clases de la diplomatura.
-
-La forma típica de comenzar a trabajar en R es haciendo doble clic en el archivo `.Rproj`. También es posible (y muy cómodo) acceder a los proyectos abiertos recientemente desde la esquina superior derecha de la interfaz.
-
-### Su uso conjunto:
-
-Les recomendamos trabajar con un `.Rproj` (un proyecto) para cada análisis o trabajo. Al hacerlo, se centraliza la configuración del entorno, las rutas de acceso y demás ajustes, lo que garantiza uniformidad durante todo el proceso. Sobre esa base, se recomienda dividir el código en diferentes scripts, asignando a cada uno tareas específicas —por ejemplo, uno para la limpieza de datos, otro para el análisis exploratorio y un tercero para la generación de gráficos—. Esta separación no solo simplifica el mantenimiento y la reutilización del código, sino que también mejora la colaboración en equipo, permitiendo que cada colaborador se familiarice rápidamente con la estructura y el flujo de trabajo.
 
 ## De cara a la clase 2
 
@@ -641,16 +679,22 @@ En la misma carpeta en la encontraron esta presentación hay una guía práctica
 
 ```{=html}
 <div id="refs" class="references csl-bib-body hanging-indent">
+
   <div id="ref-r-core" class="csl-entry">
-    R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Recuperado de <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+    R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Recuperado de <a href="https://www.R-project.org/" target="_blank" rel="noopener noreferrer">https://www.R-project.org/</a>
   </div>
   
   <div id="ref-rstudio-guide" class="csl-entry">
-    Posit Team. (2025). <i>RStudio IDE User Guide</i>. Posit Software, PBC. Recuperado de <a href="https://docs.posit.co/ide/user/">https://docs.posit.co/ide/user/</a>
+    Posit Team. (2025). <i>RStudio IDE User Guide</i>. Posit Software, PBC. Recuperado de <a href="https://docs.posit.co/ide/user/" target="_blank" rel="noopener noreferrer">https://docs.posit.co/ide/user/</a>
   </div>
   
-  <div id="ref-student1908" class="csl-entry">
-    Student [pseu. William Sealy Gosset]. (1908). <i>The probable error of a mean</i>. <i>Biometrika</i>, <b>6</b>(1), 1–25.
+  <div id="ref-ceped" class="csl-entry">
+    CEPED. (2022). Ceped.data. Portal de difusión de datos del Centro de Estudios sobre Población, Empleo y Desarrollo (CEPED-UBA), Universidad de Buenos Aires, Buenos Aires. Recuperado de <a href="https://ceped-data.shinyapps.io/ceped-data/" target="_blank" rel="noopener noreferrer">https://ceped-data.shinyapps.io/ceped-data/</a>
   </div>
+  
+  <div id="ref-oede" class="csl-entry">
+  Observatorio de Empleo y Dinámica Empresarial (OEDE). (2025). Estadísticas e indicadores nacionales de OEDE. Ministerio de Capital Humano, Argentina. Recuperado de <a href="https://www.argentina.gob.ar/trabajo/estadisticas/oede-estadisticas-nacionales" target="_blank" rel="noopener noreferrer">https://www.argentina.gob.ar/trabajo/estadisticas/oede-estadisticas-nacionales</a>
+</div>
+
 </div>
 ```

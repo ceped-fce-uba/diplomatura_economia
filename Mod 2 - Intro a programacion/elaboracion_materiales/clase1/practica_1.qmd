@@ -20,6 +20,7 @@ format:
     warning: false
     message: false
     echo: true
+    output: false
 execute:
   freeze: auto
 editor: source
@@ -52,10 +53,11 @@ Antes de arrancar, algunas claves que nos parecen importantes:
 knitr::include_graphics("imgs/RProj.png")
 ```
 
--   El ritual de iniciación de todo nuevo usuario de R es imprimir algún saludo en la consola. Escriban `print("hola")` en el panel de la esquna inferior izquierda y denle enter. Recibirán el saludo de R como un eco. Bienvenidos a esta enorme comunidad.
--   Verifiquen que están trabajando dentro del RProject de la clase 1. De no ser así, pueden abrirlo en la esquina superior derecha (y revisar la nota de clase, dónde les explicamos sobre los proyectos de RStudio).
--   Reinicien R desde la barra de herramientas de RStudio ("Session" –\> "Restart R").
--   Creen un nuevo script: desde el panel de archivos de RStudio (parte inferior a la derecha), hay un ícono de hoja en blanco con un símbolo de suma verde. Pónganle un nombre informativo (es una buena práctica). Allí es donde vamos a trabajar.
+a)  El ritual de iniciación de todo nuevo usuario de R es imprimir algún saludo en la consola. Escriban `print("hola")` en el panel de la esquna inferior izquierda y denle enter. Recibirán el saludo de R como un eco. Bienvenidos a esta enorme comunidad.
+b)  Verifiquen que están trabajando dentro del RProject de la clase 1. De no ser así, pueden abrirlo en la esquina superior derecha (y revisar la nota de clase, dónde les explicamos sobre los proyectos de RStudio).
+c)  Reinicien R desde la barra de herramientas de RStudio ("Session" –\> "Restart R").
+d)  En R, la función `mean()` calcula promedios. Escriban en la consola (panel inferior izquierdo) el comando `?mean` o `help(mean)` (son equivalentes). Tal es la forma de acceder a la documentación en el panel de ayuda.
+e)  Creen un nuevo script: desde el panel de archivos de RStudio (parte inferior a la derecha), hay un ícono de hoja en blanco con un símbolo de suma verde. Pónganle un nombre informativo (es una buena práctica). Allí es donde vamos a trabajar.
 
 ### 2. Repaso de funciones básicas
 
@@ -65,19 +67,21 @@ knitr::include_graphics("imgs/RProj.png")
 Recuerden el atajo de teclado **Alt + -** para escribir el operador de asignación `<-`
 :::
 
-a)  Crear un objeto llamado *OBJETO,* cuyo contenido sea la cadena de caracteres "texto"
+a)  Creen un objeto llamado *OBJETO* cuyo contenido sea la cadena de caracteres de su elección.
 
 ```{r}
-OBJETO <- "texto"
+OBJETO <- "texto elegido por ustedes"
 ```
 
 ------------------------------------------------------------------------
 
-b)  Guardar en un objeto llamado *RESULTADO*, lo que arroje la operación 2+2.
-    i)  ¿Qué tipo de objeto acaban de crear? Pásenlo a la función \`class()\` para verificarlo.
+b)  Guarden en un objeto llamado *RESULTADO*, lo que arroje la operación 2+2.
+    i)  ¿Qué tipo de objeto acaban de crear? Pásenlo a la función `class()` para verificarlo.
 
 ```{r}
 RESULTADO <- 2 + 2
+
+class(RESULTADO)
 
 # Cuando R interpreta/procesa nuestro código ignora
 # los espacios, entonces podemos usarlos a gusto para
@@ -86,17 +90,89 @@ RESULTADO <- 2 + 2
 
 ------------------------------------------------------------------------
 
-Guardar en un objeto llamado *Cosa*, lo que arroje la evaluación 2 + 2 == 3.
+c)  Guardar en un objeto llamado *Cosa*, lo que arroje la evaluación 2 + 2 == 3.
+    i)  Llamen a la *Cosa* para ver qué se asignó finalmente.
 
--   Pásen también este objeto a la función class() para ver qué clase de objeto es.
+    ii) Pásen también este objeto a la función class() para ver qué clase de objeto es.
 
--   Intenten llamar, desde la consola (no en el script) la variable COSA (en máyusculas). ¿Qué ocurre? ¿Por qué?
+    iii) Intenten llamar, desde la consola (no en el script) la variable COSA (en máyusculas). ¿Qué ocurre? ¿Por qué?
 
-### Métodos de acceso
+```{r}
+Cosa <- 2 + 2 == 3
 
--   Levantar alguna basesita se me ocurre, quizá la del SIPA ya que estamos.
--   Instalar, si no lo hicieron durante la clase, el paquete tidyverse, con la función `install_packages()`[Al instalar los paquetes debemos pasarlos a `install_packages()` con el nombre entre comillas. Pero cuando los cargamos con `library()` van sin éstas.]{.aside}
+Cosa
 
-### Ejercicios avanzados
+class(Cosa)
 
--   Acá algo sobre cosas básicas pero más profundo, por si alguien quiere ir más allá.
+```
+
+------------------------------------------------------------------------
+
+d)  Sobreescriban la variable *Cosa* con la multiplicación 2 \* 4
+
+    i)  Dejen un comentario con `#` explicando lo que pretendían hacer
+    ii) Evalúen si *RESULTADO* es distinto de *Cosa*
+    iii) Evalúen si *Cosa* es mayor o igual a 5
+
+```{r}
+Cosa <- 2 * 4
+
+RESULTADO != Cosa
+
+Cosa >= 5
+```
+
+------------------------------------------------------------------------
+
+### 3. Estructuras de datos y métodos de acceso
+
+a)  Instalen el paquete `readxl` [Al instalar los paquetes debemos pasarlos a `install_packages()` con el nombre entre comillas. Pero cuando los cargamos con `library()` van sin éstas.]{.aside}
+
+```{r}
+#| eval: FALSE
+
+install.packages("readxl") # Noten que al instalar va entre comillas
+
+library(readxl) # Y al importar la libería va sin las comillas
+```
+
+b)  Creen un vector con tres componentes numéricos y luego accedan al segundo elemento.
+
+```{r}
+un_vector <- c(5,99,7)
+
+un_vector[2] # Solicito el elemento en segunda posición
+```
+
+c)  Levanten el archivo **gapminder_2000.csv** que está en la carpeta *bases* y chusmeen las primeras filas con `head()`. Si abren la respuesta a esta consigna verán un código que con algunos errores: corríjanlo.
+
+    i) Usen `names()` para ver los nombres de las columnas. Elijan una columna y accedan a ella con el operador `$`
+
+```{r}
+#| eval: FALSE
+
+# Una pista: entre otras cosas, la barra inclinada está al revés.
+
+library(readr)
+
+base -> read_csv(file = bases\gapminder_2000.csv]
+
+head(base)
+
+names(base)
+
+base$Country
+```
+
+d) Siguiendo con la base anterior:
+    
+    i) Tomen el promedio de la columna population (población), usando la función `mean()`.
+    ii) Busquen el valor mínimo de la columna life (esperanza de vida), usando la función `min()`.
+    
+```{r}
+#| eval: FALSE
+
+mean(base$population)
+
+min(base$life)
+```
