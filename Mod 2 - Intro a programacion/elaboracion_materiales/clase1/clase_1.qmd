@@ -36,56 +36,13 @@ include-after-body:
   - ../assets/footer.html
 ---
 
-:::: parallax-container
-::: {#parallax-image .parallax-image-container .parallax-scroll data-image="imgs/R.jpg"}
-:::
-::::
+```{r}
+#| echo: false
+#| purl: false
 
-```{=html}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Get all parallax elements
-  const parallaxElements = document.querySelectorAll('.parallax-image-container');
-  
-  parallaxElements.forEach(function(element) {
-    // Set background image from data attribute
-    const imagePath = element.getAttribute('data-image');
-    if (imagePath) {
-      element.style.backgroundImage = `url("${imagePath}")`;
-    }
-    
-    // Set initial background position
-    element.style.backgroundPosition = 'center -50px';
-  });
-  
-  // Add scroll event listener
-  window.addEventListener('scroll', function() {
-    // Calculate viewport position
-    const scrolled = window.pageYOffset;
-    
-    // Apply parallax effect to each element
-    parallaxElements.forEach(function(element) {
-      // Get the parallax container position
-      const container = element.parentElement;
-      const containerRect = container.getBoundingClientRect();
-      const containerTop = containerRect.top + scrolled;
-      
-      // Calculate how far the container is from the top of viewport
-      const distanceFromTop = containerTop - scrolled;
-      
-      // Only apply effect when container is in viewport
-      if (distanceFromTop < window.innerHeight && distanceFromTop + containerRect.height > 0) {
-        // Adjust the divisor (3) to control parallax intensity
-        const yPos = -50 + (scrolled - containerTop) / 3;
-        
-        // Apply parallax effect
-        element.style.backgroundPosition = `center ${yPos}px`;
-      }
-    });
-  });
-});
-</script>
+knitr::include_graphics("imgs/R.jpg")
 ```
+
 
 ## ¿Qué es R?
 
