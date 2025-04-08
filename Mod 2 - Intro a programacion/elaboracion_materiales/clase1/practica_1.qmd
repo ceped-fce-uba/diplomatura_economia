@@ -92,7 +92,18 @@ Guardar en un objeto llamado *Cosa*, lo que arroje la evaluación 2 + 2 == 3.
 
 -   Intenten llamar, desde la consola (no en el script) la variable COSA (en máyusculas). ¿Qué ocurre? ¿Por qué?
 
-### Métodos de acceso
+
+### 3. Estructuras de datos y métodos de acceso
+
+-   Instalen el paquete `readxl`
+
+```{r}
+#| eval: FALSE
+
+install.packages("readxl") # Noten que al instalar va entre comillas
+
+library(readxl) # Y al importar la libería va sin las comillas
+```
 
 -   Levantar alguna basesita se me ocurre, quizá la del SIPA ya que estamos.
 -   Instalar, si no lo hicieron durante la clase, el paquete tidyverse, con la función `install_packages()`[Al instalar los paquetes debemos pasarlos a `install_packages()` con el nombre entre comillas. Pero cuando los cargamos con `library()` van sin éstas.]{.aside}
