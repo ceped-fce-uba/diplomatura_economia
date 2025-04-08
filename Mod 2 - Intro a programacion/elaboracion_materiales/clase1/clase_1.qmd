@@ -629,7 +629,6 @@ eph_T324 <- read_delim(file = "bases/usu_individual_T324.txt",
 
 ```{r}
 #| echo: FALSE
-#| warning: TRUE
 #| purl: FALSE
 
 eph_T324 <- read_delim(file = "../../Clase 1 - Intro a R/bases/usu_individual_T324.txt",
@@ -662,8 +661,6 @@ Es aconsejable mantener en todos los script una misma estructura del tipo:
 3.  Definir directorios
 4.  Definir funciones
 5.  Levantar archivos … procesamiento ….
-
-<!-- -->
 
 n.  grabar resultados
 

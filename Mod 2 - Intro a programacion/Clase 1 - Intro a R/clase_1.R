@@ -99,38 +99,19 @@ Datos$FECHA
 
 Datos[3,2]
 
-try({
 Datos$FECHA[3,2]
-})
+
 
 lista1 <- list(1, 2, "tres")
 lista1
-
-# library(readr)
-# 
-# SIPA <- read_csv("bases/base_sipa.csv")
-# names(SIPA)
-
 
 
 
 head(SIPA)
 
-# install.packages("readxl")
-
-# library(readxl)
-# 
-# ipc_mensual <- read_xlsx("bases/ipc_ceped_data.xlsx")
-# names(ipc_mensual)
-
 
 
 head(ipc_mensual)
-
-# eph_T324 <- read_delim(file = "bases/usu_individual_T324.txt",
-#                   delim = ";",
-#                   col_names = TRUE)
-
 
 
 head(eph_T324)
