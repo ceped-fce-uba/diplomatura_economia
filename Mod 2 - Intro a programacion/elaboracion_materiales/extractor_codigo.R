@@ -5,9 +5,8 @@ extractor_codigo <- function(
     source_file_pattern = "clase_%d.qmd",
     output_base_dir = "Mod 2 - Intro a programacion",
     output_file_pattern = "clase_%d.R",
-    documentation = 0,
-    verbose = TRUE
-) {
+    documentation = 0
+    ) {
   # Guardamos directorio de trabajo original
   original_dir <- getwd()
   on.exit(setwd(original_dir))
@@ -56,30 +55,23 @@ extractor_codigo <- function(
     
     # Asegurarse de que exista la carpeta de destino
     if (!dir.exists(output_folder)) {
-      if (verbose) {
-        cat("Creando carpeta de destino: ", output_folder, "\n")
-      }
+      cat("Creando carpeta de destino: ", output_folder, "\n")
       dir.create(output_folder, recursive = TRUE)
     }
-    
-    if (verbose) {
-      cat("Extrayendo", source_path, "a", output_path, "\n")
-    }
+    cat("Extrayendo", source_path, "a", output_path, "\n")
     
     # Extraer código
     knitr::purl(
       input = source_path,
       output = output_path,
       documentation = documentation,
-      quiet = !verbose
+      quiet = FALSE
     )
     
     extracted_files <- c(extracted_files, output_path)
   }
-  
-  if (verbose) {
-    cat("\nExtraídos", length(extracted_files), "scripts de R\n")
-  }
+
+  cat("\nExtraídos", length(extracted_files), "scripts de R\n")
   
   return(invisible(extracted_files))
 }
