@@ -5,7 +5,7 @@ author-title: "DOCENTES:"
 authors:
   - name: Vladimiro S. Torres
   - name: Juan Camilo Gutman
-output-file: "Clase 2 - Manipulación de bases de datos I" 
+output-file: "Clase 2 - Manipulacion de bases de datos I" 
 format:
   html:
     embed-resources: true

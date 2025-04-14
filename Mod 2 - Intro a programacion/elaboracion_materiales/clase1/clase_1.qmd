@@ -206,9 +206,9 @@ Pueden borrar objetos directamente con el comando `rm(objeto)`
 También es probable que se encuentren con la flecha que apunta en sentido contrario al anterior. Se usa menos pero para algunas operaciones es cómodo asignar al final. Lógicamente asigna en el sentido de la flecha.
 
 ```{r}
-Y <- X
+Y -> X
 
-Y # En este caso Y fue redefinida con el contenido de X
+X # En este caso X fue redefinida con el contenido de Y
 ```
 
 ## Aritmética básica
