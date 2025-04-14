@@ -55,7 +55,7 @@ No es necesario que le den mucha importancia a los mensajes de advertencia, no s
 
 Como ya se ha visto, se requiere instalar las librerías en primer lugar y por única vez, y luego invocarla en el entorno de R cada vez que se quiera utilizar las funciones que yacen dentro de esta. Una analogía a esta dinámica sería la acción de comprar y usar un libro: lo compramos una sola vez, pero para poder disponer de su contenido se requiere siempre de su apertura.
 
-A partir de este momento, trabajaremos las funciones a estudiar volcadas sobre una base de datos creada a partir de [información](https://www.argentina.gob.ar/sites/default/files/trabajoregistrado_2411_estadisticas.xlsx) del Sistema Integrado Previsional Argentino ([SIPA](https://www.argentina.gob.ar/situacion-y-evolucion-del-trabajo-registrado)). En este caso tenemos una base preprocesada guardada en formato `.csv`,
+A partir de este momento, trabajaremos las funciones a estudiar volcadas sobre una base de datos creada a partir de [información](https://www.argentina.gob.ar/sites/default/files/trabajoregistrado_2411_estadisticas.xlsx) del Sistema Integrado Previsional Argentino ([SIPA](https://www.argentina.gob.ar/situacion-y-evolucion-del-trabajo-registrado)). En este caso tenemos una base pequeña, simplificada, para que puedan prestar atención a las funciones.
 
 ```{r}
 OCUPADOS  <- c(6105953, 2543717, 10931300,
