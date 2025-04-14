@@ -1,9 +1,9 @@
 
 Y <- 1 # Creamos una variable llamada Y cuyo contenido será el número 1
 
-Y
+Y 
 
-X = 2 # Funciona a la perfección pero no es convencional.
+X = 5 # Funciona a la perfección pero no es convencional.
 
 X
 
@@ -39,14 +39,14 @@ A <- 10L  # La L indica que queremos un entero
 class(A)
 typeof(A)
 
-A <- "osea, digamos" # Asignamos texto
+A <- "o sea, digamos" # Asignamos texto
 class(A)
 
 verdadero <- TRUE # Verdadero en inglés, todo en mayúsculas
 falso <- FALSE    # Falso en inglés, todo en mayúsculas
 class(verdadero)
 
-A <- as.Date("2017-01-01")
+A <-as.Date("2017-01-01")
 class(A)
 
 A <- factor("Alto", "Medio", "Bajo") 
@@ -65,6 +65,7 @@ Y != X # Y es diferente de X
 
 Z <- Y != X
 Z
+class(z)
 
 C <- c(1, 3, 4)
 C
@@ -105,10 +106,17 @@ Datos$FECHA[3,2]
 lista1 <- list(1, 2, "tres")
 lista1
 
+library(readr)
 
+SIPA <- read_csv("bases/base_sipa.csv")
 
 head(SIPA)
+tail(SIPA)
+names(SIPA)
 
+library(readxl)
+
+ipc_mensual <- read_xlsx("bases/ipc_ceped_data.xlsx")
 
 
 head(ipc_mensual)
