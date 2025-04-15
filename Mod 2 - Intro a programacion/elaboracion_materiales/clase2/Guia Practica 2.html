@@ -2341,16 +2341,17 @@ vertical-align: -.125em;
     <h2 id="toc-title">Índice</h2>
    
   <ul>
-  <li><a href="#ejercicios" id="toc-ejercicios" class="nav-link active" data-scroll-target="#ejercicios">Ejercicios</a>
-  <ul class="collapse">
-  <li><a href="#funciones-básicas-de-manipulación-de-datos" id="toc-funciones-básicas-de-manipulación-de-datos" class="nav-link" data-scroll-target="#funciones-básicas-de-manipulación-de-datos">1. Funciones básicas de manipulación de datos</a></li>
-  </ul></li>
+  <li><a href="#funciones-básicas-de-manipulación-de-datos" id="toc-funciones-básicas-de-manipulación-de-datos" class="nav-link active" data-scroll-target="#funciones-básicas-de-manipulación-de-datos">1. Funciones básicas de manipulación de datos</a></li>
+  <li><a href="#joins" id="toc-joins" class="nav-link" data-scroll-target="#joins">2. Joins</a></li>
+  <li><a href="#profundizando-en-el-manejo-de-datos" id="toc-profundizando-en-el-manejo-de-datos" class="nav-link" data-scroll-target="#profundizando-en-el-manejo-de-datos">3. Profundizando en el manejo de datos</a></li>
+  <li><a href="#medidas-de-resumen" id="toc-medidas-de-resumen" class="nav-link" data-scroll-target="#medidas-de-resumen">4. Medidas de resumen</a></li>
+  <li><a href="#más-joins" id="toc-más-joins" class="nav-link" data-scroll-target="#más-joins">5. Más joins</a></li>
   </ul>
 </nav>
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -2378,8 +2379,6 @@ vertical-align: -.125em;
 </header>
 
 
-<section id="ejercicios" class="level1">
-<h1>Ejercicios</h1>
 <section id="funciones-básicas-de-manipulación-de-datos" class="level2">
 <h2 class="anchored" data-anchor-id="funciones-básicas-de-manipulación-de-datos">1. Funciones básicas de manipulación de datos</h2>
 <ol type="a">
@@ -2464,7 +2463,99 @@ Tip
 </details>
 </div>
 </section>
+<section id="joins" class="level2">
+<h2 class="anchored" data-anchor-id="joins">2. Joins</h2>
+<ol type="a">
+<li>Carguen las bases <em>base_sipa.csv</em> y <em>ipc_ceped_data.csv</em> y vean su contenido con un <code>head()</code>y un <code>tail()</code> respectivamente.</li>
+</ol>
+<div class="cell">
+<details class="code-fold">
+<summary>Mostrar respuesta</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>base_sipa <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;bases/base_sipa.csv&quot;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>base_ipc <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">&quot;bases/ipc_ceped_data.xlsx&quot;</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(base_sipa)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(base_ipc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ol start="2" type="a">
+<li></li>
+</ol>
 </section>
+<section id="profundizando-en-el-manejo-de-datos" class="level2">
+<h2 class="anchored" data-anchor-id="profundizando-en-el-manejo-de-datos">3. Profundizando en el manejo de datos</h2>
+<p>En clase trabajamos con una pequeña base del SIPA que ya venía preparada en formato tidy. Es muy probable que se encuentren con bases de este estilo:</p>
+</section>
+<section id="medidas-de-resumen" class="level2">
+<h2 class="anchored" data-anchor-id="medidas-de-resumen">4. Medidas de resumen</h2>
+<ol type="a">
+<li>Usen la función <code>unique()</code> para ver qué regiones identifica esta base de datos y la función <code>table()</code> para ver cuántos países hay en cada una.</li>
+</ol>
+<div class="cell">
+<details class="code-fold">
+<summary>Mostrar respuesta</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>gapminder_2000 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;bases/gapminder_2000.csv&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>gapminder_2000<span class="sc">$</span>region <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gapminder_2000<span class="sc">$</span>region)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ol start="2" type="a">
+<li>Utilicen las funciones <code>filter()</code> para crear una base que sólo conserva las filas de países de América. Al final, usen <code>summary()</code> para ver algunas medidas de resumen.</li>
+</ol>
+<div class="cell">
+<details class="code-fold">
+<summary>Mostrar respuesta</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>america_2000 <span class="ot">&lt;-</span> gapminder_2000 <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(region <span class="sc">==</span> <span class="st">&quot;America&quot;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>america_2000 <span class="sc">%&gt;%</span> <span class="fu">summary</span>() <span class="co"># ó summary(america_2000)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ol start="3" type="a">
+<li>Parece que hay valores faltantes <strong>(NA’s)</strong> en la columna de mortalidad infantil. Vean para qué países falta dicha información haciendo uso de la función <code>filter()</code> y <code>ìs.na()</code>.</li>
+</ol>
+<div class="cell">
+<details class="code-fold">
+<summary>Mostrar respuesta</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>america_2000 <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(child_mortality))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sólo estamos observando, no sobreescribimos</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ol start="4" type="a">
+<li>Con <code>!</code> invierten los valores lógicos. Sobreescriban la base de países americanos con <code>!is.na()</code> para eliminar los países con valores faltantes en dicha columna.</li>
+</ol>
+<div class="cell">
+<details class="code-fold">
+<summary>Mostrar respuesta</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>america_2000 <span class="ot">&lt;-</span> america_2000 <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(child_mortality))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sobreescribimos</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="más-joins" class="level1 page-columns page-full">
+<h1>5. Más joins</h1>
+<ol type="a">
+<li>Vamos a usar a continuación la variable “Asalariados registrados en el sector privado” de la base del SIPA. Filtren para desechar el resto y vean su contenido. Carguen también la base <em>regiones.csv</em>.</li>
+</ol>
+<ol start="2" type="a">
+<li>Hagan un join entre la base de asalariados por provincia y la de regiones. </li>
+</ol>
+<div class="no-row-height column-margin column-container"><span class="margin-aside">Obviamente, lo ideal sería asignar ciertos partidos de la provincia de Buenos Aires a la región Gran Buenos Aires y el resto de la provincia a la región pampeana. Pero a los fines de este ejercicio estamos bien.</span></div></section>
 
 </main>
 <!-- /main column -->

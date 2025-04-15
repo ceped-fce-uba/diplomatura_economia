@@ -9,4 +9,6 @@ head(base_sipa)
 
 tail(base_ipc)
 
-asalariados <- 
+
+base_regiones <- read_csv("bases/regiones_arg")
+

@@ -150,7 +150,7 @@ b)   Utilicen las funciones `filter()` para crear una base que sólo conserva la
 ```{r}
 library(tidyverse)
 
-gapminder_2000 <- gapminder_2000 %>%
+america_2000 <- gapminder_2000 %>%
   filter(region == "America")
 
 america_2000 %>% summary() # ó summary(america_2000)
@@ -176,9 +176,10 @@ america_2000 <- america_2000 %>%
 
 # 5. Más joins
 
-a) Vamos a usar a continuación la variable "Asalariados registrados en el sector privado" de la base del SIPA. Filtren para desechar el resto y vean su contenido.
+a) Vamos a usar a continuación la variable "Asalariados registrados en el sector privado" de la base del SIPA. Filtren para desechar el resto y vean su contenido. Carguen también la base *regiones.csv*.
 
 ```{r}
 
 ```
 
+b) Hagan un join entre la base de asalariados por provincia y la de regiones. [Obviamente, lo ideal sería asignar ciertos partidos de la provincia de Buenos Aires a la región Gran Buenos Aires y el resto de la provincia a la región pampeana. Pero a los fines de este ejercicio estamos bien.]{.aside}
