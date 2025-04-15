@@ -34,3 +34,7 @@ adam_smith <- adam_smith %>%
   select(organizacion_trabajo, prod_per_cap)
 
 adam_smith %>% summarise('Producción promedio' = mean(prod_per_cap))
+
+
+estado_datos <- as.data.frame(state.x77)
+estado_datos$Estado <- rownames(estado_datos)

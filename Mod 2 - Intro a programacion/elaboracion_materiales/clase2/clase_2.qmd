@@ -29,6 +29,15 @@ editor: source
 include-after-body: ../assets/footer.html
 ---
 
+```{r}
+#| echo: false
+#| purl: false
+#| out.width: "100%"
+
+knitr::include_graphics("imgs/tidyverse.png")
+```
+
+
 ## Tidyverse
 
 Tidyverse es un conjunto de paquetes de R que comparten una filosofía de diseño común y son fáciles de usar en conjunto. Fue creado para facilitar la manipulación, visualización y análisis de datos de manera eficiente, integrando una serie de herramientas que permiten trabajar con datos de forma coherente y fluida. Entre los paquetes más conocidos de tidyverse se encuentran `ggplot2` para la visualización, `dplyr` para la manipulación de datos, `tidyr` para la organización de datos, y `readr` para la importación de datos, entre otros.
@@ -36,17 +45,11 @@ Tidyverse es un conjunto de paquetes de R que comparten una filosofía de diseñ
 La idea central del tidyverse es promover un enfoque "tidy", donde los datos se organizan en un formato adecuado para el análisis (es decir, en "tidy data"), lo que facilita su uso en las diferentes etapas del proceso de análisis.
 
 ```{r}
-#| eval: false
-install.packages("tidyverse")
-library(tidyverse)
-
-```
-
-```{r}
 #| echo: true
 #| warning: true
-library(tidyverse)
+# install.packages("tidyverse") si no lo instalaron todavía
 
+library(tidyverse)
 ```
 
 No es necesario que le den mucha importancia a los mensajes de advertencia, no se trata de errores.
@@ -72,9 +75,9 @@ Datos <- data.frame(OCUPADOS, FECHA, SECTOR)
 
 ## Dplyr
 
-El caracter principal para utilizar este paquete es `%>%` (Alt + Shift + M), llamado pipe (en inglés, tubería).
+`dplyr` es uno de los paquetes más importantes del tidyverse. Se trata de un conjunto de herramientas para manipulación y análisis de datos en R.
 
-Los `%>%` toman el set de datos a su izquierda, y los transforman mediante las ordenes a su derecha, en los cuales los elementos de la izquierda están implícitos.
+Una de las cosas más importantes que nos permite utilizar este paquete es el operador **pipe** `%>%` (Alt + Shift + M) llamado *pipe* (del inglés, tubería). Los `%>%` toman el set de datos a su izquierda, y los transforman mediante las ordenes a su derecha, en los cuales los elementos de la izquierda están implícitos. De esta manera se pueden hacer cadenas de transformaciones. [Estrictamente hablado, el `%>%` es de otro paquete del tidyverse, `magrittr`, pero desde hace un tiempo `dplyr` lo importa por defecto. .]{.aside}
 
 Veamos las principales funciones que pueden utilizarse con la lógica de este paquete:
 
@@ -177,7 +180,7 @@ Datos %>%
   summarise("Promedio de ocuapdos" = mean(OCUPADOS))
 ```
 
-Fíjense que el cálculo anterior calcula el promedio de ocupados en todos los sectores y en todos los momentos del tiempo. Probablemente esto no sea lo que queríamos hacer. Para solucionar este problema, la siguiente función, la gran estrella de `dplyr`...
+Fíjense que el cálculo anterior calcula el promedio de ocupados en todos los sectores y en todos los momentos del tiempo. Probablemente esto no sea lo que queríamos hacer. Para solucionar este problema, la siguiente función, quizá la más famosa de `dplyr`.
 
 ### group_by()
 
@@ -273,7 +276,7 @@ Las funciones previamente presentadas responder a un conjunto de herramientas qu
 
 ### summary()
 
-Resume la información de cada una de las variables de la base de datos, mostrando distintos momentos de la distribución para variables numéricas, y un conteo de casos para variables del tipo factor o character
+Resume la información de cada una de las variables de la base de datos, mostrando distintos momentos de la distribución para variables numéricas, y un conteo de casos para variables del tipo factor o character. No confundan `summary()`, sustantivo, con `summarise()`, verbo.
 
 ```{r}
 summary(Datos)
@@ -281,7 +284,7 @@ summary(Datos)
 
 ### unique()
 
-Permite ver los valores únicos que toma cierta variable en mi base de datos.
+Permite ver los valores únicos que toma cierta variable/columna en mi base de datos.
 
 ```{r}
 unique(Datos$SECTOR)
@@ -307,12 +310,16 @@ table(Datos$SECTOR)
 <div id="refs" class="references csl-bib-body hanging-indent">
 
   <div id="ref-r-core" class="csl-entry">
-    R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+    R Core Team. (2024). <i>R: A Language and Environment for Statistical Computing</i>. R Foundation for Statistical Computing, Vienna, Austria. Recuperado de <a href="https://www.R-project.org/"  target="_blank" rel="noopener noreferrer">https://www.R-project.org/</a>
   </div>
   
   <div id="ref-ceped" class="csl-entry">
-    CEPED. (2022). Ceped.data. Portal de difusión de datos del Centro de Estudios sobre Población, Empleo y Desarrollo (CEPED-UBA), Universidad de Buenos Aires, Buenos Aires. Recuperado de <a href="https://www.ceped-data.shinyapps.io/">https://www.ceped-data.shinyapps.io/</a>
+    CEPED. (2022). Ceped.data. Portal de difusión de datos del Centro de Estudios sobre Población, Empleo y Desarrollo (CEPED-UBA), Universidad de Buenos Aires, Buenos Aires. Recuperado de <a href="https://ceped-data.shinyapps.io/ceped-data/" target="_blank" rel="noopener noreferrer">https://ceped-data.shinyapps.io/ceped-data/</a>
   </div>
+  
+  <div id="ref-talle-r" class="csl-entry">
+    Tiscornia, P., Weksler, G., Kozlowski D. y Shokida N. (2019). Introducción a R para Ciencias Sociales. Aplicación practica en la EPH. Recuperado de <a href="https://diegokoz.github.io/R_EPH_bookdown/index.html" target="_blank" rel="noopener noreferrer">https://diegokoz.github.io/R_EPH_bookdown/index.html</a>
+  </div>  
   
 </div>
 ```
