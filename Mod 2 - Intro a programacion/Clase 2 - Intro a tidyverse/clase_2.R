@@ -13,8 +13,8 @@ SECTOR  <-  c("Privado_Registrado","Público","Total",
               "Privado_Registrado","Público","Total")
 Datos <- data.frame(OCUPADOS, FECHA, SECTOR)
 
-Datos %>% 
- filter(SECTOR == "Total")
+Datos_total <- Datos %>% 
+  filter(SECTOR == "Total")
 
 Datos %>% 
   filter(SECTOR == "Total", OCUPADOS > 10931300)
@@ -22,21 +22,29 @@ Datos %>%
 Datos %>% 
   filter(OCUPADOS > 10931300 | SECTOR == "Privado_Registrado")
 
-Datos %>% 
-  rename(Periodo = FECHA)
+Datos_nuevo <- Datos %>% 
+  rename(Periodo = FECHA) 
+
+Datos <- Datos %>% 
+  mutate(Promedio = mean(OCUPADOS))
+
 
 Datos <- Datos %>% 
   mutate(Promedio = mean(OCUPADOS))
 Datos
 
 Datos <- Datos %>% 
-  mutate(caso_cuando = case_when(SECTOR == "Privado_Registrado"    ~ OCUPADOS*2,
-                                 SECTOR == "Público"               ~ OCUPADOS*3,
-                                 SECTOR == "Privado_No_Registrado" ~ OCUPADOS*5 ))
+  mutate(caso_cuando = case_when(SECTOR == "Privado_Registrado"    ~ "PR",
+                                 SECTOR == "Público"               ~ "P",
+                                 SECTOR == "Privado_No_Registrado" ~ "PNR",
+                                 TRUE                              ~ "0"
+                                 ))
 Datos
 
+
+
 Datos2 <- Datos %>% 
-  select(OCUPADOS, FECHA, SECTOR)
+  select(FECHA, SECTOR, OCUPADOS)
 Datos2
 
 Datos <- Datos %>% 
