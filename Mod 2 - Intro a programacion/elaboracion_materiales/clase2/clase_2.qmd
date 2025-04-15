@@ -168,20 +168,24 @@ Datos
 
 El orden en el cual aparecen las variables es el orden bajo el cual R va ordenando los resultados.
 
-### summarise()
+### summarise() ó summarize()
 
-Crea un nuevo objeto de tipo data framme, es decir puede utilizarse para crear tablas que sinteticen la información o grandes bases de datos con algún cálculo extra.
+Crea un nuevo objeto de tipo data frame, es decir puede utilizarse para crear tablas que sinteticen la información o grandes bases de datos con algún cálculo extra.
 
 ```{r}
 Datos %>% 
-  summarise(Indprom = mean(OCUPADOS))
+  summarise("Promedio de ocuapdos" = mean(OCUPADOS))
 ```
+
+Fíjense que el cálculo anterior calcula el promedio de ocupados en todos los sectores y en todos los momentos del tiempo. Probablemente esto no sea lo que queríamos hacer. Para solucionar este problema, la siguiente función, la gran estrella de `dplyr`...
 
 ### group_by()
 
-Esta función permite agrupar una operación para cada valor de una variable especificada. La función separa a la tabla según los valores de la variable indicada, y realiza las operaciones que se especifica continuación, de manera independiente para cada una de las “subtablas”.
+Esta función permite agrupar una operación para cada valor de una variable especificada. La función separa a la tabla según los valores de la variable indicada, y luego realiza las operaciones que se especifica continuación, de manera independiente para cada una de las “subtablas”. 
 
-En nuestro ejemplo, se calcula la cantidad de ocupados sobre habitantes totales de Argentina por fecha (se asumen 45 millones de habitantes).
+Casi siempre van a ver (y usar) `group_by()` funcionando junto con `summarise()`. Es cuando trabajan en conjunto que revelan su verdadero poder. 
+
+En nuestro ejemplo, podemos calcular la cantidad de ocupados sobre habitantes totales de Argentina por fecha (se asumen 45 millones de habitantes).
 
 ```{r}
 Datos %>% 

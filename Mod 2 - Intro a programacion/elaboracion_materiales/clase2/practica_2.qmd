@@ -1,6 +1,6 @@
 ---
 title: "Práctica 2"
-author: "Diplomatura PEEC - UBA"
+author: "Diplomatura PAEEC - UBA"
 output-file: "Guia Practica 2" 
 format:
   html:

@@ -4,10 +4,10 @@ fabrica_alfileres <- data.frame(
   organizacion_trabajo = c(
     "Trabajador no especializado",
     "Trabajador especializado",
-    "División del trabajo (10 trabajadores)",
+    "Division del trabajo",
     "Trabajador no especializado",
     "Trabajador especializado",
-    "División del trabajo (10 trabajadores)"
+    "Division del trabajo"
   ),
   tareas = c(
     "Todas las tareas, sin conocimiento previo del proceso y de la utilización de los medios de producción",
