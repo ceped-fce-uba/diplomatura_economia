@@ -36,5 +36,31 @@ adam_smith <- adam_smith %>%
 adam_smith %>% summarise('Producción promedio' = mean(prod_per_cap))
 
 
-estado_datos <- as.data.frame(state.x77)
-estado_datos$Estado <- rownames(estado_datos)
+############################################################3
+
+library(tidyverse)
+
+gapminder_2000 <- read_csv("bases/gapminder_2000.csv")
+
+gapminder_2000$region %>% unique()
+
+table(gapminder_2000$region)
+
+america_2000 <- gapminder_2000 %>%
+  filter(region == "America")
+
+america_2000 %>% summary() # ó summary(america_2000)
+
+america_2000 %>% 
+  filter(is.na(child_mortality))
+
+
+america_2000 <- america_2000 %>% 
+  filter(!is.na(child_mortality))
+
+poblacion_por_region <- gapminder_2000 %>%
+  group_by(region) %>%
+  summarize(poblacion_media = mean(population)) %>% 
+  arrange(desc(poblacion_media))
+
+            

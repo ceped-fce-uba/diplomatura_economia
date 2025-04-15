@@ -102,7 +102,7 @@ adam_smith <- adam_smith %>%
 a) Carguen las bases *base_sipa.csv* y *ipc_ceped_data.csv* y vean su contenido con un `head()`y un `tail()` respectivamente.
 
 ```{r}
-library(readr)
+library(tidyverse)
 library(readxl)
 
 base_sipa <- read_csv("bases/base_sipa.csv")
@@ -114,8 +114,29 @@ head(base_sipa)
 tail(base_ipc)
 ```
 
+b) Quédense solo con las filas de "Remuneración promedio - con estacionalidad" de la base_sipa.
 
-b) Realicen un left join entre ambas bases.
+```{r}
+base_sipa <- base_sipa %>% filter(Variable == "Remuneración promedio - con estacionalidad")
+```
+
+
+c) Realicen un left_join. Pero, primero, renombren la columna del ipc que se llama "valor".
+
+```{r}
+base_ipc <- base_ipc %>% rename(ipc = valor)
+  
+datos_unidos <- base_sipa %>% 
+  left_join(base_ipc, by = c("Periodo" = "fecha"))
+```
+
+d) Calculemos la remuneración real, ahora que juntamos ambas bases de datos (el 100 del IPC se encuentra enero del 2006).
+
+```{r}
+datos_unidos <- datos_unidos %>% mutate(remuneracion_real = Valor / ipc)
+
+View(datos_unidos)
+```
 
 
 ## 3. Medidas de resumen
@@ -160,5 +181,19 @@ america_2000 <- america_2000 %>%
   filter(!is.na(child_mortality))
 
 # Acá sí sobreescribimos
+```
+
+e) Creen una tabla de resumen con los promedios poblacionales de cada continente para el último año disponible en la base de datos
+
+```{r}
+poblacion_por_region <- gapminder_2000 %>%
+  group_by(region) %>%
+  summarize(poblacion_media = mean(population))
+```
+
+f) Retomen la cadena anterior y ordenen los datos de mayor a menor
+
+```{r}
+# Acá una pista nomás: arrange(desc(COLUMNA))
 ```
 

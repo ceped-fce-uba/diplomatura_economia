@@ -319,6 +319,41 @@ head(gapminder_long, 15) %>% gt()
 
 Es el opuesto de **pivot_longer**. Nos permite pivotear los datos de una variable para obtener múltiples columnas en función de alguna variable categórica que clasifique a la anterior. El “wider” refiere a que ahora nuestro dataframe va a tener menos filas (y más columnas, en función de la cantidad de categorías de la variable que use para pivotear)
 
+```{r}
+# Los mismos datos de antes pero en formato ancho
+datos_ancho <- data.frame(
+    SECTOR = c("Privado_Registrado", "Público", "Total"),
+    `Ene-12` = c(6105953, 2543717, 10931300),
+    `Feb-12` = c(6103382, 2598154, 10982740),
+    `Mar-12` = c(6112372, 2602057, 10992215),
+    check.names = FALSE # para que no cargue las fechas como Ene.12, etc.
+)
+```
+
+```{r}
+#| echo: FALSE
+#| purl: FALSE
+
+datos_ancho %>% gt()
+```
+
+
+```{r}
+datos_largo <- datos_ancho %>% 
+  pivot_longer(
+    cols = -SECTOR,           # Todas las columnas excepto SECTOR
+    names_to = "FECHA",       # Nombre de la nueva columna para las fechas
+    values_to = "OCUPADOS"    # Nombre de la nueva columna para los valores
+  )
+```
+
+```{r}
+#| echo: FALSE
+#| purl: FALSE
+
+datos_largo %>% gt()
+```
+
 ## Medidas de resumen de las variables en una base de datos
 
 Las funciones previamente presentadas responder a un conjunto de herramientas que tienen por finalidad operar sobre la base de datos que un usuario desea analizar. A continuación, se presentarán funciones cuya finalidad es analizar datos prexistentes en la base misma, sin el objetivo inmediato de realizar transformaciones sobre dichos datos.
