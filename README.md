@@ -12,7 +12,7 @@ Los materiales teóricos y prácticos de cada uno de los módulos se pueden desc
 ## Introducción a la programación en R
 
 [![Download](assets/images/boton_clase1.png)](M2_C1.rar) Introducción a R y RStudio. Lenguaje básico     
-[![Download](assets/images/boton_clase2.png)](M2_C2.zip) Manipulación de bases de datos I  
+[![Download](assets/images/boton_clase2.png)](M2_C2.rar) Manipulación de bases de datos I  
 [![Download](assets/images/boton_clase3.png)](M2_C3.rar) Manipulación de bases de datos II    
 [![Download](assets/images/boton_clase4.png)](M2_C4.rar) Visualización en R - Ggplot  
 
