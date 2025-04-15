@@ -1,9 +1,6 @@
-# install.packages("tidyverse")
-# library(tidyverse)
-# 
+# install.packages("tidyverse") si no lo instalaron todavía
 
 library(tidyverse)
-
 
 OCUPADOS  <- c(6105953, 2543717, 10931300,
                6103382, 2598154, 10982740,
@@ -47,13 +44,13 @@ Datos <- Datos %>%
 Datos
 
 Datos %>% 
-  summarise(Indprom = mean(OCUPADOS))
+  summarise("Promedio de ocupados" = mean(OCUPADOS))
 
 Datos %>% 
   group_by(FECHA) %>%
   summarise("Ocupados por habitante" = OCUPADOS/45000000)
 
-knitr::include_graphics("imgs/joins.png")
+
 
 INDICE  <- c(100,   100,   100,
              101.8, 101.2, 100.73,
@@ -77,7 +74,22 @@ IS_Indice_Gral <- IS_join %>%
   summarise(Indice_Gral = weighted.mean(INDICE,w = PONDERADOR))
 IS_Indice_Gral
 
-knitr::include_graphics("imgs/wide_long.png")
+
+
+library(gapminder)
+gapminder %>% sample_n(size = 6)
+
+
+
+gapminder_long <- gapminder %>%
+  pivot_longer(
+    cols = c(lifeExp, pop, gdpPercap),
+    names_to = "variable",  # Nombre de la columna para los nombres de las variables
+    values_to = "valor"     # Nombre de la columna para los valores
+  )
+
+
+head(gapminder_long, 6)
 
 
 

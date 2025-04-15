@@ -90,6 +90,7 @@ library(ggplot2)
 temp_arg <- read.csv("bases/city_temperature_arg.csv") 
 #hay que filtrar las bases por que tienen datos mising computados como -99
 
+
 temp_mex <- read.csv("bases/city_temperature_mex.csv")
 
 

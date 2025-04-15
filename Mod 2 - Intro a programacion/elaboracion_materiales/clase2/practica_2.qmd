@@ -115,22 +115,10 @@ tail(base_ipc)
 ```
 
 
-b) 
-
-## 3. Profundizando en el manejo de datos
-
-En clase trabajamos con una pequeña base del SIPA que ya venía preparada en formato tidy. Es muy probable que se encuentren con bases de este estilo:
-
-```{r}
-#| echo: FALSE
-
-library(gt)
+b) Realicen un left join entre ambas bases.
 
 
-```
-
-
-## 4. Medidas de resumen
+## 3. Medidas de resumen
 
 a) Usen la función `unique()` para ver qué regiones identifica esta base de datos y la función `table()` para ver cuántos países hay en cada una.
 
@@ -171,15 +159,6 @@ d) Con `!` invierten los valores lógicos. Sobreescriban la base de países amer
 america_2000 <- america_2000 %>% 
   filter(!is.na(child_mortality))
 
-# Sobreescribimos
+# Acá sí sobreescribimos
 ```
 
-# 5. Más joins
-
-a) Vamos a usar a continuación la variable "Asalariados registrados en el sector privado" de la base del SIPA. Filtren para desechar el resto y vean su contenido. Carguen también la base *regiones.csv*.
-
-```{r}
-
-```
-
-b) Hagan un join entre la base de asalariados por provincia y la de regiones. [Obviamente, lo ideal sería asignar ciertos partidos de la provincia de Buenos Aires a la región Gran Buenos Aires y el resto de la provincia a la región pampeana. Pero a los fines de este ejercicio estamos bien.]{.aside}

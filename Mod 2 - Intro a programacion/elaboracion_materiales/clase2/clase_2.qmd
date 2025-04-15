@@ -208,6 +208,7 @@ Otra implementación muy importante del paquete dplyr son las funciones para uni
 #| fig-align: "center"
 #| fig-cap: "Diagrama de tipos de join estilo SQL. *Fuente: [intro2r.library.duke.edu/join.html](https://intro2r.library.duke.edu/join.html)*"
 #| fig-cap-location: bottom
+#| purl: FALSE
 
 knitr::include_graphics("imgs/joins.png")
 ```
@@ -253,17 +254,65 @@ IS_Indice_Gral
 El paquete tidyr esta pensado para facilitar el emprolijamiento de los datos. Veremos las funciones pivot_longer y pivot_wider que nos permitirán pivotear la base según como queramos ordenar los datos para trabajarlos posteriormente o bien para presentarlos como tabla de resultados.
 
 ```{r}
-#| echo: false
+#| echo: FALSE
+#| purl: FALSE
 
 knitr::include_graphics("imgs/wide_long.png")
 ```
 
 ### pivot_longer()
 
-Nos permite pivotear los datos en columnas hacia una única variable. El *“longer”* refiere a que ahora nuestro dataframe va a tener más filas (y menos columnas)
+Nos permite pivotear los datos en columnas hacia una única variable. El *“longer”* refiere a que ahora nuestro dataframe va a tener más filas (y menos columnas). Veamos un ejemplo con la base de datos del paquete gapminder y aprovechemos la función `sample_n()`:
 
 ```{r}
+#| eval: FALSE
 
+library(gapminder)
+
+gapminder %>% sample_n(size = 6)
+```
+
+
+```{r}
+#| echo: FALSE
+#| purl: FALSE
+
+library(gt)
+library(gapminder)
+
+options(scipen = 999)
+
+gapminder %>% sample_n(size = 6) %>% gt()
+```
+
+
+```{r}
+#| eval: FALSE
+
+gapminder_long <- gapminder %>%
+  pivot_longer(
+    cols = c(lifeExp, pop, gdpPercap),
+    names_to = "variable",  # Nombre de la columna para los nombres de las variables
+    values_to = "valor"     # Nombre de la columna para los valores
+  )
+
+# Visualizamos el resultado
+head(gapminder_long, 6)
+```
+
+```{r}
+#| echo: FALSE
+#| purl: FALSE
+
+gapminder_long <- gapminder %>%
+  pivot_longer(
+    cols = c(lifeExp, pop, gdpPercap),
+    names_to = "variable",  # Nombre de la columna para los nombres de las variables
+    values_to = "valor"     # Nombre de la columna para los valores
+  )
+
+# Visualizamos el resultado
+head(gapminder_long, 15) %>% gt()
 ```
 
 ### pivot_wider()

@@ -1,9 +1,9 @@
 
 Y <- 1 # Creamos una variable llamada Y cuyo contenido será el número 1
 
-Y 
+Y
 
-X = 5 # Funciona a la perfección pero no es convencional.
+X = 2 # Funciona a la perfección pero no es convencional.
 
 X
 
@@ -11,9 +11,9 @@ Y <- X # Sobreescribimos el contenido de Y con el contenido de X
 
 Y
 
-Y <- X
+Y -> X
 
-Y # En este caso Y fue redefinida con el contenido de X
+X # En este caso X fue redefinida con el contenido de Y
 
 A <- 2 + 2 # Suma
 A
@@ -39,14 +39,14 @@ A <- 10L  # La L indica que queremos un entero
 class(A)
 typeof(A)
 
-A <- "o sea, digamos" # Asignamos texto
+A <- "osea, digamos" # Asignamos texto
 class(A)
 
 verdadero <- TRUE # Verdadero en inglés, todo en mayúsculas
 falso <- FALSE    # Falso en inglés, todo en mayúsculas
 class(verdadero)
 
-A <-as.Date("2017-01-01")
+A <- as.Date("2017-01-01")
 class(A)
 
 A <- factor("Alto", "Medio", "Bajo") 
@@ -65,7 +65,6 @@ Y != X # Y es diferente de X
 
 Z <- Y != X
 Z
-class(z)
 
 C <- c(1, 3, 4)
 C
@@ -100,26 +99,38 @@ Datos$FECHA
 
 Datos[3,2]
 
+try({
 Datos$FECHA[3,2]
-
+})
 
 lista1 <- list(1, 2, "tres")
 lista1
 
-library(readr)
+# library(readr)
+# 
+# SIPA <- read_csv("bases/base_sipa.csv")
+# names(SIPA)
 
-SIPA <- read_csv("bases/base_sipa.csv")
+
+
 
 head(SIPA)
-tail(SIPA)
-names(SIPA)
 
-library(readxl)
+# install.packages("readxl")
 
-ipc_mensual <- read_xlsx("bases/ipc_ceped_data.xlsx")
+# library(readxl)
+# 
+# ipc_mensual <- read_xlsx("bases/ipc_ceped_data.xlsx")
+# names(ipc_mensual)
+
 
 
 head(ipc_mensual)
+
+# eph_T324 <- read_delim(file = "bases/usu_individual_T324.txt",
+#                   delim = ";",
+#                   col_names = TRUE)
+
 
 
 head(eph_T324)
