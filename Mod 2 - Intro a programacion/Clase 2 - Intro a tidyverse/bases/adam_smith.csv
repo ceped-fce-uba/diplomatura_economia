@@ -1,0 +1,7 @@
+organizacion_trabajo,tareas,dias_trabajo,trabajadores,alfileres_producidos
+Trabajador no especializado,"Todas las tareas, sin conocimiento previo del proceso y de la utilización de los medios de producción",1,1,1
+Trabajador especializado,"Todas las tareas, con conocimiento previo del proceso y de la utilización de los medios de producción",1,1,20
+División del trabajo (10 trabajadores),"Realización de tareas específicas por parte de cada trabajador/a (estirado del alambre, cortado, afilado, limado, empaquetado, etc.)",1,10,48000
+Trabajador no especializado,"Todas las tareas, sin conocimiento previo del proceso y de la utilización de los medios de producción",2,1,2
+Trabajador especializado,"Todas las tareas, con conocimiento previo del proceso y de la utilización de los medios de producción",2,1,40
+División del trabajo (10 trabajadores),"Realización de tareas específicas por parte de cada trabajador/a (estirado del alambre, cortado, afilado, limado, empaquetado, etc.)",2,10,96000

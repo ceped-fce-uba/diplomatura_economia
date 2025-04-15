@@ -1,0 +1,184 @@
+---
+title: "Práctica 2"
+author: "Diplomatura PEEC - UBA"
+output-file: "Guia Practica 2" 
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+    code-summary: "Mostrar respuesta"
+    code-tools: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/practica_claro.scss
+      dark: ../assets/practica_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+    output: false
+execute:
+  freeze: auto
+editor: source
+include-after-body: ../assets/footer.html
+---
+
+```{r}
+#| echo: FALSE
+
+knitr::opts_knit$set(root.dir = "../../Clase 2 - Intro a tidyverse/")
+```
+
+## 1. Funciones básicas de manipulación de datos
+
+a)  Carguen e impriman la base `adam_smith.csv` de la carpeta bases para ver su contenido:
+
+```{r}
+library(readr) # ó library(tidyverse)
+
+adam_smith <- read_csv("bases/adam_smith.csv")
+
+adam_smith # ó print(adam_smith)
+```
+
+------------------------------------------------------------------------
+
+b) Sólo necesitamos las filas sobre la producción en una única jornada de trabajo, el resto es redundante. Usen la función `filter()` para eliminar el resto de fila y sobreescriban el resultado en el dataframe.
+
+::: {.callout-tip appearance="simple"}
+## Tip
+Para colocar pipes ` %>%` utilicen el atajo **Ctrl + Shift + M**
+:::
+
+
+```{r}
+library(dplyr) # ó library(tidyverse)
+
+adam_smith <- adam_smith %>%
+  filter(dias_trabajo == 1)
+
+# ó adam_smith <- adam_smith %>% filter(dias_trabajo == 1)
+# porque usamos el enter por convenciones de estilo, por comodidad.
+```
+
+------------------------------------------------------------------------
+
+c)  Bien podrían ser mujeres las trabajadoras del ejemplo de Adam Smith. Renombren la columna "trabajadores" a "trabajadoras" con la fórmula `rename(nuevo_nombre = viejo_nombre)` y sobreescriban.
+
+```{r}
+library(dplyr) # ó library(tidyverse)
+
+adam_smith <- adam_smith %>%
+  rename(trabajadoras = trabajadores)
+```
+
+------------------------------------------------------------------------
+
+d)  Creen una nueva columna con la producción per cápita de alfileres.
+
+```{r}
+library(dplyr) # ó library(tidyverse)
+
+adam_smith <- adam_smith %>%
+  mutate(prod_per_cap = alfileres_producidos / trabajadoras)
+```
+------------------------------------------------------------------------
+
+e)  Usando `select()`, quédense únicamente con las columnas de tipo de organización del trabajo y de producción de alfileres per cápita.
+
+```{r}
+library(dplyr) # ó library(tidyverse)
+
+adam_smith <- adam_smith %>%
+  select(organizacion_trabajo, prod_per_cap)
+```
+
+## 2. Joins
+
+a) Carguen las bases *base_sipa.csv* y *ipc_ceped_data.csv* y vean su contenido con un `head()`y un `tail()` respectivamente.
+
+```{r}
+library(readr)
+library(readxl)
+
+base_sipa <- read_csv("bases/base_sipa.csv")
+
+base_ipc <- read_xlsx("bases/ipc_ceped_data.xlsx")
+
+head(base_sipa)
+
+tail(base_ipc)
+```
+
+
+b) 
+
+## 3. Profundizando en el manejo de datos
+
+En clase trabajamos con una pequeña base del SIPA que ya venía preparada en formato tidy. Es muy probable que se encuentren con bases de este estilo:
+
+```{r}
+#| echo: FALSE
+
+library(gt)
+
+
+```
+
+
+## 4. Medidas de resumen
+
+a) Usen la función `unique()` para ver qué regiones identifica esta base de datos y la función `table()` para ver cuántos países hay en cada una.
+
+```{r}
+library(readr)
+
+gapminder_2000 <- read_csv("bases/gapminder_2000.csv")
+
+gapminder_2000$region %>% unique()
+
+table(gapminder_2000$region)
+```
+
+
+b)   Utilicen las funciones `filter()` para crear una base que sólo conserva las filas de países de América. Al final, usen `summary()` para ver algunas medidas de resumen.
+
+```{r}
+library(tidyverse)
+
+gapminder_2000 <- gapminder_2000 %>%
+  filter(region == "America")
+
+america_2000 %>% summary() # ó summary(america_2000)
+```
+
+c)  Parece que hay valores faltantes **(NA's)** en la columna de mortalidad infantil. Vean para qué países falta dicha información haciendo uso de la función `filter()` y `ìs.na()`.
+
+```{r}
+america_2000 %>% 
+  filter(is.na(child_mortality))
+
+# Sólo estamos observando, no sobreescribimos
+```
+
+d) Con `!` invierten los valores lógicos. Sobreescriban la base de países americanos con `!is.na()` para eliminar los países con valores faltantes en dicha columna.
+
+```{r}
+america_2000 <- america_2000 %>% 
+  filter(!is.na(child_mortality))
+
+# Sobreescribimos
+```
+
+# 5. Más joins
+
+a) Vamos a usar a continuación la variable "Asalariados registrados en el sector privado" de la base del SIPA. Filtren para desechar el resto y vean su contenido.
+
+```{r}
+
+```
+
