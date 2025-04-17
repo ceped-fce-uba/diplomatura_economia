@@ -135,7 +135,7 @@ d) Calculemos la remuneración real, ahora que juntamos ambas bases de datos (el
 ```{r}
 datos_unidos <- datos_unidos %>% mutate(remuneracion_real = Valor / ipc)
 
-View(datos_unidos)
+datos_unidos
 ```
 
 
@@ -196,4 +196,16 @@ f) Retomen la cadena anterior y ordenen los datos de mayor a menor
 ```{r}
 # Acá una pista nomás: arrange(desc(COLUMNA))
 ```
+
+# 4. Uno difícil: left_join() + group_by()
+
+a) Carguen estas dos bases: **base_sipa_csv** y **regiones.csv**. Esta última es una aproximación a las regiones que define el INDEC.
+
+b) Vamos a usar a continuación la variable "Asalariados registrados en el sector privado" de la base del SIPA (en miles). Filtren para desechar el resto y vean su contenido. (pueden ver todas las variables en la base con `unique(base_sipa$Variable)`). Filtren además las observaciones cuyo Periodo sea igual a 2015-01-01 (PISTA: usen `as.Date('2015-01-01')`)
+
+c) Hagan un join entre la base de asalariados por provincia y la de regiones mediante la columna común de regiones. Recuerden que la estructura básica es: `resultado <- datos_principales %>% left_join(datos_secundarios, by = "columna_comun")` [Obviamente, lo correcto sería asignar ciertos partidos de la provincia de Buenos Aires a la región Gran Buenos Aires y el resto de la provincia a la región pampeana. Pero a los fines de este ejercicio nos sirve para practicar.]{.aside}
+
+d) Si hicieron el join correctamente deberían encontrarse con que Tucumán tiene un NA (valor faltante, del inglés *Not Available*) en la nueva columna Region. ¿Por qué pasó esto? Comparen ambas bases para encontrar la respuesta (es importante que afinen el ojo a estos detalles).
+
+e) Para terminar, agrupen los datos por región, calculen la suma de asalariados y multipliquen por mil (dado que la base estaba en miles), usando como operación de resumen `sum(Valor) * 1000`). Verán que Tucumán queda por su cuenta, agrupado como NA.
 

@@ -1,7 +1,7 @@
 library("readr")
 
 provincias_argentina <- data.frame(
-  provincia = c(
+  Geografia = c(
     "CABA",
     "BUENOS AIRES",
     "CATAMARCA",
@@ -9,7 +9,7 @@ provincias_argentina <- data.frame(
     "LA RIOJA",
     "SALTA",
     "SANTIAGO DEL ESTERO",
-    "TUCUMÁN",
+    "TUCUMAN",
     "CORRIENTES",
     "CHACO",
     "FORMOSA",
@@ -17,17 +17,17 @@ provincias_argentina <- data.frame(
     "MENDOZA",
     "SAN JUAN",
     "SAN LUIS",
-    "CÓRDOBA",
-    "ENTRE RÍOS",
+    "CORDOBA",
+    "ENTRE RIOS",
     "LA PAMPA",
     "SANTA FE",
     "RIO NEGRO",
-    "NEUQUÉN",
+    "NEUQUEN",
     "CHUBUT",
     "SANTA CRUZ",
     "TIERRA DEL FUEGO"
   ),
-  region = c(
+  Region = c(
     "Gran Buenos Aires",
     "Gran Buenos Aires",
     "NOA",
@@ -55,4 +55,4 @@ provincias_argentina <- data.frame(
   )
 )
 
-write_csv(provincias_argentina, "../Clase 2 - Intro a tidyverse/bases/regiones_arg")
+write_csv(provincias_argentina, "Mod 2 - Intro a programacion/Clase 2 - Intro a tidyverse/bases/regiones_arg.csv")
