@@ -51,14 +51,18 @@ Datos <- Datos %>%
   arrange(SECTOR, OCUPADOS)
 Datos
 
-Datos %>% 
-  summarise("Promedio de ocupados" = mean(OCUPADOS))
+Tabla_Ocupados <- Datos %>% 
+  summarise("Promedio de ocupados" = mean(OCUPADOS),
+            "Mediana de ocupados"  = median(OCUPADOS))
+
+#Datos <- Datos %>% 
+#  mutate(FECHA = as.Date(FECHA))
 
 Datos %>% 
-  group_by(FECHA) %>%
+  group_by(SECTOR) %>%
   summarise("Ocupados por habitante" = OCUPADOS/45000000)
 
-
+  
 
 INDICE  <- c(100,   100,   100,
              101.8, 101.2, 100.73,
@@ -74,12 +78,12 @@ IS <- data.frame(INDICE, FECHA, GRUPO)
 Ponderadores <- data.frame(GRUPO = c("Privado_Registrado","Público","Privado_No_Registrado"),
                             PONDERADOR = c(50.16,29.91,19.93))
 IS_join <- IS %>% 
-  left_join(.,Ponderadores, by = "GRUPO")
+  left_join(., Ponderadores, by = "GRUPO")
 IS_join
 
 IS_Indice_Gral <- IS_join %>% 
   group_by(FECHA) %>% 
-  summarise(Indice_Gral = weighted.mean(INDICE,w = PONDERADOR))
+  summarise(Indice_Gral = weighted.mean(INDICE, w = PONDERADOR))
 IS_Indice_Gral
 
 
@@ -98,6 +102,8 @@ gapminder_long <- gapminder %>%
 
 
 head(gapminder_long, 6)
+
+summary(Datos$OCUPADOS)
 
 
 
