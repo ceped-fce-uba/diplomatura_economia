@@ -1,0 +1,168 @@
+---
+title: "Clase 4 - Visualización de Datos Avanzada"
+subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED - FCE - UBA)"
+author-title: "DOCENTES:" 
+authors:
+  - name: Vladimiro S. Torres
+  - name: Juan Camilo Gutman
+output-file: "Clase 3 - Manipulación de bases de datos II" 
+format:
+  html:
+    embed-resources: true
+    code-tools: false
+    code-copy: false
+    toc: true
+    toc-location: left
+    theme: 
+      light: ../assets/practica_claro.scss
+      dark: ../assets/practica_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+execute:
+  freeze: auto
+editor: source
+include-after-body: ../assets/footer.html
+---
+
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(lubridate)      # Para manejar fechas
+library(plotly)         # Interactive plots
+```
+
+```{r}
+#| echo: false
+
+library(gt)             # Para mostrar las tablas mejor
+```
+
+## Complejizar la visualización
+
+Retomar con la siguiente data ya procesada
+
+```{r}
+SIPA <- read_csv("bases/base_sipa.csv", 
+                 show_col_types = FALSE)
+
+SIPA <- SIPA %>% 
+  mutate(Periodo = as.Date(Periodo),
+         Anio = year(Periodo),
+         Mes = month(Periodo),
+         Trimestre = quarter(Periodo))
+```
+
+
+```{r}
+ipc_mensual <- read_xlsx("../clase2/bases/ipc_ceped_data.xlsx")
+
+class(ipc_mensual$fecha)
+
+ipc_mensual <- ipc_mensual %>% 
+  mutate(fecha = as.Date(fecha))
+
+class(ipc_mensual$fecha)
+```
+
+```{r}
+remuneracion_media <- SIPA %>% 
+  filter(Variable == "Remuneración promedio - sin estacionalidad") %>% 
+  mutate(indice_remuneraciones = Valor/Valor[Periodo == "2009-01-01"]*100)
+
+ipc_mensual <- ipc_mensual %>% 
+  mutate(indice_ipc_2009 = valor/valor[fecha == "2009-01-01"]*100)
+
+remuneracion_real <- remuneracion_media %>%
+  left_join(ipc_mensual, by = c("Periodo" = "fecha"))
+
+remuneracion_real <- remuneracion_real %>% 
+  mutate(indice_real = indice_remuneraciones/indice_ipc_2009*100,
+         Trimestre        = quarter(Periodo)) %>% 
+  select(Periodo, Anio = ANO4, Trimestre, Mes = sub, indice_real) 
+
+```
+
+ 
+
+
+Acá es clave armar una buena buena descripción de todo lo que se nuevo con respecto a la clase pasada
+
+
+
+
+
+```{r}
+#PROBANDO
+
+library(plotly)
+library(htmlwidgets)
+
+plot_remun <- remuneracion_real %>%
+  filter(year(Periodo) >= 2019) %>%
+  ggplot(aes(x = Periodo, y = indice_real)) +
+  geom_line(color = 'steelblue', size = 1) +
+  geom_point(color = 'steelblue', size = 2.5) +
+  scale_x_date(date_breaks = "2 month",
+               date_labels = "%b %Y") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45,
+                                  hjust = 1)
+        ) +
+  labs(title = "Remuneración Real Asal. Reg. del Sec. Privado",
+       subtitle = "Total País. Sin estacionalidad.",
+       y = "Nivel",
+       x = "", 
+       caption = "Fuente: Sistema Integrado Previsional Argentino (SIPA)")
+  
+
+plotly_remun <- plot_remun %>%
+  ggplotly()
+
+htmlwidgets::saveWidget(plotly_remun, "remuneracion_desde_2019.html")
+
+plotly_remun
+```
+
+
+
+
+
+gráficos de densidad: enut
+
+```{r}
+enut
+```
+
+
+### Recursos adicionales
+
+Para quienes quieran profundizar en estos conceptos:
+
+#### R y Tidyverse
+
+-   Wickham, H., & Grolemund, G. (2023). *R for Data Science (2nd ed)*. O'Reilly Media. <https://r4ds.hadley.nz/>
+
+## Bibliografía {.unnumbered}
+
+```{=html}
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+  <div id="ref-wickham2019" class="csl-entry">
+    Wickham, H., &amp; Grolemund, G. (2023). <i>R for Data Science (2nd ed)</i>. O'Reilly Media.
+  </div>
+
+  <div id="ref-tidyverse2023" class="csl-entry">
+    Tidyverse. (2023, April). <i>Base vs. magrittr pipe</i>. Recuperado de <a href="https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/">https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/</a>
+  </div>
+
+  <div id="ref-dataviz" class="csl-entry">
+    DataViz Inspiration. (n.d.). RetrievedRecuperado de <a href="https://www.dataviz-inspiration.com/">https://www.dataviz-inspiration.com/</a>
+  </div>
+
+</div>
+```

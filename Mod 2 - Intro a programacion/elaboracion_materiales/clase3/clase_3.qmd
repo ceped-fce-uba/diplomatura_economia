@@ -28,8 +28,6 @@ editor: source
 include-after-body: ../assets/footer.html
 ---
 
-En esta clase vamos a ver...
-
 ```{r}
 library(tidyverse)
 library(readxl)
@@ -45,15 +43,15 @@ library(gt)             # Para mostrar las tablas mejor
 
 ## Complejizar tidyverse
 
-Hasta el momento se ha avanzado sobre funciones que componen el paquete `tidyverse` en forma individual, pero no hemos observado esquemas que concatenen estas funciones en un **flujo de trabajo más complejos**. Este tipo de esquemas, o procesos, tienden a ser el trabajo más típico de un usuario/a en R, ya que para sintetizar grandes volumenes de información en indicadores o métricas, se requieren procesos previos sobre los datos.
+Hasta el momento se ha avanzado sobre funciones que componen el paquete `tidyverse` en forma individual, pero no hemos observado esquemas que concatenen estas funciones en un **flujo de trabajo más complejo**. Este tipo de esquemas, o procesos, tienden a ser el trabajo más típico de un usuario/a en R, ya que para sintetizar grandes volumenes de información en indicadores o métricas, se requieren procesos previos sobre los datos.
 
 ### El operador pipe (%\>%) como conector fundamental
 
-Este instrumento o herramienta es fundamental para los flujos de trabajo, ya que es el operador a través del cual se concatenan las operaciones u ordenes que están codificadas. Su esencia se encuentra en la posibilidad de realizar múltiples operaciones, de forma secuencial y velozmente, al mismo tiempo que dicho conjunto de operaciones quedan escritas en una secuencia de código. Se trata únicamente de una transformación sintáctica: nos permite ordenar el código
+Este instrumento o herramienta es fundamental para los flujos de trabajo, ya que es el operador a través del cual se concatenan las operaciones u ordenes que se codifican. Su esencia se encuentra en la posibilidad de realizar múltiples operaciones, de forma secuencial y velozmente, al mismo tiempo que dicho conjunto de operaciones quedan escritas en una secuencia de código. Se trata únicamente de una transformación sintáctica: nos permite ordenar el código.
 
 ## Flujo de trabajo y base de datos
 
-En esta clase abarcaremos el análisis y la práctica de flujos más complejos con `tidyverse`, a partir del uso de una base de datos de SIPA. Para ello, se procederá a importar dicha base y contar con ella en el ambiente de R.
+En esta clase abarcaremos el análisis y la práctica de flujos más complejos con `tidyverse`, a partir del uso de una base de datos de SIPA. Para ello, se procederá a importar dicha base para contar con ella en el ambiente de R.
 
 ```{r}
 SIPA <- read_csv("bases/base_sipa.csv", 
@@ -74,21 +72,24 @@ class(SIPA$Periodo)
 
 En este caso se revisó la clase de la variable, y se la modificó de modo tal que R interprete su contenido como una fecha. A partir de aquí, se procede a explorar la base de datos.
 
-### Explorar la base
+### Explorar una base
 
-En primer lugar, se puede observar con que variables cuenta la base.
+En primer lugar, se puede observar con que variables cuenta la base. Para ello, se utilizará la función `names()`, la cual nos devuelve el nombre que toma cada una de las variables o columnas dentro de la base. 
 
 ```{r}
 names(SIPA)
 ```
 
-Así, dado que una columna se llama "Variable", puede observarse al interior de esta qué etiquetas aparecen y cuál la frecuencia de cada una de estas.
+Así, dado que una columna se llama "Variable", puede observarse al interior de esta qué etiquetas aparecen y cuál la frecuencia de cada una de estas. Para ello se empleará la función `table()`, la cual devuelve el número de veces que se repite un contenido único de la variable: es decir, la frecuencia del contenido de esta. 
 
 ```{r}
 table(SIPA$Variable)
 ```
+Es importante aclarar que **la función `table()` cobra relevancia ante variables cuyo contenido sea cateórico o discreto**, ya que **cuando se analiza una variable continua (ingresos, precios, números índices) resulta más útil observar métricas que den cuenta de la distribución de la variable (máximo, mínimo, promedio, mediana, etcétera)**.
 
-De este modo, es posible incluir una variable de defina el año de cada observación, a fin de obtener datos que den cuenta de una frecuencia anual y no solo mensual.
+Nota: ver, por ejemplo, la función `summary()` para el caso de variables continuas. 
+
+De este modo, es posible incluir una variable que defina el año de cada observación, a fin de obtener datos que den cuenta de una frecuencia anual y no solo mensual.
 
 ```{r}
 SIPA <- SIPA %>% 
@@ -130,7 +131,7 @@ flujo2
 
 En este caso, se incluye un filtro para `Variable`, el cual busca acotar el cálculo para todos los casos contenidos en la categoría *"Empleo asalariado en el sector privado"*.
 
-Por lo tanto, el código puede leerse como: calculese el promedio de la columna `Valor`, para todo el conjunto de datos que compartan el mismo valor de la columna `Anio`, pero solo para la categorìa *"Empleo asalariado en el sector privado"* de la columna `Variable`.
+Por lo tanto, el código puede leerse como: calcúlese el promedio de la columna `Valor`, para todo el conjunto de datos que compartan el mismo valor de la columna `Anio`, pero solo para la categorìa *"Empleo asalariado en el sector privado"* de la columna `Variable`.
 
 A su vez, es importante señalar que en este tipo de procesamientos, R ordena las filas desde el valor más bajo al más alto de la primera columna, por defecto. Sin embargo, el orden puede modificarse al especificar un orden particular con la función `arrange()`. Por ejemplo:
 
@@ -191,7 +192,6 @@ ipc_mensual <- ipc_mensual %>%
 Con dichas variables creadas, **pero sobre todo con el mismo formato de fecha para ambas bases de datos**, procedemos a unir las bases.
 
 ```{r}
-
 remuneracion_real <- remuneracion_media %>%
   left_join(ipc_mensual, by = c("Periodo" = "fecha"))
 ```
@@ -246,9 +246,9 @@ write_excel_csv(remuneracion_real_anual, "Remuneración Real Anual 2009-2024.xls
 
 Una parte importante del uso de R consiste en las herramientas de visualización que este provee. Para ello, a partir de aquí trabajaremos sobre la librería `ggplot`. la cual forma parte del entorno `tidyverse` y su uso se encuentra ampliamente difundido entre la comunidad de usuarios/as de R.
 
-Para comenzar, además de analizar a la estructura de la lógica sintáctica, trabajaremos sobre un concepto central de `ggplot` que es la asignaciòn de atributos estèticos a los valores que toma una determinada variable. Dicho de otra forma, como mostrar de modo perceptible a la vista la diferencia entre valores: generalmente lo hacemos describiendo posiciones de un valor x y un valor y, pero también puedo definir un tamaño, una forma, o un color.
+Para comenzar, además de analizar a la estructura de la lógica sintáctica, trabajaremos sobre un concepto central de `ggplot` que es la asignaciòn de atributos estéticos a los valores que toma una determinada variable. Dicho de otra forma, como mostrar de modo perceptible a la vista la diferencia entre valores: generalmente lo hacemos describiendo posiciones de un valor x y un valor y, pero también puedo definir un tamaño, una forma, o un color.
 
-![](imagen%201.png){width="50%"}
+![](imagen_1.png){width="50%"}
 
 `ggplot` tiene su sintaxis propia. La idea central es pensar los gráficos como una sucesión de capas, que se construyen una a la vez.
 
@@ -284,12 +284,31 @@ A modo de ejemplo, y para mostrar una base de datos diferente con datos intuitiv
 temp_arg <- read.csv("bases/city_temperature_arg.csv") 
 #hay que filtrar las bases por que tienen datos mising computados como -99
 
-
 temp_mex <- read.csv("bases/city_temperature_mex.csv")
 
+temp_arg <- temp_arg %>% 
+ mutate(Month = as.factor(Month))
+temp_mex <- temp_mex %>% 
+ mutate(Month = as.factor(Month))
 ```
 
-Así, si por ejemplo le pasamos un dataframe a ggplot(), sin agregar nada más, obtenemos un gráfico vacío:
+Una vez cargadas dichas bases, se procede a analizar la variable temperatura de cada una de ellas para ver si sus valores se comportan normalmente. 
+
+```{r}
+summary(temp_arg$temp_prom)
+summary(temp_mex$temp_prom)
+```
+Se observa que existen valores -99, los cuales muy probablemente corresponden a missing data, es decir a valores NA. Por tanto, se procede a filtrar por valores mayores que cero, de modo tal de tener información con valores realmente observados.
+
+```{r}
+temp_arg <- temp_arg %>% 
+  filter(temp_prom > 0)
+
+temp_mex <- temp_mex %>% 
+  filter(temp_prom > 0)
+```
+
+Una vez realizado esto, podemos avanzar con la visualización. Si por ejemplo le pasamos un dataframe a ggplot(), sin agregar nada más, obtenemos un gráfico vacío:
 
 ```{r}
 ggplot(temp_arg)
@@ -299,7 +318,7 @@ Esto es porque necesitamos definir al menos una geometría (el recurso visual co
 
 `ggplot()` implementa un marco teórico para la creación de visualizaciones, “la gramática de los gráficos”. Ésta permite expresar en forma concisa los componentes de un gráfico:
 
-![](imagen%202.png){width="50%"}
+![](imagen_2.png){width="50%"}
 
 Si se asigna la variable `Month` a la posición en el eje de las `x`, la variable `temp_prom` a las `y`, y se añade `geom_point()` para mostrar los datos, se puede obtener el siguiente gráfico:
 
@@ -308,73 +327,117 @@ ggplot(temp_arg, aes(x = Month, y = temp_prom)) +
   geom_point()
 ```
 
+A su vez, si se agrupa por la variable `Month` la información, y se core la misma estructura de código pero modificando el tipo de gráfico por `geom_boxplot()`, obtenemos un gráfico de cajas (o velas) donde puede observarse la distribución al interior de cada uno de los mesese registrados en la base. 
 
 ```{r}
-ggplot(SIPA_viz, aes(x = Periodo, y = Valor, group = 1)) +
-  geom_point()
-```
-
-Mirar boxplots
-```{r}
-ggplot(SIPA_viz, aes(x = Mes, y = Valor)) +
+ggplot(temp_arg, aes(x = Month, y = temp_prom)) +
   geom_boxplot()
 ```
 
+Ahora crearemos dentro de cada base la variable `day_of_year`, a fin de tener un indentificador que nos permita agrupar por el dìa del año.
 
 ```{r}
-ggplot(SIPA_viz, aes(x = Mes, y = Valor, color = Anio)) +
+temp_arg <- temp_arg %>% 
+  mutate(day_of_year = yday(paste(Year, Month, Day, sep = "-")))
+
+temp_mex <- temp_mex %>% 
+  mutate(day_of_year = yday(paste(Year, Month, Day, sep = "-")))
+
+```
+
+En este caso se utilizó la función `yday()` del paquete `lubridate`, la cual nos devuelve a que día del año corresponde una fecha. Por ejemplo, el 18 de abril de 2025 es el dìa 108 del año. Para comprobar esto, corra en la consola el siguiente comando: 
+`yday("2025-04-18")`.
+
+A su vez, al interior de la función `yday()`, se pegó con la función `paste()` el dato de año, mes y día, separados por un guión, a fin de que tome la informaciòn de cada año, mes y día para devolver el número del día del año correspondiente.
+
+Con dicha información, se crea un nuevo flujo de trabajo (flujo4), donde se estima el promedio diario de la temperatura agrupado por el dìa del año correspondiente. Es decir, toma todos los primeros días de cada año y hace un promedio, luego los segundos, luego los terceros, y asì hasta el dìa 366 en los años que corresponda. Dicha información es posible representarla con una linea, ya que hay un solo valor para cada uno de los días del año, el valor que resulta del promedio de muchos años diferentes.
+
+```{r}
+flujo4 <- temp_arg %>% 
+  group_by(day_of_year) %>% 
+  summarise(promedio_dia = mean(temp_prom))
+
+ggplot(flujo4, aes(x = day_of_year, y = promedio_dia)) +
+  geom_line()
+
+```
+
+### Incluir el color
+
+Ahora, si se toma la base correspondiente al clima en México, esta contiene información sobre tres ciudades distintas. Por tanto, en términos de analizar visualmente su información, resultaría más útil poder observar la data de cada ciudad por separado. 
+
+```{r}
+flujo5 <- temp_mex %>% 
+  group_by(City, day_of_year) %>% 
+  summarise(promedio_dia = mean(temp_prom))
+
+ggplot(flujo5, aes(x = day_of_year, y = promedio_dia, color = City)) +
+  geom_line()
+```
+Notar que el atributo estético `color` permite diferenciar por color alguna variable que se requiera utilizar, en este caso `City`.
+En cambio, usando `City` como variable del eje y, y `Temperatura` dentro de color, puede verse un especie de heat map pero dentro de una sola lìnea. En este caso se utiliza `geom_point()` ya que con `geom_line()` el ancho es demasiado acotado como para percibir las diferencias de color.
+
+```{r}
+flujo6 <- flujo5 %>% 
+  rename(Temperatura = promedio_dia)
+
+ggplot(flujo6, aes(x = day_of_year, y = City, color = Temperatura)) +
+  geom_point()
+```
+
+### Atributo estético `fill`
+
+Algunas geoms permiten usar el atributo estético `fill`, que es similar `color` pero se aplica como relleno, **pintando por dentro áreas como las barras de un gráfico o las regiones en un mapa** (color, en cambio, se usa para líneas y puntos). Por ejemplo, podemos usar el atributo estético fill con geom_boxplot() para pintar el interior de cada caja. 
+
+```{r}
+ggplot(temp_mex, aes(x = Month, y = temp_prom, fill = City)) +
+  geom_boxplot()
+```
+
+Lo interesante de observar gráficos de cajas, en vez de líneas de promedios, es que puede observarse la distribución de temperaturas para un mismo mes y una misma ciudad, lo cual brinda una visión mucho más abarcativa que un promedio. Tener en cuenta que un promedio es altamente sensible a los valores extremos, no así la mediana, por tanto la métrica que se utilice para presentar los datos también forma parte del herramental que un usuario/a tiene a disposición y debe tomar en consideración. 
+
+### Titular, mostrar fuentes, definir nombres de ejes y definir estética.
+
+El ejercicio de visualizar información no solo requiere de un apropiado herramental visual, sino también de la capcidad de titular, subtitular, indicar fuentes y ejes de forma correcta y concisa. En este caso, veremos cómo agregar dicha información a nuestros gráficos.
+
+Si retomamos desde nuestro objeto de `remuneración_real`, la forma gráfica más apropaida para graficar los niveles corresponde a lineas, dado que estas pueden interpretarse como `series de tiempo`.
+
+```{r}
+remuneracion_real %>% 
+  ggplot(aes(x = Periodo, y = indice_real)) +
   geom_line()
 ```
 
-
-base para salario real
-
-```{r}
-#SIPA_viz <- SIPA %>% 
-#  filter(Variable == "Empleo asalariado en el sector privado", Valor > 200) %>% 
-#  mutate(Periodo = paste0(Anio,".", Mes),
-#         Mes = as.factor(Mes)) %>% 
-#  select(Periodo, Valor, Anio, Mes)
-```
-
-
-Graficar la serie real
-
+Para añadir todo lo referido a títulos, subtítulos, fuente y títulos de eje, se recurrirá al comando `labs()`. Si se requiere más información de la que se proveerá a continuación sobre este atributo, es posible apretar F1 posicionándose sobre `labs()`, correr en la consola el comando `?labs()`, o visitar la [sección de referencia de labs() de ggplot2](https://ggplot2.tidyverse.org/reference/labs.html]).
 
 ```{r}
-#PROBANDO
-
-library(plotly)
-library(htmlwidgets)
-
-plot_remun <- remuneracion_real %>%
-  filter(year(Periodo) >= 2019) %>%
+remuneracion_real %>% 
   ggplot(aes(x = Periodo, y = indice_real)) +
-  geom_line(color = 'steelblue', size = 1) +
-  geom_point(color = 'steelblue', size = 2.5) +
-  scale_x_date(date_breaks = "2 month",
-               date_labels = "%b %Y") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45,
-                                  hjust = 1)
-        )
-  
-
-plotly_remun <- plot_remun %>%
-  ggplotly()
-
-htmlwidgets::saveWidget(plotly_remun, "remuneracion_desde_2019.html")
-
-plotly_remun
+  geom_line() +
+  labs(title = "Remuneración Real Asal. Reg. del Sec. Privado",
+       subtitle = "Total País. Sin estacionalidad.",
+       y = "Nivel",
+       x = "", #de este modo no aparece el nombre de la variable X
+       caption = "Fuente: Sistema Integrado Previsional Argentino (SIPA)") 
 ```
 
-Tomar series en niveles, pasarlas a logs y después visualizar
+Al mismo tiempo, en busca de cambiar atributos estéticos y de diseño, se buscará definir el color de la linea, el ancho, y el tipo de trama del fondo. Para ello se emplearán parámetros al interior de `geom_line()`, así como la definición de una estética con el atributo `theme_clasic()`. Además de existir una gran cantidad de estéticas para definir, las cuales pueden observarse [aquí](https://ggplot2.tidyverse.org/reference/ggtheme.html), también hay una amplia [paleta de colores](https://r-charts.com/es/colores/) con la que R cuenta.
 
 
+```{r}
+remuneracion_real %>% 
+  ggplot(aes(x = Periodo, y = indice_real)) +
+  geom_line(color = "#104E8B", size = 1) +
+  theme_classic() +
+  labs(title = "Remuneración Real Asal. Reg. del Sec. Privado",
+       subtitle = "Total País. Sin estacionalidad.",
+       y = "Nivel",
+       x = "", #de este modo no aparece el nombre de la variable X
+       caption = "Fuente: Sistema Integrado Previsional Argentino (SIPA)") 
+```
 
-gráficos de densidad: enut
+En la próxima clase, se avanzará sobre un formato más complejo de este mismo gráfico, para luego proceder a mostrar otros tipos de gráficos, así como información vinculada a la distribución y la densidad.
 
-Al final mostrar por encima el HTML que hizo Vladi para EPH
 
 ### Recursos adicionales
 
