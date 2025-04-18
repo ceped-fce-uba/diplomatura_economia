@@ -129,7 +129,16 @@ plotly_remun
 ```
 
 
+## Graficar la dispersión y las diferencias
 
+
+
+## Graficar la distribución, la densidad y las frecuencias
+
+
+
+
+###Encuesta Nacional sobre el Uso del Tiempo (ENUT)
 
 
 gráficos de densidad: enut
