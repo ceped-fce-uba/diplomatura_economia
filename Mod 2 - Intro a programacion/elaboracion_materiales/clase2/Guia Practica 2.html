@@ -2344,12 +2344,13 @@ vertical-align: -.125em;
   <li><a href="#funciones-básicas-de-manipulación-de-datos" id="toc-funciones-básicas-de-manipulación-de-datos" class="nav-link active" data-scroll-target="#funciones-básicas-de-manipulación-de-datos">1. Funciones básicas de manipulación de datos</a></li>
   <li><a href="#joins" id="toc-joins" class="nav-link" data-scroll-target="#joins">2. Joins</a></li>
   <li><a href="#medidas-de-resumen" id="toc-medidas-de-resumen" class="nav-link" data-scroll-target="#medidas-de-resumen">3. Medidas de resumen</a></li>
+  <li><a href="#uno-difícil-left_join-group_by" id="toc-uno-difícil-left_join-group_by" class="nav-link" data-scroll-target="#uno-difícil-left_join-group_by">4. Uno difícil: left_join() + group_by()</a></li>
   </ul>
 </nav>
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -2510,7 +2511,7 @@ Tip
 <summary>Mostrar respuesta</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>datos_unidos <span class="ot">&lt;-</span> datos_unidos <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">remuneracion_real =</span> Valor <span class="sc">/</span> ipc)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(datos_unidos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>datos_unidos</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -2590,6 +2591,16 @@ Tip
 </details>
 </div>
 </section>
+<section id="uno-difícil-left_join-group_by" class="level1 page-columns page-full">
+<h1>4. Uno difícil: left_join() + group_by()</h1>
+<ol type="a">
+<li><p>Carguen estas dos bases: <strong>base_sipa_csv</strong> y <strong>regiones.csv</strong>. Esta última es una aproximación a las regiones que define el INDEC.</p></li>
+<li><p>Vamos a usar a continuación la variable “Asalariados registrados en el sector privado” de la base del SIPA (en miles). Filtren para desechar el resto y vean su contenido. (pueden ver todas las variables en la base con <code>unique(base_sipa$Variable)</code>). Filtren además las observaciones cuyo Periodo sea igual a 2015-01-01 (PISTA: usen <code>as.Date(&#39;2015-01-01&#39;)</code>)</p></li>
+<li><p>Hagan un join entre la base de asalariados por provincia y la de regiones mediante la columna común de regiones. Recuerden que la estructura básica es: <code>resultado &lt;- datos_principales %&gt;% left_join(datos_secundarios, by = &quot;columna_comun&quot;)</code> </p></li>
+<li><p>Si hicieron el join correctamente deberían encontrarse con que Tucumán tiene un NA (valor faltante, del inglés <em>Not Available</em>) en la nueva columna Region. ¿Por qué pasó esto? Comparen ambas bases para encontrar la respuesta (es importante que afinen el ojo a estos detalles).</p></li>
+<li><p>Para terminar, agrupen los datos por región, calculen la suma de asalariados y multipliquen por mil (dado que la base estaba en miles), usando como operación de resumen <code>sum(Valor) * 1000</code>). Verán que Tucumán queda por su cuenta, agrupado como NA.</p></li>
+</ol>
+<div class="no-row-height column-margin column-container"><span class="margin-aside">Obviamente, lo correcto sería asignar ciertos partidos de la provincia de Buenos Aires a la región Gran Buenos Aires y el resto de la provincia a la región pampeana. Pero a los fines de este ejercicio nos sirve para practicar.</span></div></section>
 
 </main>
 <!-- /main column -->
