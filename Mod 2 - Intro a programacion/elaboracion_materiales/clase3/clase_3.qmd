@@ -5,7 +5,7 @@ author-title: "DOCENTES:"
 authors:
   - name: Vladimiro S. Torres
   - name: Juan Camilo Gutman
-output-file: "Clase 3 - Manipulación de bases de datos II" 
+output-file: "Clase 3 - Manipulacion de bases de datos II" 
 format:
   html:
     embed-resources: true
@@ -32,7 +32,7 @@ include-after-body: ../assets/footer.html
 library(tidyverse)
 library(readxl)
 library(lubridate)      # Para manejar fechas
-library(plotly)         # Interactive plots
+library(plotly)         # Gráficos interactivos
 ```
 
 ```{r}
