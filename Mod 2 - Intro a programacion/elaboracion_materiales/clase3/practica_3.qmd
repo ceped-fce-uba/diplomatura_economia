@@ -1,0 +1,129 @@
+---
+title: "Práctica 3"
+author: "Diplomatura PAEEC - UBA"
+output-file: "Guia Practica 3" 
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+    code-summary: "Mostrar respuesta"
+    code-tools: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/practica_claro.scss
+      dark: ../assets/practica_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+    output: false
+execute:
+  freeze: auto
+editor: source
+include-after-body: ../assets/footer.html
+---
+
+```{r}
+#| echo: FALSE
+
+knitr::opts_knit$set(root.dir = "../../Clase 3 - Tidyverse avanzado y visualizacion/")
+
+```
+
+# 1. Manipulación avanzada de datos
+
+a) Carguen estas dos bases: **base_sipa_csv** y **regiones.csv**. Esta última es una aproximación a las regiones que define el INDEC.
+
+b) Traer para acá el código q tengo en borrador
+
+# 2. Visualización básica
+
+```{r}
+library(gapminder)  
+library(ggplot2)    
+
+gapminder_2007 <- subset(gapminder, year == 2007)
+
+ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +  
+  scale_x_log10() +  # Escala logarítmica para el PBI
+  labs(
+    title = "Esperanza de vida vs. PBI per Capita (2007)",
+    x = "PBI per Capita (escala logarítmica)",
+    y = "Esperanza de vida (en años)"
+  ) +
+  theme_minimal()
+
+# SUMARLE , color = continent, size = pop
+```
+
+
+# 3. group_by() %>% ggplot()
+
+```{r}
+library(palmerpenguins)
+library(tidyverse)
+
+penguin_stats <- penguins %>%
+  group_by(species) %>%
+  summarize(
+    mean_bill_length = mean(bill_length_mm, na.rm = TRUE),
+    mean_bill_depth = mean(bill_depth_mm, na.rm = TRUE),
+    mean_flipper_length = mean(flipper_length_mm, na.rm = TRUE),
+    mean_body_mass = mean(body_mass_g, na.rm = TRUE),
+    count = n()
+  )
+
+print(penguin_stats)
+
+ggplot(penguin_stats, aes(x = species, y = mean_body_mass, fill = species)) +
+  geom_col() +
+  labs(
+    title = "Peso promedio por especie de pingüino",
+    x = "Especie",
+    y = "Peso promedio de los pingüinos (kg)",
+    fill = "Species"
+  ) +
+  theme_minimal()
+
+  # +geom_text(aes(label = round(mean_bill_length, 1)), 
+  #           vjust = -0.5, size = 3.5) PARA HACERLA PIOLA
+
+```
+
+
+
+# 4. Un flujo más avanzado
+
+```{r}
+#| eval: FALSE
+
+# Preparamos los datos para el join
+asalariados_preparados <- asalariados %>%
+  mutate(Geografia = case_when(
+    str_detect(Geografia, "Cdad. Autónoma") ~ "CABA",
+    TRUE ~ str_trim(Geografia)
+  ))
+
+# Realizamos el left_join
+datos_por_region <- asalariados_preparados %>%
+  left_join(regiones, by = "Geografia")
+
+
+library(ggplot2)
+
+# Creamos un gráfico de columnas básico
+# El estético aes() define qué variables se mapean a qué elementos visuales
+ggplot(datos_por_region, aes(x = Region, y = Asalariados)) +
+  geom_col() +  # geom_col crea columnas con alturas proporcionales a los valores
+  labs(title = "Asalariados registrados del sector privado por región",
+       subtitle = "Enero 2015",
+       x = "Región",
+       y = "Cantidad de asalariados") +
+  theme_minimal()  # Un tema minimalista (a vlado no le gusta este jaja)
+
+```

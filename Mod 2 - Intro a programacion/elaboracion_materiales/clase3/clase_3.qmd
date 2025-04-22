@@ -445,7 +445,8 @@ Para quienes quieran profundizar en estos conceptos:
 
 #### R y Tidyverse
 
--   Wickham, H., & Grolemund, G. (2023). *R for Data Science (2nd ed)*. O'Reilly Media. <https://r4ds.hadley.nz/>
+-   Wickham, H., & Grolemund, G. (2023). *R for Data Science (2nd ed)*. O'Reilly Media. <https://r4ds.hadley.nz/> (para quienes necesiten una versión en español está disponible la traducción de la primera edición en este enlace: <https://es.r4ds.hadley.nz/>)
+
 
 ## Bibliografía {.unnumbered}
 
