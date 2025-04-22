@@ -1,8 +1,7 @@
 library(tidyverse)
 library(readxl)
 library(lubridate)      # Para manejar fechas
-library(plotly)         # Interactive plots
-
+library(plotly)         # Gráficos interactivos
 library(gt)             # Para mostrar las tablas mejor
 
 SIPA <- read_csv("bases/base_sipa.csv", 
@@ -64,7 +63,6 @@ remuneracion_media <- SIPA %>%
 ipc_mensual <- ipc_mensual %>% 
   mutate(indice_ipc_2009 = valor/valor[fecha == "2009-01-01"]*100)
 
-
 remuneracion_real <- remuneracion_media %>%
   left_join(ipc_mensual, by = c("Periodo" = "fecha"))
 
@@ -90,51 +88,80 @@ library(ggplot2)
 temp_arg <- read.csv("bases/city_temperature_arg.csv") 
 #hay que filtrar las bases por que tienen datos mising computados como -99
 
-
 temp_mex <- read.csv("bases/city_temperature_mex.csv")
 
+temp_arg <- temp_arg %>% 
+ mutate(Month = as.factor(Month))
+temp_mex <- temp_mex %>% 
+ mutate(Month = as.factor(Month))
+
+summary(temp_arg$temp_prom)
+summary(temp_mex$temp_prom)
+
+temp_arg <- temp_arg %>% 
+  filter(temp_prom > 0)
+
+temp_mex <- temp_mex %>% 
+  filter(temp_prom > 0)
 
 ggplot(temp_arg)
 
 ggplot(temp_arg, aes(x = Month, y = temp_prom)) +
   geom_point()
 
-ggplot(SIPA_viz, aes(x = Periodo, y = Valor, group = 1)) +
-  geom_point()
-
-ggplot(SIPA_viz, aes(x = Mes, y = Valor)) +
+ggplot(temp_arg, aes(x = Month, y = temp_prom)) +
   geom_boxplot()
 
-ggplot(SIPA_viz, aes(x = Mes, y = Valor, color = Anio)) +
+temp_arg <- temp_arg %>% 
+  mutate(day_of_year = yday(paste(Year, Month, Day, sep = "-")))
+
+temp_mex <- temp_mex %>% 
+  mutate(day_of_year = yday(paste(Year, Month, Day, sep = "-")))
+
+
+flujo4 <- temp_arg %>% 
+  group_by(day_of_year) %>% 
+  summarise(promedio_dia = mean(temp_prom))
+
+ggplot(flujo4, aes(x = day_of_year, y = promedio_dia)) +
   geom_line()
 
-#SIPA_viz <- SIPA %>% 
-#  filter(Variable == "Empleo asalariado en el sector privado", Valor > 200) %>% 
-#  mutate(Periodo = paste0(Anio,".", Mes),
-#         Mes = as.factor(Mes)) %>% 
-#  select(Periodo, Valor, Anio, Mes)
 
-#PROBANDO
+flujo5 <- temp_mex %>% 
+  group_by(City, day_of_year) %>% 
+  summarise(promedio_dia = mean(temp_prom))
 
-library(plotly)
-library(htmlwidgets)
+ggplot(flujo5, aes(x = day_of_year, y = promedio_dia, color = City)) +
+  geom_line()
 
-plot_remun <- remuneracion_real %>%
-  filter(year(Periodo) >= 2019) %>%
+flujo6 <- flujo5 %>% 
+  rename(Temperatura = promedio_dia)
+
+ggplot(flujo6, aes(x = day_of_year, y = City, color = Temperatura)) +
+  geom_point()
+
+ggplot(temp_mex, aes(x = Month, y = temp_prom, fill = City)) +
+  geom_boxplot()
+
+remuneracion_real %>% 
   ggplot(aes(x = Periodo, y = indice_real)) +
-  geom_line(color = 'steelblue', size = 1) +
-  geom_point(color = 'steelblue', size = 2.5) +
-  scale_x_date(date_breaks = "2 month",
-               date_labels = "%b %Y") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45,
-                                  hjust = 1)
-        )
-  
+  geom_line()
 
-plotly_remun <- plot_remun %>%
-  ggplotly()
+remuneracion_real %>% 
+  ggplot(aes(x = Periodo, y = indice_real)) +
+  geom_line() +
+  labs(title = "Remuneración Real Asal. Reg. del Sec. Privado",
+       subtitle = "Total País. Sin estacionalidad.",
+       y = "Nivel",
+       x = "", #de este modo no aparece el nombre de la variable X
+       caption = "Fuente: Sistema Integrado Previsional Argentino (SIPA)") 
 
-htmlwidgets::saveWidget(plotly_remun, "remuneracion_desde_2019.html")
-
-plotly_remun
+remuneracion_real %>% 
+  ggplot(aes(x = Periodo, y = indice_real)) +
+  geom_line(color = "#104E8B", size = 1) +
+  theme_classic() +
+  labs(title = "Remuneración Real Asal. Reg. del Sec. Privado",
+       subtitle = "Total País. Sin estacionalidad.",
+       y = "Nivel",
+       x = "", #de este modo no aparece el nombre de la variable X
+       caption = "Fuente: Sistema Integrado Previsional Argentino (SIPA)") 

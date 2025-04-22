@@ -34,96 +34,110 @@ knitr::opts_knit$set(root.dir = "../../Clase 3 - Tidyverse avanzado y visualizac
 
 ```
 
-# 1. Manipulación avanzada de datos
+# 1. Repaso guía práctica 2 (y gráfico de columnas)
 
-a) Carguen estas dos bases: **base_sipa_csv** y **regiones.csv**. Esta última es una aproximación a las regiones que define el INDEC.
+a) Retomemos el cuarto ejercicio de la guía 2 y hagamos un simple gráfico de columnas con los datos agrupados:
 
-b) Traer para acá el código q tengo en borrador
+```{r}
+library(tidyverse)
+library(readxl)
 
-# 2. Visualización básica
+sipa <- read_csv("bases/base_sipa.csv")
+regiones <- read_csv("bases/regiones_arg.csv")
+
+sipa <- sipa %>%
+  mutate(Periodo = as.Date(Periodo)) %>% 
+  filter(Variable == "Asalariados registrados en el sector privado") %>% 
+  mutate(Geografia = str_replace_all(Geografia, "TUCUMÁN", "TUCUMAN"))
+
+sipa_regiones_group_by <- sipa %>%
+  left_join(regiones, by = "Geografia") %>%
+  group_by(Region) %>% 
+  summarize(remuneracion_promedio = mean(Valor) * 1000)
+
+ggplot(sipa_regiones_group_by, aes(x = Region, y = remuneracion_promedio)) +
+  geom_col()
+```
+b) Prueben usar `fill = "steelblue"` como argumento de la capa `geom_col`. Y si les salió el gráfico con los números en notación científica, prueben cambiar configuración global de R con `options(scipen = 999)`.
+
+```{r}
+#| eval: FALSE
+
+options(scipen = 999)
+
+ggplot(sipa_regiones_group_by, aes(x = Region, y = remuneracion_promedio)) +
+  geom_col(fill = "steelblue")
+```
+
+
+# 2. Visualización básica (gráfico de dispersión)
+
+a) Carguen el paquete `gapminder`, conserven únicamente los datos del 2007
 
 ```{r}
 library(gapminder)  
 library(ggplot2)    
 
-gapminder_2007 <- subset(gapminder, year == 2007)
+gapminder_2007 <- gapminder %>% filter(year == 2007)
 
 ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
   geom_point() +  
-  scale_x_log10() +  # Escala logarítmica para el PBI
   labs(
     title = "Esperanza de vida vs. PBI per Capita (2007)",
-    x = "PBI per Capita (escala logarítmica)",
+    x = "PBI per Capita (dólares ajustados por inflación)",
     y = "Esperanza de vida (en años)"
   ) +
-  theme_minimal()
+  theme_classic()
+```
+b) Probemos aplicar una escala logarítmica en base 10 al eje horizontal, el correspondiente al PBI per cápita (PISTA: usen `scale_x_log10()` como una capa más).
 
-# SUMARLE , color = continent, size = pop
+```{r}
+
+library(gapminder)  
+library(ggplot2)    
+
+gapminder_2007 <- gapminder %>% filter(year == 2007)
+
+ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +  
+  labs(
+    title = "Esperanza de vida vs. PBI per Capita (2007)",
+    x = "PBI per Capita (en escala logarítmica)",
+    y = "Esperanza de vida (en años)"
+  ) +
+  scale_x_log10() +  # Escala logarítmica para el PBI
+  theme_classic()
 ```
 
 
+
 # 3. group_by() %>% ggplot()
+
+a) Enganchen un group_by() con un summarize() para hacer un gráfico de columnas del peso promedio de cada especie de pingüino del dataset del paquete `palmerpenguins`. Agreguemos etiquetas con la capa `labs()` y la capa adicional de tema `theme_classic()`.
 
 ```{r}
 library(palmerpenguins)
 library(tidyverse)
 
-penguin_stats <- penguins %>%
+peso_pinguinos <- penguins %>%
   group_by(species) %>%
-  summarize(
-    mean_bill_length = mean(bill_length_mm, na.rm = TRUE),
-    mean_bill_depth = mean(bill_depth_mm, na.rm = TRUE),
-    mean_flipper_length = mean(flipper_length_mm, na.rm = TRUE),
-    mean_body_mass = mean(body_mass_g, na.rm = TRUE),
-    count = n()
-  )
+  summarize(peso_promedio = mean(body_mass_g, na.rm = TRUE))
 
-print(penguin_stats)
-
-ggplot(penguin_stats, aes(x = species, y = mean_body_mass, fill = species)) +
+ggplot(peso_pinguinos, aes(x = species, y = peso_promedio, fill = species)) +
   geom_col() +
   labs(
     title = "Peso promedio por especie de pingüino",
     x = "Especie",
-    y = "Peso promedio de los pingüinos (kg)",
+    y = "Peso promedio de los pingüinos (gr.)",
     fill = "Species"
   ) +
-  theme_minimal()
-
-  # +geom_text(aes(label = round(mean_bill_length, 1)), 
-  #           vjust = -0.5, size = 3.5) PARA HACERLA PIOLA
+  theme_classic()
 
 ```
 
+# 4. Gráfico de líneas
+
+a) Carguen el paquete `gapminder` y grafiquen la evolución de alguna de las variables de la base de datos de alguno de los países (por ejemplo, el PBI per cápita en dólares ajustados por la inflación (la variable `gdpPercap` del dataset) de China). Busquen inspiración en internet, con algún motor de búsqueda, y denle algún toque personal al gráfico (por ejemplo, https://r-graph-gallery.com/line-chart-ggplot2.html). Si se animan, pueden compartir su gráfico por nuestros grupos de WhatsApp y/o Slack.
 
 
-# 4. Un flujo más avanzado
 
-```{r}
-#| eval: FALSE
-
-# Preparamos los datos para el join
-asalariados_preparados <- asalariados %>%
-  mutate(Geografia = case_when(
-    str_detect(Geografia, "Cdad. Autónoma") ~ "CABA",
-    TRUE ~ str_trim(Geografia)
-  ))
-
-# Realizamos el left_join
-datos_por_region <- asalariados_preparados %>%
-  left_join(regiones, by = "Geografia")
-
-
-library(ggplot2)
-
-# Creamos un gráfico de columnas básico
-# El estético aes() define qué variables se mapean a qué elementos visuales
-ggplot(datos_por_region, aes(x = Region, y = Asalariados)) +
-  geom_col() +  # geom_col crea columnas con alturas proporcionales a los valores
-  labs(title = "Asalariados registrados del sector privado por región",
-       subtitle = "Enero 2015",
-       x = "Región",
-       y = "Cantidad de asalariados") +
-  theme_minimal()  # Un tema minimalista (a vlado no le gusta este jaja)
-
-```
