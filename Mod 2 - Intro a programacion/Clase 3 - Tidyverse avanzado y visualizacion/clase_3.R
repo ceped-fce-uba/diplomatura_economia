@@ -4,7 +4,9 @@ library(lubridate)      # Para manejar fechas
 library(plotly)         # Gráficos interactivos
 library(gt)             # Para mostrar las tablas mejor
 
-SIPA <- read_csv("bases/base_sipa.csv", 
+
+
+SIPA <- read_csv("Mod 2 - Intro a programacion/Clase 3 - Tidyverse avanzado y visualizacion/bases/base_sipa.csv", 
                  show_col_types = FALSE)
 
 class(SIPA$Periodo)
@@ -14,7 +16,6 @@ SIPA <- SIPA %>%
 
 class(SIPA$Periodo)
   
-
 names(SIPA)
 
 table(SIPA$Variable)
@@ -29,17 +30,17 @@ flujo1 <- SIPA %>%
 flujo1
 
 flujo2 <- SIPA %>%
-  filter(Variable == "Empleo asalariado en el sector privado") %>% 
+  filter(Variable == "Empleo asalariado en el sector privado") %>%
   group_by(Anio) %>% 
-  summarise(Promedio = mean(Valor))
-
+  summarise(Promedio = mean(Valor)) 
+  
 flujo2
 
 flujo3 <- SIPA %>%
   filter(Variable == "Empleo en casas particulares") %>% 
   group_by(Anio) %>% 
   summarise(Promedio = mean(Valor)) %>% 
-  arrange(-Anio)
+  arrange(Anio)
 
 flujo3
 
@@ -47,7 +48,7 @@ SIPA <- SIPA %>%
   mutate(Mes = month(Periodo),
          Trimestre = quarter(Periodo))
 
-ipc_mensual <- read_xlsx("../clase2/bases/ipc_ceped_data.xlsx")
+ipc_mensual <- read_xlsx("Mod 2 - Intro a programacion/Clase 3 - Tidyverse avanzado y visualizacion/bases/ipc_ceped_data.xlsx")
 
 class(ipc_mensual$fecha)
 
@@ -57,7 +58,7 @@ ipc_mensual <- ipc_mensual %>%
 class(ipc_mensual$fecha)
 
 remuneracion_media <- SIPA %>% 
-  filter(Variable == "Remuneración promedio - sin estacionalidad") %>% 
+  filter(Variable == "Remuneración promedio - \r\nsin estacionalidad") %>% 
   mutate(indice_remuneraciones = Valor/Valor[Periodo == "2009-01-01"]*100)
 
 ipc_mensual <- ipc_mensual %>% 
@@ -81,14 +82,14 @@ remuneracion_real_anual <- remuneracion_real_anual %>%
 remuneracion_real_anual <- remuneracion_real_anual %>% 
   mutate(Variacion = round((Promedio_Anual/lag(Promedio_Anual)-1)*100, digits = 2))
 
-# write_excel_csv(remuneracion_real_anual, "Remuneración Real Anual 2009-2024.xlsx")
+#write_excel_csv(remuneracion_real_anual, "Remuneración Real Anual 2009-2024.xlsx")
 
 library(ggplot2)
 
-temp_arg <- read.csv("bases/city_temperature_arg.csv") 
+temp_arg <- read.csv("Mod 2 - Intro a programacion/Clase 3 - Tidyverse avanzado y visualizacion/bases/city_temperature_arg.csv") 
 #hay que filtrar las bases por que tienen datos mising computados como -99
 
-temp_mex <- read.csv("bases/city_temperature_mex.csv")
+temp_mex <- read.csv("Mod 2 - Intro a programacion/Clase 3 - Tidyverse avanzado y visualizacion/bases/city_temperature_mex.csv")
 
 temp_arg <- temp_arg %>% 
  mutate(Month = as.factor(Month))
@@ -117,7 +118,6 @@ temp_arg <- temp_arg %>%
 
 temp_mex <- temp_mex %>% 
   mutate(day_of_year = yday(paste(Year, Month, Day, sep = "-")))
-
 
 flujo4 <- temp_arg %>% 
   group_by(day_of_year) %>% 
@@ -162,6 +162,6 @@ remuneracion_real %>%
   theme_classic() +
   labs(title = "Remuneración Real Asal. Reg. del Sec. Privado",
        subtitle = "Total País. Sin estacionalidad.",
-       y = "Nivel",
+       y = "",
        x = "", #de este modo no aparece el nombre de la variable X
        caption = "Fuente: Sistema Integrado Previsional Argentino (SIPA)") 
