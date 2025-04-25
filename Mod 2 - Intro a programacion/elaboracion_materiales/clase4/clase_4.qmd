@@ -5,7 +5,7 @@ author-title: "DOCENTES:"
 authors:
   - name: Vladimiro S. Torres
   - name: Juan Camilo Gutman
-output-file: "Clase 3 - Manipulación de bases de datos II" 
+output-file: "Clase 4 - Visualizacion de Datos Avanzada" 
 format:
   html:
     embed-resources: true
@@ -38,15 +38,167 @@ library(plotly)         # Interactive plots
 
 ```{r}
 #| echo: false
+#| purl: false
 
-library(gt)             # Para mostrar las tablas mejor
+library(gt)
+options(scipen=999)
 ```
 
-## Complejizar la visualización
+# Complejizar la visualización
 
-Retomar con la siguiente data ya procesada
+
+## Prueba Minerales
+
+::: {.panel-tabset}
+## ggplot2
 
 ```{r}
+library(tidyverse)
+library(ggthemes)    
+library(plotly)
+
+# Leer los datos
+expo_mineras <- read_csv("bases/expo_mineras_por_grupo.csv")
+
+ggplot(expo_mineras, aes(x = anio, y = expo_grupo, fill = grupo_nuevo)) +
+  # bordes finos para distinguir los grupos
+  geom_area(color = "white", size = 0.1, alpha = 0.85) +
+  
+  # paleta de colores
+  scale_fill_tableau() +
+
+  labs(
+    title = "Exportaciones mineras argentinas por grupo de minerales (1994-2022)",
+    x = "Año",
+    y = "Miles de millones USD",
+    fill = "Mineral"
+  ) -> graf_expo_mine
+
+graf_expo_mine
+
+# muy avanzado, pero...
+# capaz meterle:
+
+# + theme_fivethirtyeight() 
+
+# y 
+# library(scales)      # Para formateo de etiquetas
+# 
+#   scale_y_continuous(
+#     labels = function(x) paste0("$", x, "B"),
+#     expand = c(0, 0)
+#   ) +
+# 
+#   scale_x_continuous(
+#     breaks = seq(1994, 2022, by = 4),
+#     expand = c(0, 0)
+#   ) +
+
+
+# y, tal vez:
+
+ # %>%
+ #  # Ordenar los minerales por valor total para mejor visualización
+ #  group_by(grupo_nuevo) %>%
+ #  mutate(total = sum(expo_grupo)) %>%
+ #  ungroup() %>%
+ #  mutate(grupo_nuevo = fct_reorder(grupo_nuevo, total, .desc = TRUE))
+
+# clave...
+
+# library(scales)  # Para funciones de formato avanzadas
+# 
+# # Función para formato de millones con punto como separador de miles
+# # pero no vimos funciones...
+#
+# formato_millones <- function(x) {
+#   # Reemplaza coma con punto como separador de miles y agrega símbolo "$" y "M"
+#   paste0("$ ", format(x, big.mark = ".", decimal.mark = ","), " M")
+# }
+# 
+#   # Formato personalizado para el eje Y
+#   scale_y_continuous(
+#     labels = formato_millones,
+#     # Asegurar que las divisiones de la escala sean números enteros
+#     breaks = function(x) pretty(x, n = 6)
+#   ) +
+
+```
+
+## ggplotly
+
+Una sola línea de código y ya lo hacemos interactivo:
+
+```{r}
+ggplotly(graf_expo_mine)
+```
+
+:::
+
+
+# Agroindustria
+
+## Columnas acostadas
+
+```{r}
+importancia_agro <- read_csv("bases/importancia_agro.csv")
+
+importancia_agro <- importancia_agro %>%
+  filter(pais %in% c("Bolivia", "Paraguay", "Ecuador", "Uruguay", 
+                     "Colombia", "Argentina", "China", "Perú", 
+                     "Brasil", "Mundo", "México", "Chile"))
+
+importancia_agro <- importancia_agro %>%
+  arrange(desc(va_agro_sobre_pbi))
+
+# Creamos columna para destacar Argentina
+importancia_agro <- importancia_agro %>%
+  mutate(es_argentina = ifelse(pais == "Argentina", "Sí", "No"))
+
+ggplot(importancia_agro, 
+         aes(x = reorder(pais, va_agro_sobre_pbi), 
+             y = va_agro_sobre_pbi,
+             fill = es_argentina)) +
+    # Añadimos las barras
+    geom_bar(stat = "identity") +
+    # Configuramos colores (Argentina en celeste, otros en naranja)
+    scale_fill_manual(values = c("No" = "#FF8C00", "Sí" = "#87CEEB")) +
+    # Añadimos etiquetas con los porcentajes
+    geom_text(aes(label = paste0(format(va_agro_sobre_pbi, decimal.mark = ",", nsmall = 1), "%")),
+              hjust = -0.2, size = 3.5) +
+    # Invertimos el eje para que se vea como el gráfico original de Fundar
+    coord_flip() +
+    # sin esto no se veía la etiqueta de Bolivia por ejemplo
+    scale_y_continuous(limits = c(0, 14),
+                       breaks = seq(2, 14, by = 2),
+                       labels = function(x) paste0(x, "%")) +
+    # Añadimos títulos y subtítulos
+    labs(title = "Importancia del agro y la pesca en Argentina y otros países",
+         subtitle = "PIB del agro y la pesca como porcentaje del PIB total, en países seleccionados (en porcentaje), 2021",
+         caption = "Fuente de datos: Banco Mundial.\nNota: los datos están en precios corrientes.",
+         x = NULL,
+         y = NULL)
+```
+
+## Gráfico de barras apiladas y de líneas de varios países
+
+```{r}
+# con datos de agroindustria: https://argendata.fund.ar/topico/agroindustria/
+```
+
+
+## Personalización
+
+Esto quizá mejor al final, que les quede de material de consulta, quizá con alguna mención a la librería scales y la de ggthemes.
+
+![Machete de estilos de ggplot2 por Isabella Benabaye](imgs/ggplot2-theme-elements.png)
+
+
+Retomar con la siguiente data ya procesada supongo que graficos de lineas con varios numeros indice como el de Graña o alguna otra evolución.
+
+```{r}
+library(tidyverse)
+
 SIPA <- read_csv("bases/base_sipa.csv", 
                  show_col_types = FALSE)
 
@@ -144,6 +296,8 @@ plotly_remun
 gráficos de densidad: enut
 
 ```{r}
+#| eval: FALSE
+
 enut
 ```
 
@@ -152,9 +306,9 @@ enut
 
 Para quienes quieran profundizar en estos conceptos:
 
-#### R y Tidyverse
+#### ggplot2
 
--   Wickham, H., & Grolemund, G. (2023). *R for Data Science (2nd ed)*. O'Reilly Media. <https://r4ds.hadley.nz/>
+-   QCBS R Workshop Series (2023). *Workshop 3: Introduction to data visualisation with ggplot2*. <https://r.qcbs.ca/workshop03/book-en/>
 
 ## Bibliografía {.unnumbered}
 
@@ -163,10 +317,6 @@ Para quienes quieran profundizar en estos conceptos:
 
   <div id="ref-wickham2019" class="csl-entry">
     Wickham, H., &amp; Grolemund, G. (2023). <i>R for Data Science (2nd ed)</i>. O'Reilly Media.
-  </div>
-
-  <div id="ref-tidyverse2023" class="csl-entry">
-    Tidyverse. (2023, April). <i>Base vs. magrittr pipe</i>. Recuperado de <a href="https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/">https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/</a>
   </div>
 
   <div id="ref-dataviz" class="csl-entry">

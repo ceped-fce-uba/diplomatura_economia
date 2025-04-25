@@ -1,8 +1,11 @@
 library(tidyverse)
 library(readxl)
+library(plotly)
 
-sipa <- read_csv("Mod 2 - Intro a programacion/Clase 3 - Tidyverse avanzado y visualizacion/bases/base_sipa.csv")
-regiones <- read_csv("Mod 2 - Intro a programacion/Clase 3 - Tidyverse avanzado y visualizacion/bases/regiones_arg.csv")
+options(scipen = 9000)
+
+sipa <- read_csv("bases/base_sipa.csv")
+regiones <- read_csv("bases/regiones_arg.csv")
 
 sipa <- sipa %>%
   mutate(Periodo = as.Date(Periodo),
@@ -17,5 +20,7 @@ sipa_regiones_group_by <- sipa %>%
   group_by(Region) %>% 
   summarize(asalariados_privados = sum(Valor) * 1000)
 
-ggplot(sipa_regiones_group_by, aes(x = Region, y = asalariados_privados)) +
+plot <- ggplot(sipa_regiones_group_by, aes(x = Region, y = asalariados_privados)) +
   geom_col(fill = "steelblue")
+
+ggplotly(plot)
