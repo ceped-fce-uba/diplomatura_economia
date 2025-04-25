@@ -28,12 +28,12 @@ editor: source
 include-after-body: ../assets/footer.html
 ---
 
-
 ```{r}
 library(tidyverse)
 library(readxl)
 library(lubridate)      # Para manejar fechas
 library(plotly)         # Interactive plots
+library(ggthemes)
 ```
 
 ```{r}
@@ -46,16 +46,97 @@ options(scipen=999)
 
 # Complejizar la visualización
 
+En este última clase se avanzará sobre la complejización de la visualización de datos en R, entendiendo que las principales fortalezas de ello se encuentra en la posibilidad de automatizar complejas visualizaciones sobre un conjunto no menor de datos. A su vez, el entorno de R permite explorar cambios drásticos sobre la visualización, vinculados al formato y la geometría del dato visualizado, tan solo con acotadas líneas de código.
 
-## Prueba Minerales
+En una primera instancia se avanzará sobre la visualización más compleja de series, así como de puntos, para luego avanzar en la visualización de frecuencias, distribuciones y densidad.
+
+## Visualizar Series
+
+Explicar los cambios entre el último gráfico de salario real y este 
+
+```{r}
+library(tidyverse)
+
+SIPA <- read_csv("bases/base_sipa.csv", 
+                 show_col_types = FALSE)
+
+SIPA <- SIPA %>% 
+  mutate(Periodo = as.Date(Periodo),
+         Anio = year(Periodo),
+         Mes = month(Periodo),
+         Trimestre = quarter(Periodo))
+```
+
+
+```{r}
+ipc_mensual <- read_xlsx("../clase2/bases/ipc_ceped_data.xlsx")
+
+class(ipc_mensual$fecha)
+
+ipc_mensual <- ipc_mensual %>% 
+  mutate(fecha = as.Date(fecha))
+
+class(ipc_mensual$fecha)
+```
+
+```{r}
+remuneracion_media <- SIPA %>% 
+  filter(Variable == "Remuneración promedio - sin estacionalidad") %>% 
+  mutate(indice_remuneraciones = Valor/Valor[Periodo == "2009-01-01"]*100)
+
+ipc_mensual <- ipc_mensual %>% 
+  mutate(indice_ipc_2009 = valor/valor[fecha == "2009-01-01"]*100)
+
+remuneracion_real <- remuneracion_media %>%
+  left_join(ipc_mensual, by = c("Periodo" = "fecha"))
+
+remuneracion_real <- remuneracion_real %>% 
+  mutate(indice_real = indice_remuneraciones/indice_ipc_2009*100,
+         Trimestre        = quarter(Periodo)) %>% 
+  select(Periodo, Anio = ANO4, Trimestre, Mes = sub, indice_real) 
+
+```
+
+```{r}
+#PROBANDO
+
+library(plotly)
+library(htmlwidgets)
+
+plot_remun <- remuneracion_real %>%
+  filter(year(Periodo) >= 2019) %>%
+  ggplot(aes(x = Periodo, y = indice_real)) +
+  geom_line(color = 'steelblue', size = 1) +
+  geom_point(color = 'steelblue', size = 2.5) +
+  scale_x_date(date_breaks = "2 month",
+               date_labels = "%b %Y") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45,
+                                  hjust = 1)
+        ) +
+  labs(title = "Remuneración Real Asal. Reg. del Sec. Privado",
+       subtitle = "Total País. Sin estacionalidad.",
+       y = "Nivel",
+       x = "", 
+       caption = "Fuente: Sistema Integrado Previsional Argentino (SIPA)")
+  
+
+plotly_remun <- plot_remun %>%
+  ggplotly()
+
+htmlwidgets::saveWidget(plotly_remun, "remuneracion_desde_2019.html")
+
+plotly_remun
+```
+
+
 
 ::: {.panel-tabset}
 ## ggplot2
 
+este esta re bueno, pero esta lleno de pruebas, definí una y mandale 
+
 ```{r}
-library(tidyverse)
-library(ggthemes)    
-library(plotly)
 
 # Leer los datos
 expo_mineras <- read_csv("bases/expo_mineras_por_grupo.csv")
@@ -133,12 +214,10 @@ Una sola línea de código y ya lo hacemos interactivo:
 ggplotly(graf_expo_mine)
 ```
 
-:::
 
+Agroindustria
 
-# Agroindustria
-
-## Columnas acostadas
+Columnas acostadas
 
 ```{r}
 importancia_agro <- read_csv("bases/importancia_agro.csv")
@@ -180,14 +259,14 @@ ggplot(importancia_agro,
          y = NULL)
 ```
 
-## Gráfico de barras apiladas y de líneas de varios países
+Gráfico de barras apiladas y de líneas de varios países
 
 ```{r}
 # con datos de agroindustria: https://argendata.fund.ar/topico/agroindustria/
 ```
 
 
-## Personalización
+Personalización
 
 Esto quizá mejor al final, que les quede de material de consulta, quizá con alguna mención a la librería scales y la de ggthemes.
 
@@ -196,101 +275,50 @@ Esto quizá mejor al final, que les quede de material de consulta, quizá con al
 
 Retomar con la siguiente data ya procesada supongo que graficos de lineas con varios numeros indice como el de Graña o alguna otra evolución.
 
+## Visualizar Puntos
+
+Acá se puede ver la clase 2 de la diplo de UNSAM
+
+## Visualizar Composición
+
+Acá creo que ya tenías cosas, pero no se
+
+
+
+## Visualizar la Dispersión y las Diferencias
+
+Para avanzar sobre medidas vinculadas a la dispersión y las diferencias, se hará uso de la [base de datos](https://www.indec.gob.ar/indec/web/Institucional-Indec-BasesDeDatos-9) proveniente de la [Encuesta Nacional de Uso del Tiempo (ENUT)](https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-31-117).
+
+Entre octubre y diciembre de 2021, el INDEC realizó la Encuesta Nacional de Uso del Tiempo, que busca caracterizar la vida de personas de distintas edades y el tiempo que le dedican a las actividades que realizan dentro y fuera de los hogares. El relevamiento se llevó a cabo en 28.520 viviendas seleccionadas de áreas urbanas de todo el país.
+
+Por tanto, se procede a levantar la base de datos correspondiente a la encuesta:
+
 ```{r}
-library(tidyverse)
+enut <- read.table("bases/enut2021_base.txt",
+                  header = TRUE,
+                  sep = "|",
+                  dec = ".")
+```
 
-SIPA <- read_csv("bases/base_sipa.csv", 
-                 show_col_types = FALSE)
+Notar que el tipo de base es `.txr`, un formato no utilizado hasta el momento, pero muy habitual en las bases de datos provistas por el INDEC. En este sentido, un formato distinto requiere funciones distintas, para este caso se utilizó la función `read.table()`. Al mismo tiempo, es muy importante notar que este tipo de formatos no tienen estandarizados el tipo de separado entre una variable u otra, ni el signo de puntuación que diferencia el entero del decimal. Es por ello que se requiere utilizar los parámetros de la función para indicarle a R que signo separa una variable de otra y cuál el entero del decimal.
 
-SIPA <- SIPA %>% 
-  mutate(Periodo = as.Date(Periodo),
-         Anio = year(Periodo),
-         Mes = month(Periodo),
-         Trimestre = quarter(Periodo))
+De este modo, `header = TRUE` nos indica que R muestre el título de cada columna (nombre de variable), `sep = "|` es una indicación para que R interprete que el signo | separa una variable de otra (en otros casos podría ser una coma o un punto y coma), y por último `dec = "."` hace referencia a que las variables numéricas se separan entre enteros y decimales mediante puntos.
+
+Ahora si, se procede a visualizar la información de la encuesta. Para trabajar con ella, siempre es recomendable contar con el [Diccionario de Registros](https://www.indec.gob.ar/ftp/cuadros/menusuperior/enut/enut2021_diccionario_registros.xlsx), el cual nos indicara a qué corresponde cada nombre de variable y que tipo de contenido yacen en estas.
+
+En dicha exploración, puede encontrarse, por ejemplo, que la variable `TIPO_HOGAR_DTOTAL` refleja la tipología de hogar según demandante de cuidado: 0 para hogares sin personas demandantes de cuidado, 1 para aquellos hogares donde hay al menos un demandante de cuidado.
+
+```{r}
+ggplot(enut, aes())
 ```
 
 
-```{r}
-ipc_mensual <- read_xlsx("../clase2/bases/ipc_ceped_data.xlsx")
-
-class(ipc_mensual$fecha)
-
-ipc_mensual <- ipc_mensual %>% 
-  mutate(fecha = as.Date(fecha))
-
-class(ipc_mensual$fecha)
-```
-
-```{r}
-remuneracion_media <- SIPA %>% 
-  filter(Variable == "Remuneración promedio - sin estacionalidad") %>% 
-  mutate(indice_remuneraciones = Valor/Valor[Periodo == "2009-01-01"]*100)
-
-ipc_mensual <- ipc_mensual %>% 
-  mutate(indice_ipc_2009 = valor/valor[fecha == "2009-01-01"]*100)
-
-remuneracion_real <- remuneracion_media %>%
-  left_join(ipc_mensual, by = c("Periodo" = "fecha"))
-
-remuneracion_real <- remuneracion_real %>% 
-  mutate(indice_real = indice_remuneraciones/indice_ipc_2009*100,
-         Trimestre        = quarter(Periodo)) %>% 
-  select(Periodo, Anio = ANO4, Trimestre, Mes = sub, indice_real) 
-
-```
-
- 
-
-
-Acá es clave armar una buena buena descripción de todo lo que se nuevo con respecto a la clase pasada
+## Visualizar la distribución, la densidad y las frecuencias
 
 
 
 
-
-```{r}
-#PROBANDO
-
-library(plotly)
-library(htmlwidgets)
-
-plot_remun <- remuneracion_real %>%
-  filter(year(Periodo) >= 2019) %>%
-  ggplot(aes(x = Periodo, y = indice_real)) +
-  geom_line(color = 'steelblue', size = 1) +
-  geom_point(color = 'steelblue', size = 2.5) +
-  scale_x_date(date_breaks = "2 month",
-               date_labels = "%b %Y") +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 45,
-                                  hjust = 1)
-        ) +
-  labs(title = "Remuneración Real Asal. Reg. del Sec. Privado",
-       subtitle = "Total País. Sin estacionalidad.",
-       y = "Nivel",
-       x = "", 
-       caption = "Fuente: Sistema Integrado Previsional Argentino (SIPA)")
-  
-
-plotly_remun <- plot_remun %>%
-  ggplotly()
-
-htmlwidgets::saveWidget(plotly_remun, "remuneracion_desde_2019.html")
-
-plotly_remun
-```
-
-
-## Graficar la dispersión y las diferencias
-
-
-
-## Graficar la distribución, la densidad y las frecuencias
-
-
-
-
-###Encuesta Nacional sobre el Uso del Tiempo (ENUT)
+### Complejización de la distribución: graficos de violin vs. boxplot
 
 
 gráficos de densidad: enut
