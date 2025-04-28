@@ -29,18 +29,16 @@ include-after-body: ../assets/footer.html
 ---
 
 ```{r}
+#| echo: false
+#| purl: false
+
 library(tidyverse)
 library(readxl)
 library(lubridate)      # Para manejar fechas
 library(plotly)         # Interactive plots
 library(ggthemes)
-```
-
-```{r}
-#| echo: false
-#| purl: false
-
 library(gt)
+
 options(scipen=999)
 ```
 
@@ -52,34 +50,25 @@ En una primera instancia se avanzará sobre la visualización más compleja de s
 
 ## Visualizar Series
 
-Explicar los cambios entre el último gráfico de salario real y este 
+Al final de la última clase les mostramos el siguiente gráfico:
 
 ```{r}
+#| warning: FALSE
+
 library(tidyverse)
 
-SIPA <- read_csv("bases/base_sipa.csv", 
-                 show_col_types = FALSE)
+SIPA <- read_csv("bases/base_sipa.csv", show_col_types = FALSE)
+ipc_mensual <- read_xlsx("../clase2/bases/ipc_ceped_data.xlsx")
 
 SIPA <- SIPA %>% 
   mutate(Periodo = as.Date(Periodo),
          Anio = year(Periodo),
          Mes = month(Periodo),
          Trimestre = quarter(Periodo))
-```
-
-
-```{r}
-ipc_mensual <- read_xlsx("../clase2/bases/ipc_ceped_data.xlsx")
-
-class(ipc_mensual$fecha)
 
 ipc_mensual <- ipc_mensual %>% 
   mutate(fecha = as.Date(fecha))
 
-class(ipc_mensual$fecha)
-```
-
-```{r}
 remuneracion_media <- SIPA %>% 
   filter(Variable == "Remuneración promedio - sin estacionalidad") %>% 
   mutate(indice_remuneraciones = Valor/Valor[Periodo == "2009-01-01"]*100)
@@ -95,51 +84,147 @@ remuneracion_real <- remuneracion_real %>%
          Trimestre        = quarter(Periodo)) %>% 
   select(Periodo, Anio = ANO4, Trimestre, Mes = sub, indice_real) 
 
+graf_remun <- remuneracion_real %>% 
+  ggplot(aes(x = Periodo, y = indice_real)) +
+  geom_line(color = "#104E8B", size = 1) +
+  theme_classic() +
+  labs(title = "Remuneración Real Asal. Reg. del Sec. Privado",
+       subtitle = "Total País. Sin estacionalidad. (ene-2009 = 100)",
+       y = "",
+       x = "",
+       caption = "Fuente: Sistema Integrado Previsional Argentino (SIPA)")
+
+graf_remun
 ```
+
+Podemos empezar por poner un tema especial. En este caso, uno del paquete `ggthemes`:
 
 ```{r}
-#PROBANDO
+library(ggthemes)
 
-library(plotly)
-library(htmlwidgets)
+graf_remun <- graf_remun +
+  theme_fivethirtyeight() 
 
-plot_remun <- remuneracion_real %>%
-  filter(year(Periodo) >= 2019) %>%
-  ggplot(aes(x = Periodo, y = indice_real)) +
-  geom_line(color = 'steelblue', size = 1) +
-  geom_point(color = 'steelblue', size = 2.5) +
-  scale_x_date(date_breaks = "2 month",
-               date_labels = "%b %Y") +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 45,
-                                  hjust = 1)
-        ) +
-  labs(title = "Remuneración Real Asal. Reg. del Sec. Privado",
-       subtitle = "Total País. Sin estacionalidad.",
-       y = "Nivel",
-       x = "", 
-       caption = "Fuente: Sistema Integrado Previsional Argentino (SIPA)")
-  
-
-plotly_remun <- plot_remun %>%
-  ggplotly()
-
-htmlwidgets::saveWidget(plotly_remun, "remuneracion_desde_2019.html")
-
-plotly_remun
+graf_remun
 ```
 
+Siempre es interesante agregar marcas contextuales. Por ejemplo, una línea discontinua horizontal y otra punteada, vertical.
 
+```{r}
+graf_remun <- graf_remun +
+  
+  geom_hline(yintercept = 100, linetype = "dashed", color = "gray50", size = 0.8) +
+  
+  geom_vline(xintercept = as.Date("2020-03-20"), linetype = "dotted", color = "red", size = 0.7)
 
-::: {.panel-tabset}
-## ggplot2
+graf_remun
+```
 
-este esta re bueno, pero esta lleno de pruebas, definí una y mandale 
+Un poco más avanzado, pero pueden hacer anotaciones en el gráfico. Lo más complicado es dar las coordenadas, pero para eso conviene ir probando:
+
+```{r}
+graf_remun <- graf_remun +
+  annotate("text", x = as.Date("2020-03-20"), y = max(remuneracion_real$indice_real, na.rm = TRUE), 
+         label = "Inicio Pandemia", hjust = -0.1, vjust = 7, size = 3)
+
+graf_remun
+```
+
+Pueden también ajustarse los llamados "ticks" (o marcas de graduación) de los ejes. Éstos son pequeñas marcas en los ejes vertical u horizontal que sirven de referencia para los valores del gráfico. Las funciones de ajuste más usadas son `scale_x_continuos()` o `scale_y_continuos()` pero que son algo más confusas. Empecemos por algo simple:
+
+```{r}
+graf_remun <- graf_remun +
+scale_x_date(date_breaks = "1 year", date_labels = "%Y")
+
+graf_remun
+```
+
+Algo típico es voltear las etiquetas de las marcas de graduación a 45°, muy útil cuando se tiene cortes muy frecuentes:
+
+```{r}
+graf_remun <- graf_remun +
+  theme(axis.text.x = element_text(angle = 45,
+                                  hjust = 1)
+        )
+  
+graf_remun
+```
+
+Para terminar, aquí cómo pueden añadir áreas sombreadas para destacar períodos específicos:
+
+```{r}
+graf_remun <- graf_remun +
+  
+annotate("rect", 
+       xmin = as.Date("2015-09-01"), xmax = as.Date("2020-02-01"),
+       ymin = -Inf, ymax = Inf, 
+       fill = "yellow", alpha = 0.2) +
+  
+annotate("text", x = as.Date("2017-12-10"), y = max(remuneracion_real$indice_real, na.rm = TRUE), 
+         label = "Retroceso previo a la pandemia", vjust = 0, size = 3)
+
+graf_remun
+```
+
+## Visualizar Puntos
+
+En la práctica de la clase anterior vimos el siguiente gráfico:
+
+```{r}
+library(gapminder)  
+library(ggplot2)    
+
+gapminder_2007 <- gapminder %>% filter(year == 2007)
+
+ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +  
+  labs(
+    title = "Esperanza de vida vs. PBI per Capita (2007)",
+    x = "PBI per Capita (en escala logarítmica)",
+    y = "Esperanza de vida (en años)"
+  ) +
+  scale_x_log10() +  # Escala logarítmica para el PBI
+  theme_classic()
+```
+
+En breve vamos a ver una manera de complejizar esta visualización. Pero primero, los comentarios que les prometimos sobre escalas logarítmicas:
+
+-   Distancias iguales representan multiplicaciones iguales, no sumas iguales:
+    -   En una escala logarítmica base 10, el espacio entre cada potencia de 10 (1, 10, 100, 1000, etc.) es visualmente idéntico.
+    -   En nuestro caso, por ejemplo, la diferencia entre 300 y 1.000 ocupa el mismo espacio que entre 3.000 y 10.000
+
+```{r}
+library(gapminder)
+library(ggplot2)
+
+ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp, 
+                          size = pop, color = continent)) +
+  geom_point(alpha = 0.7) +  # Puntos con transparencia, clave por la superposición
+  scale_x_log10() +  # Escala logarítmica para GDP per capita
+  labs(
+    title = "Esperanza de vida vs. PBI per Capita (2007)",
+    x = "PBI per Capita (en escala logarítmica)",
+    y = "Esperanza de vida (en años)",
+    color = "Continente"
+  ) +
+  theme_classic()
+```
+
+## Visualizar Composición
+
+### Gráficos de áreas apiladas
 
 ```{r}
 
 # Leer los datos
 expo_mineras <- read_csv("bases/expo_mineras_por_grupo.csv")
+
+
+expo_mineras <- expo_mineras %>% 
+  group_by(grupo_nuevo) %>%
+  mutate(total = sum(expo_grupo)) %>%
+  ungroup() %>%
+  mutate(grupo_nuevo = fct_reorder(grupo_nuevo, total, .desc = TRUE))
 
 ggplot(expo_mineras, aes(x = anio, y = expo_grupo, fill = grupo_nuevo)) +
   # bordes finos para distinguir los grupos
@@ -147,66 +232,27 @@ ggplot(expo_mineras, aes(x = anio, y = expo_grupo, fill = grupo_nuevo)) +
   
   # paleta de colores
   scale_fill_tableau() +
+  
+    scale_y_continuous(
+    labels = function(x) paste0("$", x / 1000000, "M"),
+    expand = c(0, 0)
+  ) +
+
+  scale_x_continuous(
+    breaks = seq(1994, 2022, by = 4),
+    expand = c(0, 0)
+  ) +
 
   labs(
     title = "Exportaciones mineras argentinas por grupo de minerales (1994-2022)",
     x = "Año",
     y = "Miles de millones USD",
     fill = "Mineral"
-  ) -> graf_expo_mine
+  ) -> graf_expo_mine # Esta forma de asignar puede que también se la encuentren
 
 graf_expo_mine
 
-# muy avanzado, pero...
-# capaz meterle:
-
-# + theme_fivethirtyeight() 
-
-# y 
-# library(scales)      # Para formateo de etiquetas
-# 
-#   scale_y_continuous(
-#     labels = function(x) paste0("$", x, "B"),
-#     expand = c(0, 0)
-#   ) +
-# 
-#   scale_x_continuous(
-#     breaks = seq(1994, 2022, by = 4),
-#     expand = c(0, 0)
-#   ) +
-
-
-# y, tal vez:
-
- # %>%
- #  # Ordenar los minerales por valor total para mejor visualización
- #  group_by(grupo_nuevo) %>%
- #  mutate(total = sum(expo_grupo)) %>%
- #  ungroup() %>%
- #  mutate(grupo_nuevo = fct_reorder(grupo_nuevo, total, .desc = TRUE))
-
-# clave...
-
-# library(scales)  # Para funciones de formato avanzadas
-# 
-# # Función para formato de millones con punto como separador de miles
-# # pero no vimos funciones...
-#
-# formato_millones <- function(x) {
-#   # Reemplaza coma con punto como separador de miles y agrega símbolo "$" y "M"
-#   paste0("$ ", format(x, big.mark = ".", decimal.mark = ","), " M")
-# }
-# 
-#   # Formato personalizado para el eje Y
-#   scale_y_continuous(
-#     labels = formato_millones,
-#     # Asegurar que las divisiones de la escala sean números enteros
-#     breaks = function(x) pretty(x, n = 6)
-#   ) +
-
 ```
-
-## ggplotly
 
 Una sola línea de código y ya lo hacemos interactivo:
 
@@ -214,76 +260,7 @@ Una sola línea de código y ya lo hacemos interactivo:
 ggplotly(graf_expo_mine)
 ```
 
-
-Agroindustria
-
-Columnas acostadas
-
-```{r}
-importancia_agro <- read_csv("bases/importancia_agro.csv")
-
-importancia_agro <- importancia_agro %>%
-  filter(pais %in% c("Bolivia", "Paraguay", "Ecuador", "Uruguay", 
-                     "Colombia", "Argentina", "China", "Perú", 
-                     "Brasil", "Mundo", "México", "Chile"))
-
-importancia_agro <- importancia_agro %>%
-  arrange(desc(va_agro_sobre_pbi))
-
-# Creamos columna para destacar Argentina
-importancia_agro <- importancia_agro %>%
-  mutate(es_argentina = ifelse(pais == "Argentina", "Sí", "No"))
-
-ggplot(importancia_agro, 
-         aes(x = reorder(pais, va_agro_sobre_pbi), 
-             y = va_agro_sobre_pbi,
-             fill = es_argentina)) +
-    # Añadimos las barras
-    geom_bar(stat = "identity") +
-    # Configuramos colores (Argentina en celeste, otros en naranja)
-    scale_fill_manual(values = c("No" = "#FF8C00", "Sí" = "#87CEEB")) +
-    # Añadimos etiquetas con los porcentajes
-    geom_text(aes(label = paste0(format(va_agro_sobre_pbi, decimal.mark = ",", nsmall = 1), "%")),
-              hjust = -0.2, size = 3.5) +
-    # Invertimos el eje para que se vea como el gráfico original de Fundar
-    coord_flip() +
-    # sin esto no se veía la etiqueta de Bolivia por ejemplo
-    scale_y_continuous(limits = c(0, 14),
-                       breaks = seq(2, 14, by = 2),
-                       labels = function(x) paste0(x, "%")) +
-    # Añadimos títulos y subtítulos
-    labs(title = "Importancia del agro y la pesca en Argentina y otros países",
-         subtitle = "PIB del agro y la pesca como porcentaje del PIB total, en países seleccionados (en porcentaje), 2021",
-         caption = "Fuente de datos: Banco Mundial.\nNota: los datos están en precios corrientes.",
-         x = NULL,
-         y = NULL)
-```
-
-Gráfico de barras apiladas y de líneas de varios países
-
-```{r}
-# con datos de agroindustria: https://argendata.fund.ar/topico/agroindustria/
-```
-
-
-Personalización
-
-Esto quizá mejor al final, que les quede de material de consulta, quizá con alguna mención a la librería scales y la de ggthemes.
-
-![Machete de estilos de ggplot2 por Isabella Benabaye](imgs/ggplot2-theme-elements.png)
-
-
-Retomar con la siguiente data ya procesada supongo que graficos de lineas con varios numeros indice como el de Graña o alguna otra evolución.
-
-## Visualizar Puntos
-
-Acá se puede ver la clase 2 de la diplo de UNSAM
-
-## Visualizar Composición
-
-Acá creo que ya tenías cosas, pero no se
-
-
+Lo cierto es que si quieren entrar en el mundo de las visualizaciones interactivas tienen que explorar `plotly`. No siempre funciona bien `ggplotly()` para traducir de una librería a otra.
 
 ## Visualizar la Dispersión y las Diferencias
 
@@ -302,7 +279,7 @@ enut <- read.table("bases/enut2021_base.txt",
 
 Notar que el tipo de base es `.txr`, un formato no utilizado hasta el momento, pero muy habitual en las bases de datos provistas por el INDEC. En este sentido, un formato distinto requiere funciones distintas, para este caso se utilizó la función `read.table()`. Al mismo tiempo, es muy importante notar que este tipo de formatos no tienen estandarizados el tipo de separado entre una variable u otra, ni el signo de puntuación que diferencia el entero del decimal. Es por ello que se requiere utilizar los parámetros de la función para indicarle a R que signo separa una variable de otra y cuál el entero del decimal.
 
-De este modo, `header = TRUE` nos indica que R muestre el título de cada columna (nombre de variable), `sep = "|` es una indicación para que R interprete que el signo | separa una variable de otra (en otros casos podría ser una coma o un punto y coma), y por último `dec = "."` hace referencia a que las variables numéricas se separan entre enteros y decimales mediante puntos.
+De este modo, `header = TRUE` nos indica que R muestre el título de cada columna (nombre de variable), `sep = "|` es una indicación para que R interprete que el signo \| separa una variable de otra (en otros casos podría ser una coma o un punto y coma), y por último `dec = "."` hace referencia a que las variables numéricas se separan entre enteros y decimales mediante puntos.
 
 Ahora si, se procede a visualizar la información de la encuesta. Para trabajar con ella, siempre es recomendable contar con el [Diccionario de Registros](https://www.indec.gob.ar/ftp/cuadros/menusuperior/enut/enut2021_diccionario_registros.xlsx), el cual nos indicara a qué corresponde cada nombre de variable y que tipo de contenido yacen en estas.
 
@@ -312,14 +289,9 @@ En dicha exploración, puede encontrarse, por ejemplo, que la variable `TIPO_HOG
 ggplot(enut, aes())
 ```
 
-
 ## Visualizar la distribución, la densidad y las frecuencias
 
-
-
-
 ### Complejización de la distribución: graficos de violin vs. boxplot
-
 
 gráficos de densidad: enut
 
@@ -329,14 +301,19 @@ gráficos de densidad: enut
 enut
 ```
 
-
 ### Recursos adicionales
 
 Para quienes quieran profundizar en estos conceptos:
 
-#### ggplot2
+-   La clase pasada les hablamos un poco sobre números índice (y hoy seguimos trabajando sobre el índice de remuneraciones reales). Los números índices son en general una forma excelente de visualizar y son especialmente potentes para graficar múltiples series. Más sobre esto y otras cosas en estas dos excelentes entradas de blog: <https://www.storytellingwithdata.com/blog/2016/2/1/be-gone-dual-y-axis>, <https://www.datawrapper.de/blog/dualaxis>
 
 -   QCBS R Workshop Series (2023). *Workshop 3: Introduction to data visualisation with ggplot2*. <https://r.qcbs.ca/workshop03/book-en/>
+
+-   The R Graph Gallery. <https://r-graph-gallery.com/>
+
+-   From data to viz. <https://www.data-to-viz.com/>
+
+-   Dataviz Inspiration <https://www.dataviz-inspiration.com/>
 
 ## Bibliografía {.unnumbered}
 
