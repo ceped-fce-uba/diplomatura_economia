@@ -50,7 +50,7 @@ En una primera instancia se avanzará sobre la visualización más compleja de s
 
 ## Visualizar Series
 
-Sobre el final de la última clase  final de la última clase se trabajo sobre la visualización del salario real. En dicho proceso, se buscó visualizar una serie de tiempo del ingreso real, incluyendo capas vinculadas a la información (títulos, fuente, etc) y estética o trama del gráfico (un `theme`).
+Sobre el final de la última clase trabajamos sobre la visualización del salario real. En dicho proceso, se buscó visualizar una serie de tiempo del ingreso real, incluyendo capas vinculadas a la información (títulos, fuente, etc) y estética o trama del gráfico (un `theme`).
 
 ```{r}
 #| warning: FALSE
@@ -97,7 +97,7 @@ graf_remun <- remuneracion_real %>%
 graf_remun
 ```
 
-De este modo, se puede avanzar en la complejización a través de incluir un tema especial. Para ello, se utilizará el paquete `ggthemes`, el cual incluye una gran variaedad de estéticas. 
+Ahora vamos a (literalmente) sumar capas de complejidad a nuestro gráfico original. Para empezar, utilizará el paquete `ggthemes`, el cual incluye una gran variedad de estilos/temas.
 
 ```{r}
 library(ggthemes)
@@ -108,7 +108,7 @@ graf_remun <- graf_remun +
 graf_remun
 ```
 
-En términos de la estética del fondo, R también permite agregar marcas contextuales. Por ejemplo, una línea discontinua horizontal y otra punteada, vertical. Esto puede lograrse mediante sobreescribir el gráfico pero agregando capaz geométricas que indiquen una línea, es decir, las funciones `geom_hline()` y `geom_vline()`.
+En términos de la estética del fondo, R también permite agregar marcas contextuales. Por ejemplo, una línea discontinua horizontal y otra punteada, vertical. Esto puede lograrse agregando capas geométricas que indiquen una línea, es decir, las funciones `geom_hline()` y `geom_vline()`.
 
 ```{r}
 graf_remun <- graf_remun +
@@ -152,7 +152,7 @@ graf_remun <- graf_remun +
 graf_remun
 ```
 
-Como último atributo para añadir al gráfico de salario real, es posible añadir áreas sombreadas para destacar períodos específicos. Esto es ampliamente utilizado para indicar años de recesión dentro de visualizaciones de series sobre actividad o empleo. 
+Como último atributo para añadir al gráfico de salario real, es posible añadir áreas sombreadas para destacar períodos específicos. Esto es ampliamente utilizado para indicar años de recesión dentro de visualizaciones de series sobre actividad o empleo.
 
 ```{r}
 graf_remun <- graf_remun +
@@ -191,11 +191,11 @@ ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
 
 A continuación se complejizará sobre este gráfico, y la visualización de puntos en general, pero antes algunos comentarios en torno a las transformaciones o escalas logarítmicas.
 
-    -   Distancias iguales representan multiplicaciones iguales, no sumas iguales:
-    -   En una escala logarítmica base 10, el espacio entre cada potencia de 10 (1, 10, 100, 1000, etc.) es visualmente idéntico.
-    -   En nuestro caso, por ejemplo, la diferencia entre 300 y 1.000 ocupa el mismo espacio que entre 3.000 y 10.000
-    
-En definitva la búsqueda por transformar a logaritmos algunas de las visualizaciones que pueden encontrarse es acotar las enormes distancias que pueden tener los niveles no logarítmicos. 
+-   Distancias iguales representan multiplicaciones iguales, no sumas iguales:
+-   En una escala logarítmica base 10, el espacio entre cada potencia de 10 (1, 10, 100, 1000, etc.) es visualmente idéntico.
+-   En nuestro caso, por ejemplo, la diferencia entre 300 y 1.000 ocupa el mismo espacio que entre 3.000 y 10.000
+
+En definitva la búsqueda por transformar a logaritmos algunas de las visualizaciones que pueden encontrarse es acotar las enormes distancias que pueden tener los niveles no logarítmicos.
 
 En el siguiente gráfico se visualizará la experiencia de vida vinculada al PBI per cápita (en escala logarítmica), donde los colores nos permitirán diferenciar entre continentes, y los tamaños entre el volumen de población de cada nación. Esto último no es trivial, ya que si dos países poseen un mismo PBI per cápita pero uno posee la mitad de población que el otro, el país de mayor población posee un PBI considerablemente mayor.
 
@@ -219,9 +219,9 @@ Así como se trabajó sobre la gráfica de series y la de puntos, una herramient
 
 ### Gráficos de áreas apiladas
 
-En este caso, se trabajará sobre una base con información de la exportación minera argentina. ACA INDICAR ALGO MÁS SOBRE ESTA BASE, ALGÚN LINK, ALGO! 
+En este caso, se trabajará sobre una base con información de la exportación minera argentina. ACA INDICAR ALGO MÁS SOBRE ESTA BASE, ALGÚN LINK, ALGO!
 
-Previo a la visualización propiamente dicha, se realiza un breve procesamiento donde se crea la variable `total`, agrupando por grupo mineral. 
+Previo a la visualización propiamente dicha, se realiza un breve procesamiento donde se crea la variable `total`, agrupando por grupo mineral.
 
 ```{r}
 
@@ -257,19 +257,66 @@ ggplot(expo_mineras, aes(x = anio, y = expo_grupo, fill = grupo_nuevo)) +
     x = "Año",
     y = "Miles de millones USD",
     fill = "Mineral"
-  ) -> graf_expo_mine # Esta forma de asignar puede que también se la encuentren
+  ) -> graf_expo_mine_area # Esta forma de asignar puede que también se la encuentren
 
-graf_expo_mine
+graf_expo_mine_area
 
 ```
 
 Al mismo tiempo, si se utiliza la función `ggplotly()`, con una sola línea de código es posible volver interactiva a la visualización.
 
 ```{r}
-ggplotly(graf_expo_mine)
+library(plotly)
+
+ggplotly(graf_expo_mine_area)
 ```
 
-Es importante destacar que el mundo de las visualizaciones interactivas es amplio, y `plotly` configura en un universo en si mismo, por tanto hay mucho más para indagar en dicha herramienta que lo aquí expuesto. Además, no siempre funciona bien `ggplotly()` para traducir de una librería a otra, pero siempre se pueden buscar en Google los errores que surjan al intentar volver interactiva una visualización. 
+Es importante destacar que el mundo de las visualizaciones interactivas es amplio, y `plotly` configura en un universo en si mismo, por tanto hay mucho más para indagar en dicha herramienta que lo aquí expuesto. Además, no siempre funciona bien `ggplotly()` para traducir de una librería a otra, pero siempre se pueden buscar en Google los errores que surjan al intentar volver interactiva una visualización.
+
+### Gráficos de barras apiladas
+
+Alternativamente, los mismos datos vistos antes podríamos haberlos visualizado con barras apiladas:
+
+```{r}
+ggplot(expo_mineras, aes(x = anio, y = expo_grupo, fill = grupo_nuevo)) +
+  # Usamos geom_col() en lugar de geom_area() para crear barras apiladas
+  geom_col(color = "white", size = 0.1, alpha = 0.85) +
+  
+  # Mantenemos la misma paleta de colores
+  scale_fill_tableau() +
+  
+  scale_y_continuous(
+    labels = function(x) paste0("$", x / 1000000, "M"),
+    expand = c(0, 0)
+  ) +
+  scale_x_continuous(
+    breaks = seq(1994, 2022, by = 4),
+    expand = c(0, 0)
+  ) +
+  labs(
+    title = "Exportaciones mineras argentinas por grupo de minerales (1994-2022)",
+    x = "Año",
+    y = "Miles de millones USD",
+    fill = "Mineral"
+  ) -> graf_expo_mine_barras
+
+graf_expo_mine_barras
+```
+Y es igualmente fácil añadirle interactividad:
+
+```{r}
+ggplotly(graf_expo_mine_barras)
+```
+Por último, si quieren exportar el gráfico interactivo en formato HTML para compartirlo por sí solo o para integrarlo en una página web o blog, hacerlo es muy sencillo:
+
+```{r}
+library(htmlwidgets)
+
+mine_interac_area <- ggplotly(graf_expo_mine_barras)
+
+htmlwidgets::saveWidget(mine_interac_area, "exportaciones_mineras.html")
+```
+
 
 ## Visualizar la Frecuencia
 
@@ -324,7 +371,7 @@ ggplot(graf, aes(x = P47T, fill = MAS_500, weight = PONDII)) +
   
 ```
 
-Notar que se calculó el percentil 99 de la variable de ingresos y se filtro la escala del eje horizontal desde 0 hasta el percentil 99. También se utilizó una paleta de colores específicas con `scale_fill_brewer()`. 
+Notar que se calculó el percentil 99 de la variable de ingresos y se filtro la escala del eje horizontal desde 0 hasta el percentil 99. También se utilizó una paleta de colores específicas con `scale_fill_brewer()`.
 
 Si por ejemplo se busca observar la cantidad de personas por nivel educativo, de acuerdo al tamaño del aglomerado, puede usarse también un histograma pero agregando `facte_wrap()`. A saber, `facte_wrap()`es una función para crear múltiples gráficos (facetas) en una sola imagen, dividiendo los datos por una o más variables categóricas.
 
@@ -348,7 +395,6 @@ Hasta aquí observamos gráficos vinculados a la frecuencia, ahora bien si quere
 
 En el último gráfico sobre ingresos se observa la dimensión de los ingresos totales individuales asociada a la geografía, si ahora por ejemplo buscamos visualizar algo que de cuenta del ingreso laboral en torno al nivel educativo, y al sexo, pueden emplearse gráficos de caja y hacer uso del atributo `facte_wrap()`.
 
-
 ```{r}
 perc_99_p21 <-  quantile(eph$P21, probs = c(99/100), na.rm = TRUE)
 
@@ -367,10 +413,9 @@ ggplot(graf, aes(x= NIVEL_ED, y = P21, group = NIVEL_ED, fill = NIVEL_ED)) +
        ) 
 ```
 
-En este caso se observan gráficos de caja para cada nivel educativo y a su vez separados según sexo, de modo tal que pueden compararse vis a vis los niveles de ingreso laboral entre distintos sexos teniendo en cuenta el nivel educativo. 
+En este caso se observan gráficos de caja para cada nivel educativo y a su vez separados según sexo, de modo tal que pueden compararse vis a vis los niveles de ingreso laboral entre distintos sexos teniendo en cuenta el nivel educativo.
 
-Puede observarse algo similar, si nos enfocamos en la dimensión del sexo, pero analizando la distribución como densidad. 
-
+Puede observarse algo similar, si nos enfocamos en la dimensión del sexo, pero analizando la distribución como densidad.
 
 ```{r}
 trimestre <- "4to trimestre 2024"
@@ -392,7 +437,6 @@ ggplot(graf, aes(x = P21, fill = sexo, weight = PONDIIO)) +
 ```
 
 Desde el punto de vista del código, notar que se han implementado dos complejidades extras. Por un lado, se creó un objeto llamado `trimestre`, el cual contiene la información realtiva a qué trimestre pertenece la información visualizada. De este modo, en el subtítulo se incluyó el contenido de dicho objeto, esto puede ser interesante de cara a automatizar una serie de procesos donde solo se cambie el nombre de las etiquetas en un momento inicial del script, y todas las visualizaciones se corran con la información contenida en los objetos correspondientes. A su vez, se creó el objeto `cols`, donde si indicaron dos colores que luego se le atribuyeron al gráfico. Algo también muy útil si se busca homogeizar la gama de colores de algún documento analítico.
-
 
 ### Complejización de la distribución: graficos de violin vs. boxplot
 
@@ -450,13 +494,11 @@ ggplot(graf, aes(y = P21, x = sexo, fill = sexo)) +
   geom_boxplot(width = 0.2)
 ```
 
-
 ## Aplicación de R a páginas web e informes.
 
 En el caso del [CEPED](https://www.economicas.uba.ar/investigacion/institutos-y-centros/ceped/), se desarrolló un sitio titulado [CEPED Data](https://ceped-data.shinyapps.io/ceped-data/), donde pueden encontrarse series históricas de tipo de cambio, salarios, empleo, activida económica, entre otras.
 
-A su vez, diferentes análisis basados en R se han realizado también sobre encuestas que dan cuenta de las diferencias en el uso del tiempo en torno al género. Ecofeminita, por ejemplo, ha publicado [informes](https://ecofeminita.com/tiempo-libre/?v=5435c69ed3bc) en su [sitio web](https://ecofeminita.com/?v=c582dec943ff), donde tanto el sitio como los informes se encuentran desarrollados completamente en R.  
-
+A su vez, diferentes análisis basados en R se han realizado también sobre encuestas que dan cuenta de las diferencias en el uso del tiempo en torno al género. Ecofeminita, por ejemplo, ha publicado [informes](https://ecofeminita.com/tiempo-libre/?v=5435c69ed3bc) en su [sitio web](https://ecofeminita.com/?v=c582dec943ff), donde tanto el sitio como los informes se encuentran desarrollados completamente en R.
 
 ## Recursos adicionales
 
