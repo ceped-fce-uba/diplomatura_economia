@@ -277,7 +277,7 @@ Para avanzar sobre medidas vinculadas a la dispersión y las diferencias, se har
 
 La Encuesta Permanente de Hogares (EPH) es un programa nacional de producción sistemática y permanente de indicadores sociales que lleva a cabo el Instituto Nacional de Estadística y Censos (INDEC), que permite conocer las características sociodemográficas y socioeconómicas de la población. En su modalidad original, se ha venido aplicando en Argentina desde 1973, dos veces al año (mayo y octubre). Con un plan de incorporación progresiva, se han llegado a cubrir 31 aglomerados urbanos y un área urbano-rural. A partir de 2003, la Encuesta Permanente de Hogares (EPH) en Argentina se transformó en un relevamiento continuo que produce datos trimestrales para los 31 Aglomerados Urbanos.
 
-Por tanto, se procede a levantar la base de datos correspondiente a la encuesta:
+Por tanto, se procede a levantar la base de datos correspondiente a la encuesta y realizar algunos cambios de etiquetado sobre variables relevantes para la visualización.
 
 ```{r}
 eph <- read.table("bases/usu_individual_T424.txt",
@@ -289,7 +289,8 @@ eph <- eph %>%
   mutate(MAS_500 = case_when(MAS_500 == "N" ~ "Menos de 500 mil",
                              MAS_500 == "S" ~ "500 mil y más"),
          sexo    = case_when(CH04 == 1 ~ "Varón",
-                             CH04 == 2 ~ "Mujer"))
+                             CH04 == 2 ~ "Mujer"),
+         NIVEL_ED = as.factor(NIVEL_ED))
 
 ```
 
@@ -299,14 +300,18 @@ De este modo, `header = TRUE` nos indica que R muestre el título de cada column
 
 Ahora si, se procede a visualizar la información de la encuesta. Para trabajar con ella, siempre es recomendable contar con el [Diccionario de Registros](https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/EPH_registro_4T2024.pdf), el cual nos indicara a qué corresponde cada nombre de variable y que tipo de contenido yacen en estas.
 
+A continuación se avanzará sobre la gráfica de frecuencias, utilizando el `geom_histogram()` para la visualización de un histograma.
+
 ```{r}
 graf <- eph %>% 
-  filter(P47T > 0) 
+  filter(P47T > 0,
+         P21 > 0) 
 
 perc_99 <- quantile(eph$P47T, probs = c(99/100), na.rm = TRUE)
 
-ggplot(graf, aes(x = P47T, fill = MAS_500, w = PONDII)) +
-  geom_histogram(bins = 150) +
+ggplot(graf, aes(x = P47T, fill = MAS_500, weight = PONDII)) +
+  geom_histogram(bins = 100) +
+  scale_fill_brewer(palette = 9) +
   scale_x_continuous(limits = c(0, perc_99)) +
   theme_minimal() +
   labs(title= "Ingreso Total Individual según tamaño de aglomerado",
@@ -314,170 +319,146 @@ ggplot(graf, aes(x = P47T, fill = MAS_500, w = PONDII)) +
        caption = "Fuente: Encuesta Permanente de Hogares",
        x = "Ingreso Total Individual",
        y = "Casos",
-       fill = "Tamaño de aglomerado"
+       fill = "Aglomerado"
        )
   
 ```
+
+Notar que se calculó el percentil 99 de la variable de ingresos y se filtro la escala del eje horizontal desde 0 hasta el percentil 99. También se utilizó una paleta de colores específicas con `scale_fill_brewer()`. 
+
+Si por ejemplo se busca observar la cantidad de personas por nivel educativo, de acuerdo al tamaño del aglomerado, puede usarse también un histograma pero agregando `facte_wrap()`. A saber, `facte_wrap()`es una función para crear múltiples gráficos (facetas) en una sola imagen, dividiendo los datos por una o más variables categóricas.
+
+```{r}
+ggplot(graf, aes(x = as.integer(NIVEL_ED), weight = PONDERA)) +
+  geom_histogram(bins = 30, fill = "steelblue4") +
+  facet_wrap(~ as.factor(MAS_500)) +
+  theme_classic() +
+  labs(title= "Nivel Educativo según tamaño de aglomerado",
+       subtitle = "4to trimestre 2024",
+       caption = "Fuente: Encuesta Permanente de Hogares",
+       x = "Nivel Educativo",
+       y = "Casos"
+       
+       )
+```
+
+## Visualizar la distribución y la densidad
+
+Hasta aquí observamos gráficos vinculados a la frecuencia, ahora bien si queremos observar la distribucón, podemos emplear gráficos de caja o también de densidad.
+
+En el último gráfico sobre ingresos se observa la dimensión de los ingresos totales individuales asociada a la geografía, si ahora por ejemplo buscamos visualizar algo que de cuenta del ingreso laboral en torno al nivel educativo, y al sexo, pueden emplearse gráficos de caja y hacer uso del atributo `facte_wrap()`.
 
 
 ```{r}
 perc_99_p21 <-  quantile(eph$P21, probs = c(99/100), na.rm = TRUE)
 
-ggplot(graf, aes(x= NIVEL_ED, y = P21, group = NIVEL_ED, fill = NIVEL_ED, w = PONDIIO )) +
+ggplot(graf, aes(x= NIVEL_ED, y = P21, group = NIVEL_ED, fill = NIVEL_ED)) +
   geom_boxplot()+
+  scale_fill_brewer(palette = 9) +
   scale_y_continuous(limits = c(0, perc_99_p21))+
-  facet_wrap(~ CH04, labeller = "label_both")
+  facet_wrap(~ sexo) +
+  theme_minimal() + 
+  labs(title= "Distribución Ingreso de la Ocupación Principal según sexo y nivel educativo",
+       subtitle = "4to trimestre 2024",
+       caption = "Fuente: Encuesta Permanente de Hogares",
+       x = "",
+       y = "",
+       fill = "Nivel ed."
+       ) 
 ```
 
-## Visualizar la distribución, la densidad y las frecuencias
+En este caso se observan gráficos de caja para cada nivel educativo y a su vez separados según sexo, de modo tal que pueden compararse vis a vis los niveles de ingreso laboral entre distintos sexos teniendo en cuenta el nivel educativo. 
+
+Puede observarse algo similar, si nos enfocamos en la dimensión del sexo, pero analizando la distribución como densidad. 
 
 
 ```{r}
 trimestre <- "4to trimestre 2024"
 
-ggplot(graf, aes(x = P47T, fill = MAS_500, w = PONDII)) +
-  geom_density(alpha = 0.5) +
+cols <- c("#698B22", "#36648B")
+
+ggplot(graf, aes(x = P21, fill = sexo, weight = PONDIIO)) +
+  geom_density(alpha = 0.5, color = NA) +
+  scale_fill_manual(values = cols) +
   theme_minimal() +
-  scale_x_continuous(limits = c(0, perc_99)) +
-  labs(title= "Ingreso Total Individual según tamaño de aglomerado",
+  scale_x_continuous(limits = c(0, perc_99_p21)) +
+  labs(title= "Distribución Ingreso Ocupación Principal según sexo",
        subtitle = `trimestre`,
        caption = "Fuente: Encuesta Permanente de Hogares",
-       x = "Ingreso Total Individual",
-       y = "Densidad",
-       fill = "Aglomerado")
+       x = "Ingreso Ocupación Principal",
+       y = "",
+       fill = "Sexo") + 
+  theme(axis.text.y = element_blank())
 ```
 
+Desde el punto de vista del código, notar que se han implementado dos complejidades extras. Por un lado, se creó un objeto llamado `trimestre`, el cual contiene la información realtiva a qué trimestre pertenece la información visualizada. De este modo, en el subtítulo se incluyó el contenido de dicho objeto, esto puede ser interesante de cara a automatizar una serie de procesos donde solo se cambie el nombre de las etiquetas en un momento inicial del script, y todas las visualizaciones se corran con la información contenida en los objetos correspondientes. A su vez, se creó el objeto `cols`, donde si indicaron dos colores que luego se le atribuyeron al gráfico. Algo también muy útil si se busca homogeizar la gama de colores de algún documento analítico.
 
-
-
-```{r}
-ggplot(graf, aes(x = P47T, group = MAS_500, fill = MAS_500, w = PONDII)) +
-  geom_density(alpha = 0.4) +
-  scale_x_continuous(limits = c(0, perc_99),
-                     breaks = seq(0, 2000000, by = 1000000)) +
-  facet_wrap(~ sexo) +
-  theme_minimal() +
-  labs(title = "Ingreso Horario según tamaño de aglomerado y sexo",
-       subtitle = `trimestre`,
-       caption = "Fuente: Encuesta Permanente de Hogares",
-       x = "Ingreso Total Individual",
-       y = "Densidad",
-       fill = "Aglomerado")
-
-```
-
-
-Y DENSIDAD POR TIPO DE INGRESO LAB-NOLAB??
 
 ### Complejización de la distribución: graficos de violin vs. boxplot
 
+Un tipo de visualización cada vez más difundida en la estadística es la de gráficos de violin, haciendo referencia al instrumento de cuerda, los cuales permiten observar mejor las distribuciones que los gráficos de boxplot.
+
+Por ejemplo, el siguiente gráfico de cajas está construido con el ingreso de la ocupación principal y discriminado por sexo.
+
 ```{r}
-ggplot(graf, aes(y = P47T, x = sexo, fill = sexo, w = PONDII)) +
+ggplot(graf, aes(y = P21, x = sexo, fill = sexo)) +
   geom_boxplot() +
-  scale_y_continuous(limits = c(0, perc_99)) +
+  scale_y_continuous(limits = c(0, perc_99_p21)) +
+  scale_fill_manual(values = cols) +
   theme_minimal() +
-  labs(title = "Distribución del Ingreso Total Individual según sexo",
+  labs(title = "Distribución del Ingreso Ocupación Principal según sexo",
        subtitle = `trimestre`,
-       y = "Ingreso Total Individual",
-       x = "Sexo",
+       y = "Ingreso Ocupación Principal",
+       x = "",
+       fill = "Sexo",
        caption = "Fuente: Encuesta Permanente de Hogares"
        ) 
 ```
 
+Se pueden observar las diferencias en torno al promedio y los valores más elevados que toma el percentil 50 a 75 de la muestra para los varones. Ahora bien, un gráfico de violin muestra esto en forma mucho más amigable a la vista. Por ejemplo:
 
 ```{r}
-ggplot(graf, aes(y = P47T, x = sexo, fill = sexo, w = PONDII)) +
+ggplot(graf, aes(y = P21, x = sexo, fill = sexo, weight = PONDIIO)) +
   geom_violin() +
-  scale_y_continuous(limits = c(0, perc_99)) +
+  scale_y_continuous(limits = c(0, perc_99_p21)) +
+  scale_fill_manual(values = cols) +
   theme_minimal() +
-  labs(title = "Distribución del Ingreso Total Individual según sexo",
+   labs(title = "Distribución del Ingreso Ocupación Principal según sexo",
        subtitle = `trimestre`,
-       y = "Ingreso Total Individual",
-       x = "Sexo",
+       y = "Ingreso Ocupación Principal",
+       x = "",
+       fill = "Sexo",
        caption = "Fuente: Encuesta Permanente de Hogares"
        ) 
 ```
 
+En este caso, se puede ver de forma mucho más clara el sesgo hacia valores bajos de la distribución del ingreso en mujeres. Si se observan ambos gráficos en conjunto, se arriba a la siguiente visualización comparada:
 
 ```{r}
-ggplot(graf, aes(y = P47T, x = sexo, fill = sexo, w = PONDII)) +
+ggplot(graf, aes(y = P21, x = sexo, fill = sexo)) +
   geom_violin() +
-  scale_y_continuous(limits = c(0, perc_99)) +
+  scale_y_continuous(limits = c(0, perc_99_p21)) +
+  scale_fill_manual(values = cols) +
   theme_minimal() +
-  labs(title = "Distribución del Ingreso Total Individual según sexo",
+  labs(title = "Distribución del Ingreso Ocupación Principal según sexo",
        subtitle = `trimestre`,
-       y = "Ingreso Total Individual",
-       x = "Sexo",
+       y = "Ingreso Ocupación Principal",
+       x = "",
+       fill = "Sexo",
        caption = "Fuente: Encuesta Permanente de Hogares"
        ) +
   geom_boxplot(width = 0.2)
 ```
 
 
+## Aplicación de R a páginas web e informes.
 
-## Aplicación a la ENUT
+En el caso del [CEPED](https://www.economicas.uba.ar/investigacion/institutos-y-centros/ceped/), se desarrolló un sitio titulado [CEPED Data](https://ceped-data.shinyapps.io/ceped-data/), donde pueden encontrarse series históricas de tipo de cambio, salarios, empleo, activida económica, entre otras.
 
-
-
-
-
-
-```{r}
-dia_no_simult_ocup <- enut %>% 
-  filter(EDAD_SEL > 18) %>%
-  filter(CONDICION_ACTIVIDAD== 1) %>% 
-  mutate(SEXO_SEL = case_when(SEXO_SEL == 1 ~ "Mujeres",
-                              SEXO_SEL == 2 ~ "Varones"),
-         horas_totales = TSS_GRANGRUPO_PERSONALES + TSS_GRANGRUPO_TNR + TSS_GRANGRUPO_OCUPACIONYAUTOCONSUMO - TSS_ACT_DORMIR - TSS_ACT_COMERYBEBER
-         ) %>% 
-  mutate(dem_cuid = case_when(CANT_DEMANDANTES_TOTAL >0 ~ "Con demandantes de cuidado en el hogar",
-                              CANT_DEMANDANTES_TOTAL == 0 ~ "Sin demandantes de cuidado en el hogar")) %>%
-  group_by(SEXO_SEL,dem_cuid) %>% 
-  summarise(act_pers = weighted.mean((TSS_GRANGRUPO_PERSONALES-TSS_ACT_DORMIR - TSS_ACT_COMERYBEBER),WPER),
-            no_rem = weighted.mean(TSS_GRANGRUPO_TNR,WPER),
-            rem = weighted.mean(TSS_GRANGRUPO_OCUPACIONYAUTOCONSUMO,WPER),
-            total = weighted.mean(horas_totales,WPER)) %>% 
-  #mutate(control = act_pers + no_rem + rem)
-  mutate("Actividades personales" = act_pers/total,
-         "Trabajo no remunerado" = no_rem/total,
-         "Trabajo remunerado" = rem/total) %>% 
-  select(-no_rem,-rem,-act_pers,-total) %>% 
-  pivot_longer(!c("SEXO_SEL","dem_cuid"),names_to = "act", values_to = "valor") %>% 
-  mutate(grupo = paste0(SEXO_SEL, " - ",dem_cuid))
-
-dia_no_simult_ocup
-```
-
-```{r}
-colores3 = c("#facf7d","#e5616e","#bda8c3" )
-
-dia_no_simult_ocup %>% 
-  mutate(dem_cuid = factor(dem_cuid),
-         dem_cuid = fct_rev(dem_cuid)) %>% 
-  ggplot(.,aes(x = SEXO_SEL, y = valor, fill = act))+
-  geom_col(position = "stack")+
-  coord_flip()+
-  facet_wrap(~dem_cuid, nrow = 2,scales = "free")+
-  theme_minimal()+
-  labs(title = "¿Cómo se distribuye el día de las personas?",
-       subtitle = "Personas ocupadas mayores de 18 años",
-       y = "Porcentaje de las horas diarias",
-       x = "",
-       fill = "",
-       caption = "Nota: Se excluye el tiempo dedicado a dormir, comer y beber")+
-  scale_fill_manual(values = colores3)+
-  theme(legend.position = "top")+
-  theme(text = element_text(size = 12))+
-  guides(fill = guide_legend(reverse=TRUE))
-```
+A su vez, diferentes análisis basados en R se han realizado también sobre encuestas que dan cuenta de las diferencias en el uso del tiempo en torno al género. Ecofeminita, por ejemplo, ha publicado [informes](https://ecofeminita.com/tiempo-libre/?v=5435c69ed3bc) en su [sitio web](https://ecofeminita.com/?v=c582dec943ff), donde tanto el sitio como los informes se encuentran desarrollados completamente en R.  
 
 
-
-
-
-
-
-### Recursos adicionales
+## Recursos adicionales
 
 Para quienes quieran profundizar en estos conceptos:
 
