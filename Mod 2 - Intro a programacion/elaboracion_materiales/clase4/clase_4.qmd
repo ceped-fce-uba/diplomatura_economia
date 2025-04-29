@@ -50,7 +50,7 @@ En una primera instancia se avanzará sobre la visualización más compleja de s
 
 ## Visualizar Series
 
-Al final de la última clase les mostramos el siguiente gráfico:
+Sobre el final de la última clase  final de la última clase se trabajo sobre la visualización del salario real. En dicho proceso, se buscó visualizar una serie de tiempo del ingreso real, incluyendo capas vinculadas a la información (títulos, fuente, etc) y estética o trama del gráfico (un `theme`).
 
 ```{r}
 #| warning: FALSE
@@ -97,7 +97,7 @@ graf_remun <- remuneracion_real %>%
 graf_remun
 ```
 
-Podemos empezar por poner un tema especial. En este caso, uno del paquete `ggthemes`:
+De este modo, se puede avanzar en la complejización a través de incluir un tema especial. Para ello, se utilizará el paquete `ggthemes`, el cual incluye una gran variaedad de estéticas. 
 
 ```{r}
 library(ggthemes)
@@ -108,7 +108,7 @@ graf_remun <- graf_remun +
 graf_remun
 ```
 
-Siempre es interesante agregar marcas contextuales. Por ejemplo, una línea discontinua horizontal y otra punteada, vertical.
+En términos de la estética del fondo, R también permite agregar marcas contextuales. Por ejemplo, una línea discontinua horizontal y otra punteada, vertical. Esto puede lograrse mediante sobreescribir el gráfico pero agregando capaz geométricas que indiquen una línea, es decir, las funciones `geom_hline()` y `geom_vline()`.
 
 ```{r}
 graf_remun <- graf_remun +
@@ -120,7 +120,9 @@ graf_remun <- graf_remun +
 graf_remun
 ```
 
-Un poco más avanzado, pero pueden hacer anotaciones en el gráfico. Lo más complicado es dar las coordenadas, pero para eso conviene ir probando:
+Notar que al interior de estas se incluyen los parámetros de coordenadas, colores, tipo de linea y tamaño.
+
+En una versión más compleja de esto, es posible incluir anotaciones en el gráfico. Lo más complicado es dar las coordenadas exactas, pero R permite una operatividad muy rápida al poder visualizar el gráfico e ir hacinedo diferentes pruebas hasta encontrar la combinación más útil.
 
 ```{r}
 graf_remun <- graf_remun +
@@ -130,7 +132,7 @@ graf_remun <- graf_remun +
 graf_remun
 ```
 
-Pueden también ajustarse los llamados "ticks" (o marcas de graduación) de los ejes. Éstos son pequeñas marcas en los ejes vertical u horizontal que sirven de referencia para los valores del gráfico. Las funciones de ajuste más usadas son `scale_x_continuos()` o `scale_y_continuos()` pero que son algo más confusas. Empecemos por algo simple:
+A su vez, también es posible ajustar los llamados "ticks" (o marcas de graduación) de los ejes. Éstos son pequeñas marcas en los ejes (vertical u horizontal) que sirven de referencia para los valores del gráfico. Las funciones de ajuste más usadas son `scale_x_continuos()` o `scale_y_continuos()` pero que son algo más confusas. Empecemos por algo simple:
 
 ```{r}
 graf_remun <- graf_remun +
@@ -139,7 +141,7 @@ scale_x_date(date_breaks = "1 year", date_labels = "%Y")
 graf_remun
 ```
 
-Algo típico es voltear las etiquetas de las marcas de graduación a 45°, muy útil cuando se tiene cortes muy frecuentes:
+Una costumbre estética es voltear las etiquetas de las marcas de graduación a 45°, muy útil cuando se tiene datos para una período largo de tiempo. Para ello, se utiliza el atributo `theme()`.
 
 ```{r}
 graf_remun <- graf_remun +
@@ -150,7 +152,7 @@ graf_remun <- graf_remun +
 graf_remun
 ```
 
-Para terminar, aquí cómo pueden añadir áreas sombreadas para destacar períodos específicos:
+Como último atributo para añadir al gráfico de salario real, es posible añadir áreas sombreadas para destacar períodos específicos. Esto es ampliamente utilizado para indicar años de recesión dentro de visualizaciones de series sobre actividad o empleo. 
 
 ```{r}
 graf_remun <- graf_remun +
@@ -158,7 +160,7 @@ graf_remun <- graf_remun +
 annotate("rect", 
        xmin = as.Date("2015-09-01"), xmax = as.Date("2020-02-01"),
        ymin = -Inf, ymax = Inf, 
-       fill = "yellow", alpha = 0.2) +
+       fill = "#8B3A3A", alpha = 0.2) +
   
 annotate("text", x = as.Date("2017-12-10"), y = max(remuneracion_real$indice_real, na.rm = TRUE), 
          label = "Retroceso previo a la pandemia", vjust = 0, size = 3)
@@ -168,7 +170,7 @@ graf_remun
 
 ## Visualizar Puntos
 
-En la práctica de la clase anterior vimos el siguiente gráfico:
+Ahora bien, para avanzar en el conocimiento sobre visualización, se procederá a abordar la visualización de puntos en forma más completa. En la práctica de la clase anterior se construó el siguiente gráfico:
 
 ```{r}
 library(gapminder)  
@@ -187,16 +189,17 @@ ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
   theme_classic()
 ```
 
-En breve vamos a ver una manera de complejizar esta visualización. Pero primero, los comentarios que les prometimos sobre escalas logarítmicas:
+A continuación se complejizará sobre este gráfico, y la visualización de puntos en general, pero antes algunos comentarios en torno a las transformaciones o escalas logarítmicas.
 
--   Distancias iguales representan multiplicaciones iguales, no sumas iguales:
+    -   Distancias iguales representan multiplicaciones iguales, no sumas iguales:
     -   En una escala logarítmica base 10, el espacio entre cada potencia de 10 (1, 10, 100, 1000, etc.) es visualmente idéntico.
     -   En nuestro caso, por ejemplo, la diferencia entre 300 y 1.000 ocupa el mismo espacio que entre 3.000 y 10.000
+    
+En definitva la búsqueda por transformar a logaritmos algunas de las visualizaciones que pueden encontrarse es acotar las enormes distancias que pueden tener los niveles no logarítmicos. 
+
+En el siguiente gráfico se visualizará la experiencia de vida vinculada al PBI per cápita (en escala logarítmica), donde los colores nos permitirán diferenciar entre continentes, y los tamaños entre el volumen de población de cada nación. Esto último no es trivial, ya que si dos países poseen un mismo PBI per cápita pero uno posee la mitad de población que el otro, el país de mayor población posee un PBI considerablemente mayor.
 
 ```{r}
-library(gapminder)
-library(ggplot2)
-
 ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp, 
                           size = pop, color = continent)) +
   geom_point(alpha = 0.7) +  # Puntos con transparencia, clave por la superposición
@@ -212,7 +215,13 @@ ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp,
 
 ## Visualizar Composición
 
+Así como se trabajó sobre la gráfica de series y la de puntos, una herramienta de gran poder en la visualización es la composición, dado que esta permite observar como se componen las piezas de un todo. Para ello, se recurrirá a los gráficos de barras apiladas.
+
 ### Gráficos de áreas apiladas
+
+En este caso, se trabajará sobre una base con información de la exportación minera argentina. ACA INDICAR ALGO MÁS SOBRE ESTA BASE, ALGÚN LINK, ALGO! 
+
+Previo a la visualización propiamente dicha, se realiza un breve procesamiento donde se crea la variable `total`, agrupando por grupo mineral. 
 
 ```{r}
 
@@ -254,52 +263,219 @@ graf_expo_mine
 
 ```
 
-Una sola línea de código y ya lo hacemos interactivo:
+Al mismo tiempo, si se utiliza la función `ggplotly()`, con una sola línea de código es posible volver interactiva a la visualización.
 
 ```{r}
 ggplotly(graf_expo_mine)
 ```
 
-Lo cierto es que si quieren entrar en el mundo de las visualizaciones interactivas tienen que explorar `plotly`. No siempre funciona bien `ggplotly()` para traducir de una librería a otra.
+Es importante destacar que el mundo de las visualizaciones interactivas es amplio, y `plotly` configura en un universo en si mismo, por tanto hay mucho más para indagar en dicha herramienta que lo aquí expuesto. Además, no siempre funciona bien `ggplotly()` para traducir de una librería a otra, pero siempre se pueden buscar en Google los errores que surjan al intentar volver interactiva una visualización. 
 
-## Visualizar la Dispersión y las Diferencias
+## Visualizar la Frecuencia
 
-Para avanzar sobre medidas vinculadas a la dispersión y las diferencias, se hará uso de la [base de datos](https://www.indec.gob.ar/indec/web/Institucional-Indec-BasesDeDatos-9) proveniente de la [Encuesta Nacional de Uso del Tiempo (ENUT)](https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-31-117).
+Para avanzar sobre medidas vinculadas a la dispersión y las diferencias, se hará uso de la [base de datos](https://www.indec.gob.ar/indec/web/Institucional-Indec-BasesDeDatos) proveniente de la [Encuesta Permanente de Hogares (EPH)](https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-31-60).
 
-Entre octubre y diciembre de 2021, el INDEC realizó la Encuesta Nacional de Uso del Tiempo, que busca caracterizar la vida de personas de distintas edades y el tiempo que le dedican a las actividades que realizan dentro y fuera de los hogares. El relevamiento se llevó a cabo en 28.520 viviendas seleccionadas de áreas urbanas de todo el país.
+La Encuesta Permanente de Hogares (EPH) es un programa nacional de producción sistemática y permanente de indicadores sociales que lleva a cabo el Instituto Nacional de Estadística y Censos (INDEC), que permite conocer las características sociodemográficas y socioeconómicas de la población. En su modalidad original, se ha venido aplicando en Argentina desde 1973, dos veces al año (mayo y octubre). Con un plan de incorporación progresiva, se han llegado a cubrir 31 aglomerados urbanos y un área urbano-rural. A partir de 2003, la Encuesta Permanente de Hogares (EPH) en Argentina se transformó en un relevamiento continuo que produce datos trimestrales para los 31 Aglomerados Urbanos.
 
 Por tanto, se procede a levantar la base de datos correspondiente a la encuesta:
 
 ```{r}
-enut <- read.table("bases/enut2021_base.txt",
+eph <- read.table("bases/usu_individual_T424.txt",
                   header = TRUE,
-                  sep = "|",
+                  sep = ";",
                   dec = ".")
+
+eph <- eph %>% 
+  mutate(MAS_500 = case_when(MAS_500 == "N" ~ "Menos de 500 mil",
+                             MAS_500 == "S" ~ "500 mil y más"),
+         sexo    = case_when(CH04 == 1 ~ "Varón",
+                             CH04 == 2 ~ "Mujer"))
+
 ```
 
 Notar que el tipo de base es `.txr`, un formato no utilizado hasta el momento, pero muy habitual en las bases de datos provistas por el INDEC. En este sentido, un formato distinto requiere funciones distintas, para este caso se utilizó la función `read.table()`. Al mismo tiempo, es muy importante notar que este tipo de formatos no tienen estandarizados el tipo de separado entre una variable u otra, ni el signo de puntuación que diferencia el entero del decimal. Es por ello que se requiere utilizar los parámetros de la función para indicarle a R que signo separa una variable de otra y cuál el entero del decimal.
 
-De este modo, `header = TRUE` nos indica que R muestre el título de cada columna (nombre de variable), `sep = "|` es una indicación para que R interprete que el signo \| separa una variable de otra (en otros casos podría ser una coma o un punto y coma), y por último `dec = "."` hace referencia a que las variables numéricas se separan entre enteros y decimales mediante puntos.
+De este modo, `header = TRUE` nos indica que R muestre el título de cada columna (nombre de variable), `sep = ";"` es una indicación para que R interprete al punto y coma como un separador de variables, y por último `dec = "."` hace referencia a que las variables numéricas se separan entre enteros y decimales mediante puntos.
 
-Ahora si, se procede a visualizar la información de la encuesta. Para trabajar con ella, siempre es recomendable contar con el [Diccionario de Registros](https://www.indec.gob.ar/ftp/cuadros/menusuperior/enut/enut2021_diccionario_registros.xlsx), el cual nos indicara a qué corresponde cada nombre de variable y que tipo de contenido yacen en estas.
-
-En dicha exploración, puede encontrarse, por ejemplo, que la variable `TIPO_HOGAR_DTOTAL` refleja la tipología de hogar según demandante de cuidado: 0 para hogares sin personas demandantes de cuidado, 1 para aquellos hogares donde hay al menos un demandante de cuidado.
+Ahora si, se procede a visualizar la información de la encuesta. Para trabajar con ella, siempre es recomendable contar con el [Diccionario de Registros](https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/EPH_registro_4T2024.pdf), el cual nos indicara a qué corresponde cada nombre de variable y que tipo de contenido yacen en estas.
 
 ```{r}
-ggplot(enut, aes())
+graf <- eph %>% 
+  filter(P47T > 0) 
+
+perc_99 <- quantile(eph$P47T, probs = c(99/100), na.rm = TRUE)
+
+ggplot(graf, aes(x = P47T, fill = MAS_500, w = PONDII)) +
+  geom_histogram(bins = 150) +
+  scale_x_continuous(limits = c(0, perc_99)) +
+  theme_minimal() +
+  labs(title= "Ingreso Total Individual según tamaño de aglomerado",
+       subtitle = "4to trimestre 2024",
+       caption = "Fuente: Encuesta Permanente de Hogares",
+       x = "Ingreso Total Individual",
+       y = "Casos",
+       fill = "Tamaño de aglomerado"
+       )
+  
+```
+
+
+```{r}
+perc_99_p21 <-  quantile(eph$P21, probs = c(99/100), na.rm = TRUE)
+
+ggplot(graf, aes(x= NIVEL_ED, y = P21, group = NIVEL_ED, fill = NIVEL_ED, w = PONDIIO )) +
+  geom_boxplot()+
+  scale_y_continuous(limits = c(0, perc_99_p21))+
+  facet_wrap(~ CH04, labeller = "label_both")
 ```
 
 ## Visualizar la distribución, la densidad y las frecuencias
 
-### Complejización de la distribución: graficos de violin vs. boxplot
-
-gráficos de densidad: enut
 
 ```{r}
-#| eval: FALSE
+trimestre <- "4to trimestre 2024"
 
-enut
+ggplot(graf, aes(x = P47T, fill = MAS_500, w = PONDII)) +
+  geom_density(alpha = 0.5) +
+  theme_minimal() +
+  scale_x_continuous(limits = c(0, perc_99)) +
+  labs(title= "Ingreso Total Individual según tamaño de aglomerado",
+       subtitle = `trimestre`,
+       caption = "Fuente: Encuesta Permanente de Hogares",
+       x = "Ingreso Total Individual",
+       y = "Densidad",
+       fill = "Aglomerado")
 ```
+
+
+
+
+```{r}
+ggplot(graf, aes(x = P47T, group = MAS_500, fill = MAS_500, w = PONDII)) +
+  geom_density(alpha = 0.4) +
+  scale_x_continuous(limits = c(0, perc_99),
+                     breaks = seq(0, 2000000, by = 1000000)) +
+  facet_wrap(~ sexo) +
+  theme_minimal() +
+  labs(title = "Ingreso Horario según tamaño de aglomerado y sexo",
+       subtitle = `trimestre`,
+       caption = "Fuente: Encuesta Permanente de Hogares",
+       x = "Ingreso Total Individual",
+       y = "Densidad",
+       fill = "Aglomerado")
+
+```
+
+
+Y DENSIDAD POR TIPO DE INGRESO LAB-NOLAB??
+
+### Complejización de la distribución: graficos de violin vs. boxplot
+
+```{r}
+ggplot(graf, aes(y = P47T, x = sexo, fill = sexo, w = PONDII)) +
+  geom_boxplot() +
+  scale_y_continuous(limits = c(0, perc_99)) +
+  theme_minimal() +
+  labs(title = "Distribución del Ingreso Total Individual según sexo",
+       subtitle = `trimestre`,
+       y = "Ingreso Total Individual",
+       x = "Sexo",
+       caption = "Fuente: Encuesta Permanente de Hogares"
+       ) 
+```
+
+
+```{r}
+ggplot(graf, aes(y = P47T, x = sexo, fill = sexo, w = PONDII)) +
+  geom_violin() +
+  scale_y_continuous(limits = c(0, perc_99)) +
+  theme_minimal() +
+  labs(title = "Distribución del Ingreso Total Individual según sexo",
+       subtitle = `trimestre`,
+       y = "Ingreso Total Individual",
+       x = "Sexo",
+       caption = "Fuente: Encuesta Permanente de Hogares"
+       ) 
+```
+
+
+```{r}
+ggplot(graf, aes(y = P47T, x = sexo, fill = sexo, w = PONDII)) +
+  geom_violin() +
+  scale_y_continuous(limits = c(0, perc_99)) +
+  theme_minimal() +
+  labs(title = "Distribución del Ingreso Total Individual según sexo",
+       subtitle = `trimestre`,
+       y = "Ingreso Total Individual",
+       x = "Sexo",
+       caption = "Fuente: Encuesta Permanente de Hogares"
+       ) +
+  geom_boxplot(width = 0.2)
+```
+
+
+
+## Aplicación a la ENUT
+
+
+
+
+
+
+```{r}
+dia_no_simult_ocup <- enut %>% 
+  filter(EDAD_SEL > 18) %>%
+  filter(CONDICION_ACTIVIDAD== 1) %>% 
+  mutate(SEXO_SEL = case_when(SEXO_SEL == 1 ~ "Mujeres",
+                              SEXO_SEL == 2 ~ "Varones"),
+         horas_totales = TSS_GRANGRUPO_PERSONALES + TSS_GRANGRUPO_TNR + TSS_GRANGRUPO_OCUPACIONYAUTOCONSUMO - TSS_ACT_DORMIR - TSS_ACT_COMERYBEBER
+         ) %>% 
+  mutate(dem_cuid = case_when(CANT_DEMANDANTES_TOTAL >0 ~ "Con demandantes de cuidado en el hogar",
+                              CANT_DEMANDANTES_TOTAL == 0 ~ "Sin demandantes de cuidado en el hogar")) %>%
+  group_by(SEXO_SEL,dem_cuid) %>% 
+  summarise(act_pers = weighted.mean((TSS_GRANGRUPO_PERSONALES-TSS_ACT_DORMIR - TSS_ACT_COMERYBEBER),WPER),
+            no_rem = weighted.mean(TSS_GRANGRUPO_TNR,WPER),
+            rem = weighted.mean(TSS_GRANGRUPO_OCUPACIONYAUTOCONSUMO,WPER),
+            total = weighted.mean(horas_totales,WPER)) %>% 
+  #mutate(control = act_pers + no_rem + rem)
+  mutate("Actividades personales" = act_pers/total,
+         "Trabajo no remunerado" = no_rem/total,
+         "Trabajo remunerado" = rem/total) %>% 
+  select(-no_rem,-rem,-act_pers,-total) %>% 
+  pivot_longer(!c("SEXO_SEL","dem_cuid"),names_to = "act", values_to = "valor") %>% 
+  mutate(grupo = paste0(SEXO_SEL, " - ",dem_cuid))
+
+dia_no_simult_ocup
+```
+
+```{r}
+colores3 = c("#facf7d","#e5616e","#bda8c3" )
+
+dia_no_simult_ocup %>% 
+  mutate(dem_cuid = factor(dem_cuid),
+         dem_cuid = fct_rev(dem_cuid)) %>% 
+  ggplot(.,aes(x = SEXO_SEL, y = valor, fill = act))+
+  geom_col(position = "stack")+
+  coord_flip()+
+  facet_wrap(~dem_cuid, nrow = 2,scales = "free")+
+  theme_minimal()+
+  labs(title = "¿Cómo se distribuye el día de las personas?",
+       subtitle = "Personas ocupadas mayores de 18 años",
+       y = "Porcentaje de las horas diarias",
+       x = "",
+       fill = "",
+       caption = "Nota: Se excluye el tiempo dedicado a dormir, comer y beber")+
+  scale_fill_manual(values = colores3)+
+  theme(legend.position = "top")+
+  theme(text = element_text(size = 12))+
+  guides(fill = guide_legend(reverse=TRUE))
+```
+
+
+
+
+
+
 
 ### Recursos adicionales
 
