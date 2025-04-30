@@ -1,8 +1,0 @@
-variable,etiqueta
-iso3,Código identificador de país (ISO 3166-1 alfa-3)
-anio,Año al que corresponde el dato
-gran_sector,Gran sector: Bienes o Servicios
-sector_codigo,Código del sector productivo
-sector_desc,Nombre del sector productivo
-empleo_miles,"Empleo en el sector, en miles"
-share_empleo,Proporción del empleo total del país en dicho año que representa el sector (entre 0 y 1)

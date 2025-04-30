@@ -1,4 +1,5 @@
 library(tidyverse)
+library(writexl)
 
 # Schteingart, D., Sonzogni, P. y Pascuariello, G. (2024). Estructura productiva. Argendata. Fundar.
 base <- read_csv("Mod 2 - Intro a programacion/elaboracion_materiales/proc_bases/empleo_sectores.csv")
@@ -34,5 +35,8 @@ diccionario_variables <- tibble(
 )
 
 write_csv(base, "Mod 2 - Intro a programacion/Actividad Integradora/bases/empleo_sectores_base.csv")
-write_csv(diccionario_variables, "Mod 2 - Intro a programacion/Actividad Integradora/bases/diccionario_empleo_sectores_vars.csv")
+write_xlsx(diccionario_variables, "Mod 2 - Intro a programacion/Actividad Integradora/bases/diccionario_empleo_sectores_vars.xlsx")
+
+ecopop <- read_csv("Mod 2 - Intro a programacion/Actividad Integradora/bases/diccionario_ecopop_vars.csv")
+write_xlsx(ecopop, "Mod 2 - Intro a programacion/Actividad Integradora/bases/diccionario_ecopop_vars.xlsx")
 
