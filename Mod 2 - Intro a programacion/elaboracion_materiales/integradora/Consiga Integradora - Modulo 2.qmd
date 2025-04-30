@@ -1,0 +1,47 @@
+---
+title: "Actividad integradora - Módulo 2"
+author: "Diplomatura PAEEC - UBA"
+output-file: "Actividad integradora - Módulo 2" 
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+    code-summary: "Mostrar respuesta"
+    code-tools: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/practica_claro.scss
+      dark: ../assets/practica_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+    output: false
+execute:
+  freeze: auto
+editor: source
+include-after-body: ../assets/footer.html
+---
+
+## Consigna General
+
+La actividad integradora se articula de la siguiente forma, en primer lugar se deberá elegir entre dos bases de datos provistas por [Fundar](https://fund.ar/), una correspondiente a [economía popular](https://fund.ar/publicacion/economia-popular-caba/) y otra a [estructura productiva](https://argendata.fund.ar/topico/estructura-productiva/)[La base de esturctura productiva cuenta con varios países de la región. Son libres de elegir uno específico para trabajar o, si así lo quisieran, trabajar con dos o más de ellos]{.aside}. Estas bases las encontrarán en la carpeta de actividad integradora, dentro de la carpeta bases, junto con un diccionario de variables para cada una de estas.
+
+En segundo lugar, se relizaran una serie de tareas, que se indicaran en la sección de *consigna específica*, las cuales deben realizarse en el marco de una carpeta y un proyecto de R. En dicha carpeta debe figurar: una carpeta titulada `base` donde se encuentre la base utilizada, una carpeta llamada `resultados` donde se guarden las visualizaciones construidas, el proyecto y el script con todos los códigos. Por último deberá enviarse dicha carpeta (en forma comprimida), al mail de la diplomatura *diplo.problemas.economia\@gmail.com*, con asunto del mail "Apellido - Actividad Integradora M2".
+
+La fecha límite de entrega es el **lunes 12 de mayo a las 23.59hs**. Para cualquier consulta seguirán vigentes las vías de comunicación habituales del módulo y de la diplomatura.
+
+### Consigna específica
+
+La consigna no es absoluta y rígida, pero se esperan ciertos desarrollos mínimos que den cuenta de la comprensión de los temas abordados en la materia y el seguimiento cronológico del programa propuesto. Una parte sustancial de la consiga es el orden: carpeta con proyecto, script, carpeta de base y carpeta de resultados. En el script que generen en primer lugar deben, convocar a las librerias a utilizar (aquí pueden usar cuantas quieran, siempre que usen `tidyverse` y `ggplot2`) y luego importar la base que hayan seleccionado. A continuación se pide que:
+
+1.  Realicen un primer procesamiento simple, esto debe incluir necesariamente un pipe (`%>%`), pero puede modificar la base original (creando una nueva variable por ejemplo) o crear una nueva base (o tabla) donde se quiera ver algún universo en específico o una medida resumen.
+2.  Realicen un segundo procesamiento más complejo, esto debe incluir como mínimo dos pipes (`%>%`). La búsqueda en esta tarea es que hagan un procesamiento previo de cara a la visualización u obtengan una tabla que brinde información adicional sobre la base (pueden, por ejemplo, agrugar por alguna variable relevante y realizar un cálculo).
+3.  Realicen una visualización simple, esto puede implicar algún procesamiento previo de la base o no, pero la idea es que usen una cantidad acotada de atributos estéticos y puedan dar cuenta de alguna visualización. Debe exportarse y guardarse en la carpeta `Resultados`.
+4.  Realicen una visualización compleja. En este caso sigue sin haber límites vinculados al procesamiento previo del objeto a visualizar, pero tampoco se limita el agregado de atributos estéticos. Pueden agregar atributos vinculados a la estética del fondo, títulos y escalas, así como volver interactivo el gráfico o avanzar sobre temáticas de visualización muy avanzada. También debe ser exportardo y guardado en la carpeta `Resultados` (por ejemplo con el botón 'Exportar' en la solapa de gráficos del panel de la esquina inferior derecha).
+
+La motivación del ejercicio y el espíritu de corrección se centran en proceso pedagógico detrás del módulo y la cronología en la complejización de la herramienta R. Pueden hacer uso de cualquier canal o motor de búsqueda siempre que se entregue todos los elementos señalados en la consigna general al interior de la carpeta.
