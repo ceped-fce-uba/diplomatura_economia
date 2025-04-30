@@ -1,6 +1,6 @@
 ---
 title: "Clase 4 - Visualización de Datos Avanzada"
-subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED - FCE - UBA)"
+subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED FCE - UBA)"
 author-title: "DOCENTES:" 
 authors:
   - name: Vladimiro S. Torres
@@ -219,7 +219,7 @@ Así como se trabajó sobre la gráfica de series y la de puntos, una herramient
 
 ### Gráficos de áreas apiladas
 
-En este caso, se trabajará sobre una base con información de la exportación minera argentina. ACA INDICAR ALGO MÁS SOBRE ESTA BASE, ALGÚN LINK, ALGO!
+En este caso, se trabajará sobre una base con información de la exportación minera argentina. Se trata de una base de Fundar, que tiene un excelente programa de datos abiertos. Recomendamos fuertemente que ingresen en el siguiente link y conozcan un poco más su propuesta: [https://argendata.fund.ar/topico/mineria/](https://argendata.fund.ar/topico/mineria/).
 
 Previo a la visualización propiamente dicha, se realiza un breve procesamiento donde se crea la variable `total`, agrupando por grupo mineral.
 
@@ -518,14 +518,14 @@ Para quienes quieran profundizar en estos conceptos:
 
 ```{=html}
 <div id="refs" class="references csl-bib-body hanging-indent">
-
+  <div id="ref-corfield2024" class="csl-entry">
+    Corfield, K. y Delbuono, V. (2024). Minería. Argendata. Fundar. Recuperado de <a href="https://argendata.fund.ar/topico/mineria/">https://argendata.fund.ar/topico/mineria/</a>
+  </div>
   <div id="ref-wickham2019" class="csl-entry">
     Wickham, H., &amp; Grolemund, G. (2023). <i>R for Data Science (2nd ed)</i>. O'Reilly Media.
   </div>
-
   <div id="ref-dataviz" class="csl-entry">
     DataViz Inspiration. (n.d.). RetrievedRecuperado de <a href="https://www.dataviz-inspiration.com/">https://www.dataviz-inspiration.com/</a>
   </div>
-
 </div>
 ```
