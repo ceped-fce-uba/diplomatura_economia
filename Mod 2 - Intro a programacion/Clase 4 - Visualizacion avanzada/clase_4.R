@@ -1,5 +1,6 @@
 library(tidyverse)
 library(readxl)
+options(scipen = 999)
 
 SIPA <- read_csv("bases/base_sipa.csv", show_col_types = FALSE)
 ipc_mensual <- read_xlsx("bases/ipc_ceped_data.xlsx")
@@ -184,7 +185,7 @@ mine_interac_area <- ggplotly(graf_expo_mine_barras)
 
 htmlwidgets::saveWidget(mine_interac_area, "exportaciones_mineras.html")
 
-eph <- read.table("bases/usu_individual_T424.txt",
+eph <- read.table("Mod 2 - Intro a programacion/Clase 4 - Visualizacion avanzada/bases/usu_individual_T424.txt",
                   header = TRUE,
                   sep = ";",
                   dec = ".")
@@ -205,7 +206,7 @@ perc_99 <- quantile(eph$P47T, probs = c(99/100), na.rm = TRUE)
 
 ggplot(graf, aes(x = P47T, fill = MAS_500, weight = PONDII)) +
   geom_histogram(bins = 100) +
-  scale_fill_brewer(palette = 9) +
+  scale_fill_brewer(palette = 5) +
   scale_x_continuous(limits = c(0, perc_99)) +
   theme_minimal() +
   labs(title= "Ingreso Total Individual según tamaño de aglomerado",
@@ -286,7 +287,9 @@ ggplot(graf, aes(y = P21, x = sexo, fill = sexo, weight = PONDIIO)) +
        x = "",
        fill = "Sexo",
        caption = "Fuente: Encuesta Permanente de Hogares"
-       ) 
+       ) +
+  stat_summary(fun = mean, colour = "black") +
+  stat_summary(fun = median, colour = "red4")
 
 ggplot(graf, aes(y = P21, x = sexo, fill = sexo)) +
   geom_violin() +
@@ -301,3 +304,4 @@ ggplot(graf, aes(y = P21, x = sexo, fill = sexo)) +
        caption = "Fuente: Encuesta Permanente de Hogares"
        ) +
   geom_boxplot(width = 0.2)
+
