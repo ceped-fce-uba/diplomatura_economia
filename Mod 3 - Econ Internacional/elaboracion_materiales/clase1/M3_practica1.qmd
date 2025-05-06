@@ -1,0 +1,55 @@
+---
+title: "Módulo 3 - Práctica 1"
+author: "Diplomatura PAEEC - UBA"
+output-file: "Guia Practica 1" 
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+    code-summary: "Mostrar respuesta"
+    code-tools: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/practica_claro.scss
+      dark: ../assets/practica_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+    output: false
+execute:
+  freeze: auto
+editor: source
+include-after-body: ../assets/footer.html
+---
+
+```{r}
+#| echo: FALSE
+
+# knitr::opts_knit$set(root.dir = "../../Clase 3 - Tidyverse avanzado y visualizacion/")
+
+```
+
+## Fuentes de información
+
+A continuación varios links a sitios web de organismos que disponibilizan bases de datos:
+
+-   [stat.unido.org](https://stat.unido.org/): les permite...
+
+-   [OECD / OCDE](https://www.oecd.org/en/data/indicators/purchasing-power-parities-ppp.html)
+
+-   [Banco Mundial](https://data.worldbank.org/indicator/NY.GDP.FCST.KD)
+
+## Consignas
+
+### 1. Bajen tal cosa
+
+asdasd
+
+### 2. Empleo industrial
+
+Hagan esto...
