@@ -50,7 +50,7 @@ ggplot(datos_filtrados, aes(x = Anio, y = pp_empleo_industrial, color = País, g
     subtitle = "Alemania, Argentina, China y México (1978-2018)",
     x = "",
     y = "",
-    caption = "Fuente: Graña y Terranova (2023)"
+    caption = "Fuente: Graña y Terranova (2022)"
   ) +
   
   theme_fivethirtyeight() +
