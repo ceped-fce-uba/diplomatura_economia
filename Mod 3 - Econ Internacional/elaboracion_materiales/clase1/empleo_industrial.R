@@ -9,13 +9,8 @@ base <- read_xlsx(path = "Mod 3 - Econ Internacional/elaboracion_materiales/clas
                   range = 'A1:AU1571')
 
 base <- base %>% 
-  select(Anio, País, Regiones.economicas, Ocup_TOTAL_ECONOMIA, Ocup_INDUSTRIA) %>% 
-  
-  filter(Anio >= 1978,
-         Anio <= 2018,
-         Anio != 1999    # faltan datos de china para el 99'
-         ) %>% 
-  
+  select(Anio, País, Regiones.economicas, Ocup_TOTAL_ECONOMIA, Ocup_INDUSTRIA) %>%
+
   mutate(across(
     c(Ocup_TOTAL_ECONOMIA, Ocup_INDUSTRIA), # en miles para estos países
     ~ case_when(
@@ -27,6 +22,12 @@ base <- base %>%
 write_csv(base, "Mod 3 - Econ Internacional/elaboracion_materiales/clase1/bases/empleo_industrial.csv")
 
 # Van dos flujos de group_by %>% ungroup() separados para mayor legibilidad:
+
+base <- base %>% 
+  filter(Anio >= 1978,
+         Anio <= 2018,
+         Anio != 1999  # faltan datos de china para el 99'
+         )
 
 participacion_por_region <- base %>%
   group_by(Anio, Regiones.economicas) %>% 
@@ -64,4 +65,6 @@ graf_empleo_ind <- participacion_por_region %>%
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
 
-graf_empleo_ind %>% plotly::ggplotly()
+graf_empleo_ind
+
+# graf_empleo_ind %>% plotly::ggplotly()

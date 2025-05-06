@@ -29,21 +29,23 @@ base <- base %>%
 ############################
 # ACÁ ARRANCA EL EJERCICIO #
 ############################
+# mutate(pp_empleo_industrial = Ocup_INDUSTRIA / Ocup_TOTAL_ECONOMIA)
 
 datos_filtrados <- base %>%
   filter(País %in% c("DEU", "ARG", "CHN", "MEX")) %>%
+  
+  arrange(País, Anio) # Se ordena para que no haya problemas con lineas que van y vienen
 
-  arrange(País, Anio) # Se ordena para que no haya problemas con linease que van y vienen
-
-ggplot(datos_filtrados, aes(x = Anio, y = pp_empleo_industrial, color = País, group = País)) +
-
+lineas_empleo_industrial <- datos_filtrados %>% 
+  ggplot(aes(x = Anio, y = pp_empleo_industrial, color = País, group = País)) +
+  
   geom_line(linewidth = 1.2, alpha = 0.9) +
   
   # Sumamos puntos para enfatizar los datos disponibles
   geom_point(size = 2.5, alpha = 0.7) +
   
   scale_x_continuous(breaks = seq(from = 1978, to = 2018, by = 5)) +
-
+  
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   labs(
     title = "Evolución de la participación del empleo industrial",
@@ -65,6 +67,12 @@ ggplot(datos_filtrados, aes(x = Anio, y = pp_empleo_industrial, color = País, g
     panel.grid.minor = element_blank()
   )
 
+plotly::ggplotly(lineas_empleo_industrial)
+
+# DE EXTRA QUE PONGAN EL 100 DONDE SE LES CANTE, CAPAZ AL COMIENZO DE LA CLASE 2
+# MUESTRO EL EXTRA
+
+# Que escriban un parrafito explicando qué ven.
 
 # POR SI ALGUIEN SE ANIMA
 

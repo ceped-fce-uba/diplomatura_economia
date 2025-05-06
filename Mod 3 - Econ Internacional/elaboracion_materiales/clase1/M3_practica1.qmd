@@ -1,7 +1,7 @@
 ---
-title: "Módulo 3 - Práctica 1"
+title: "Práctica desindustrialización"
 author: "Diplomatura PAEEC - UBA"
-output-file: "Guia Practica 1" 
+output-file: "Practica desindustrializacion" 
 format:
   html:
     embed-resources: true
@@ -34,22 +34,54 @@ include-after-body: ../assets/footer.html
 
 ```
 
-## Fuentes de información
-
-A continuación varios links a sitios web de organismos que disponibilizan bases de datos:
-
--   [stat.unido.org](https://stat.unido.org/): les permite...
-
--   [OECD / OCDE](https://www.oecd.org/en/data/indicators/purchasing-power-parities-ppp.html)
-
--   [Banco Mundial](https://data.worldbank.org/indicator/NY.GDP.FCST.KD)
-
 ## Consignas
 
-### 1. Bajen tal cosa
+A continuación les presentamos dos ejercicios que tienen que resolver y entregar. Van a tener tiempo hasta el lunes 19 de mayo a las 23:59, teniendo que enviar un script .R y un documento de texto con las fotos de los gráficos y las respuestas textuales. Los trabajos serán recibidos en diplo.problemas.economia\@gmail.com, con asunto del mail “Apellido - Práctica 1 Módulo 3”.
 
-asdasd
+Los datos que necesitan se encuentran en el archivo comprimido que descargaron bajo el nombre de *empleo_industrial.csv*. Son datos del trabajo de Graña y Terranova (2022). Remuevan el año 1999 de la base de datos: faltan datos de China para dicho período.
 
-### 2. Empleo industrial
+El primero de los ejercicios es el más sencillo. El segundo ya es más difícil. En ambos casos tómense un tiempo para pensar cómo pueden lograr lo que se les pide antes de empezar a escribir el código. Como siempre, pueden evacuar sus dudas por los canales habituales (WhatsApp, Slack).
 
-Hagan esto...
+### 1. Evolución de la participación del Empleo industrial
+
+Construyan un gráfico de líneas de la evolución de la participación del empleo industrial en el empleo total de cada país, para el período 1978-2018, para Alemania, Argentina, China y México (por si no conocen los códigos oficiales de países: [ISO 3166-1 alfa-3](https://es.wikipedia.org/wiki/ISO_3166-1_alfa-3))
+
+Utilicen lo aprendido en el módulo anterior. Y, adicionalmente, agreguen dos capas geométricas al gráfico: `geom_col()` y `geom_point()`, como dos capas independendientes. De este modo se construye un gráfico de puntos conectados por una línea. Es importante que luego de filtrar los años y países utilicen `arrange(País, Anio)` para tener los datos bien ordenados al momento de graficar.
+
+Escriban un párrafo en el cual interpreten brevemente el gráfico. No es necesario que mencionen a todos los países, pueden concentrarse en lo que más les llame la atención o les interese.
+
+### 2. Participación del Empleo industrial por regiones
+
+Para el mismo período del punto anterior, pero ahora para todos los paises, construyan un gráfico de barras apiladas de la participación del empleo industrial por región. Calculen las participaciones del empleo industrial de cada región **en el empleo total de todos los países de la muestra**. De este modo, apilar las barras que representan proporciones no pierde el sentido matemático.
+
+Para resolver el ejercicio van a tener que realizar dos operaciones de agrupación:
+
+1.  Primero tendrán que agrupar por año y por región para obtener totales de cada región. Luego del `group_by() %>% summarize()` encadenen un ` %>% ungroup()` para obtener una nueva tabla sin agrupamientos para futuras operaciones.
+
+2.  Luego, a partir de la tabla regional, ya con los totales regionales, tienen que crear totales generales. Para ello, agrupen esta vez solo por año y usen el flujo `group_by() %>% mutate()` (de esta manera `dplyr` realiza las transformaciones grupo a grupo). Así, van a poder crear el total general de empleo que necesitan, para luego calcular la participación del empleo industrial de cada región en el total general de la muestra, para cada año. Y, terminen con un `ungroup()`, por si las dudas.
+
+Luego ya van a poder construir el gráfico de columnas apiladas. Recuerden usar `geom_col(position = "stack")`. Definan el relleno (el fill) según región para que se diferencien las secciones de las barras apiladas. Acuérdense de remover el año 1999 de la muestra.
+
+Finalmente, escriban un párrafo para describir lo que observan en el gráfico.
+
+### Fuentes de información
+
+A continuación, las fuentes de información que les mencionamos en clase:
+
+-   [UNIDO](https://stat.unido.org/)
+
+-   [OECD / OCDE](https://www.oecd.org/en/data.html)
+
+-   [Banco Mundial](https://data.worldbank.org/indicator/)
+
+## Referencias {.unnumbered}
+
+```{=html}
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+  <div id="ref-grana2022" class="csl-entry">
+    Graña, J. M., &amp; Terranova, L. (2022). <i>Neither mechanical nor premature: deindustrialization and the New International Division of Labour (1970-2019)</i>. Department of Economic History and Institutions, Policy and World Economy.
+  </div>
+  
+</div>
+```
