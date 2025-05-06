@@ -50,13 +50,19 @@ Utilicen lo aprendido en el módulo anterior. Y, adicionalmente, agreguen dos ca
 
 Escriban un párrafo en el cual interpreten brevemente el gráfico. No es necesario que mencionen a todos los países, pueden concentrarse en lo que más les llame la atención o les interese.
 
+::: {.callout-tip icon="false"}
+## EXTRA
+
+Les proponemos realizar, de manera opcional, un ejercicio adicional: construir un gráfico comparativo mediante números índice para los países indicados en la consigna. Asignen el valor 100 a la participación del empleo industrial en cada uno de los países en un año base que consideren apropiado y grafiquen su progresión. Esto facilitará observar cómo evolucionan relativamente desde el punto de referencia.
+:::
+
 ### 2. Participación del Empleo industrial por regiones
 
 Para el mismo período del punto anterior, pero ahora para todos los paises, construyan un gráfico de barras apiladas de la participación del empleo industrial por región. Calculen las participaciones del empleo industrial de cada región **en el empleo total de todos los países de la muestra**. De este modo, apilar las barras que representan proporciones no pierde el sentido matemático.
 
 Para resolver el ejercicio van a tener que realizar dos operaciones de agrupación:
 
-1.  Primero tendrán que agrupar por año y por región para obtener totales de cada región. Luego del `group_by() %>% summarize()` encadenen un ` %>% ungroup()` para obtener una nueva tabla sin agrupamientos para futuras operaciones.
+1.  Primero tendrán que agrupar por año y por región para obtener totales de cada región. Luego del `group_by() %>% summarize()` encadenen un `%>% ungroup()` para obtener una nueva tabla sin agrupamientos para futuras operaciones.
 
 2.  Luego, a partir de la tabla regional, ya con los totales regionales, tienen que crear totales generales. Para ello, agrupen esta vez solo por año y usen el flujo `group_by() %>% mutate()` (de esta manera `dplyr` realiza las transformaciones grupo a grupo). Así, van a poder crear el total general de empleo que necesitan, para luego calcular la participación del empleo industrial de cada región en el total general de la muestra, para cada año. Y, terminen con un `ungroup()`, por si las dudas.
 
