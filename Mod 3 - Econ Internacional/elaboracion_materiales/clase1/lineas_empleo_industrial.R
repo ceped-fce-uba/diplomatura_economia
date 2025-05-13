@@ -67,6 +67,8 @@ lineas_empleo_industrial <- datos_filtrados %>%
     panel.grid.minor = element_blank()
   )
 
+lineas_empleo_industrial
+
 plotly::ggplotly(lineas_empleo_industrial)
 
 # DE EXTRA QUE PONGAN EL 100 DONDE SE LES CANTE, CAPAZ AL COMIENZO DE LA CLASE 2
@@ -101,3 +103,42 @@ plotly::ggplotly(lineas_empleo_industrial)
 #   legend.position = "none")
 
 # scale_x_continuous(limits = c(min(datos_filtrados$Anio), max(datos_filtrados$Anio) + 3.5))
+
+base_1991 <- datos_filtrados %>% 
+  filter(Anio >= 1991) %>% 
+  group_by(País) %>% 
+  mutate(base1991 = pp_empleo_industrial[Anio==1991],
+         indice = (pp_empleo_industrial / base1991) * 100 ) %>% 
+  ungroup()
+
+base_1991  %>% 
+  ggplot(aes(x = Anio, y = indice, color = País, group = País)) +
+  
+  geom_line(linewidth = 1.2, alpha = 0.9) +
+  
+  # Sumamos puntos para enfatizar los datos disponibles
+  geom_point(size = 2.5, alpha = 0.7) +
+  
+  scale_x_continuous(breaks = seq(from = 1978, to = 2018, by = 1)) +
+  
+  #scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Índices de participación del empleo industrial (1991 = 100)",
+    subtitle = "Alemania, Argentina, China y México (1991-2018)",
+    x = "",
+    y = "",
+    caption = "Fuente: Graña y Terranova (2022)"
+  ) +
+  
+  theme_fivethirtyeight() +
+  
+  scale_color_tableau() +
+  
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(face = "bold", size = 16),
+    plot.subtitle = element_text(size = 12, color = "darkgrey"),
+    axis.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
