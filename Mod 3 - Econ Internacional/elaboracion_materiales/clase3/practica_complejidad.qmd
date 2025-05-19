@@ -1,0 +1,95 @@
+---
+title: "Práctica complejidad económica"
+author: "Diplomatura PAEEC - UBA"
+output-file: "Practica complejidad económica" 
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+    code-summary: "Mostrar respuesta"
+    code-tools: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/practica_claro.scss
+      dark: ../assets/practica_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+    output: false
+execute:
+  freeze: auto
+editor: source
+include-after-body: ../assets/footer.html
+---
+
+```{r}
+#| echo: FALSE
+
+# knitr::opts_knit$set(root.dir = "../../Clase 3 - Tidyverse avanzado y visualizacion/")
+
+```
+
+## Consignas
+
+A continuación les presentamos dos ejercicios: el primero será resuleto en clase, por lo cual `sólo van a tener que entregar el segundo`. Como con la práctica anterior, van a tener tiempo hasta el lunes 26 de mayo a las 23:59, teniendo que enviar un script .R y las respuestas textuales. Los trabajos deberán ser enviados por mail con asunto “Apellido - Práctica 3 Módulo 3” a diplo.problemas.economia\@gmail.com.
+
+Tómense un tiempo para pensar cómo pueden lograr lo que se les pide antes de empezar a escribir el código. Y, como siempre, pueden evacuar sus dudas por los canales habituales (WhatsApp, Slack).
+
+### 1. Diversidad económica de los países
+
+Partiendo de la base de BACI del año 2023 que bajaron la vez pasada `(BACI_HS92_Y2023_V202501.csv)`, agrupar de modo de armar los flujos componentes del cálculo de Ventajas Comparativas Relevadas (VCR): exportaciones por país y producto, total de exportaciones por país, total de exportaciones por producto, total de exportaciones mundiales. Reemplacen los códigos numéricos de países por sus códigos de tres letras (iso3).
+
+Sin aplicar filtro alguno, calculen el total de productos con VCR para todos los países de la base. Ordene y seleccione ¿cuáles son los 10 países con mayor diversidad? ¿cuales los 10 con menor diversidad?
+
+### 2. Ubicuidad económica de los productos
+
+Repliquen el procedimiento para calcular ahora cuántos países exportan con VCR cada uno de los productos. Ordene y seleccione según productos más ubicuos -poco raros, muy comunes- a poco ubicuos -muy raros, poco comunes-.
+
+Exporten una tabla con los 10 productos más ubicuos y otra con los 10 productos menos ubicuos en formato .xlsx (con `write_xlsx()` del paquete `writexl`). Para finalizar, escriban un párrafo en el cual interpreten brevemente los resultados.
+
+#### ANEXO: FÓRMULAS PARA EL CÁLCULO DE VCR VERSIÓN BALASSA
+
+Para el cálculo de este indicador, utilicen la siguiente fórmula:
+
+$$VCR_{ij}=\frac{X_{ij}/X_{j}}{X_{im}/X_{m}}$$
+
+Donde:
+
+* $VCR_{ij}$: Ventajas comparativas reveladas sobre el bien i para el país j
+* $X_{ij}$: Exportaciones del bien i del país j
+* $X_{j}$: Exportaciones totales del país j (sumatoria de todos los bienes i)
+* $X_{im}$: Exportaciones del bien i del mundo
+* $X_{m}$: Exportaciones totales del mundo (sumatoria de todos los bienes i)
+
+El numerador representa la participación del bien "i" dentro de las exportaciones totales del país "j", mientras que el denominador indica la participación del bien "i" sobre las exportaciones totales mundiales.
+
+En definitiva, se compara la estructura exportadora de un determinado país con respecto a la estructura de ventas agregada mundial.
+
+* Si $VCR_{ij}>1$, el bien "i" tiene mayor incidencia para la estructura exportadora del país "j" que para el promedio del mundo, indicando una ventaja comparativa
+
+* Si $VCR_{ij}<1$, el bien "i" tiene menor incidencia para la estructura exportadora del país "j" que para el promedio del mundo, indicando una desventaja comparativa.
+
+Finalmente normalicen el índice con la siguiente fórmula:
+
+$$IVCR_{ij} = \frac{VCR_{ij} - 1}{VCR_{ij} + 1}$$
+
+* Si $IVCR_{ij}>0$, el bien "i" tiene mayor incidencia para la estructura exportadora del país "j" que para el promedio del mundo, indicando una ventaja comparativa
+
+* Si $IVCR_{ij}<0$, el bien "i" tiene menor incidencia para la estructura exportadora del país "j" que para el promedio del mundo, indicando una desventaja comparativa.
+
+## Referencias {.unnumbered}
+
+```{=html}
+<div id="refs" class="references csl-bib-body hanging-indent">
+  
+  <div id="ref-baci2010" class="csl-entry">
+   Gaulier, G. and Zignago, S. (2010) BACI: International Trade Database at the Product-Level. The 1994-2007 Version. CEPII Working Paper, N°2010-23.
+</div>
+  
+  </div>
+```
