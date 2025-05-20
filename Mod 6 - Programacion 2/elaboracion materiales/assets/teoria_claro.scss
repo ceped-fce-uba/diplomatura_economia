@@ -1,0 +1,354 @@
+/*-- scss:defaults --*/
+// Base document colors
+$body-bg: #ffffff;
+$body-color: #363636;
+$link-color: #0e6aa5;
+$hover-color: #0d395f;
+
+// Fonts
+$font-family-sans-serif: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+$font-family-monospace: 'Fira Code', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+$headings-font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+// Font sizes
+$font-size-base: 1.1rem;
+$h1-font-size: $font-size-base * 2.5;
+$h2-font-size: $font-size-base * 2;
+$h3-font-size: $font-size-base * 1.5;
+$h4-font-size: $font-size-base * 1.2;
+
+// Colors for code blocks
+$code-block-bg: #f8f9fa;
+$code-color: #8a2be2;
+
+// TOC styles
+$toc-color: $body-color;
+$toc-active-color: $link-color;
+
+// Callout colors
+$callout-color-note: #0090e9;
+$callout-color-tip: #02b875;
+$callout-color-warning: #ff6700;
+$callout-color-important: #d9534f;
+
+/*-- scss:rules --*/
+
+// Body text
+body {
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #0d395f;
+}
+
+h1 {
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+// Links
+a {
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: underline;
+    color: $hover-color;
+  }
+}
+
+// Code
+pre {
+  border-radius: 0.5rem;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+code {
+  font-size: 0.9em;
+}
+
+// Tables
+.table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  
+  th {
+    border-top: none;
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: $body-color;
+    text-align: left;
+  }
+  
+  td, th {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+  }
+  
+  thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+  }
+  
+  tbody + tbody {
+    border-top: 2px solid #dee2e6;
+  }
+}
+
+// Improved callouts
+div.callout {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.5rem;
+  border-left-width: 5px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+div.callout-note {
+  border-left-color: $callout-color-note;
+  
+  .callout-header {
+    background-color: rgba($callout-color-note, 0.1);
+  }
+}
+
+div.callout-tip {
+  border-left-color: $callout-color-tip;
+  
+  .callout-header {
+    background-color: rgba($callout-color-tip, 0.1);
+  }
+}
+
+div.callout-warning {
+  border-left-color: $callout-color-warning;
+  
+  .callout-header {
+    background-color: rgba($callout-color-warning, 0.1);
+  }
+}
+
+div.callout-important {
+  border-left-color: $callout-color-important;
+  
+  .callout-header {
+    background-color: rgba($callout-color-important, 0.1);
+  }
+}
+
+// Enhanced Practice Callout
+div.callout-practice {
+  border-left-color: #1f497d !important;
+  background-color: rgba(31, 73, 125, 0.05);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(31, 73, 125, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 7px 14px rgba(31, 73, 125, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  .callout-header {
+    background-color: rgba(31, 73, 125, 0.15) !important;
+    border-bottom: 1px solid rgba(31, 73, 125, 0.2);
+    color: #1f497d !important;
+    font-weight: 600;
+  }
+  
+  .callout-body {
+    padding: 1rem;
+  }
+  
+  // Optional: Style the icon if needed
+  .iconify {
+    color: #1f497d;
+    margin-right: 0.3rem;
+    vertical-align: middle;
+  }
+}
+
+// Code folding
+.code-fold-btn-container {
+  margin-right: 4px;
+}
+
+.code-fold-btn {
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 2px 7px;
+}
+
+// gt tables
+.gt_table {
+  margin-top: 1rem !important;
+  margin-bottom: 2rem !important;
+  border: none;
+  border-collapse: collapse;
+  font-family: $font-family-sans-serif;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  
+  .gt_title {
+    font-family: $headings-font-family;
+    font-weight: 600;
+    color: #0d395f;
+    font-size: 1.3rem;
+    padding-top: 0.5rem;
+  }
+  
+  .gt_subtitle {
+    font-size: 1rem;
+    font-style: italic;
+    color: #505050;
+    padding-bottom: 0.5rem;
+  }
+  
+  .gt_heading {
+    border-bottom: 2px solid #dee2e6;
+    text-align: left;
+  }
+  
+  .gt_col_heading {
+    font-weight: 600;
+    padding: 0.75rem;
+    color: $body-color;
+    background-color: #f8f9fa;
+  }
+  
+  .gt_row {
+    padding: 0.75rem;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .gt_stubhead {
+    font-weight: 600;
+    color: $body-color;
+    background-color: #f8f9fa;
+  }
+}
+
+// Figures
+figure {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  
+  figcaption {
+    font-size: 0.875rem;
+    font-style: italic;
+    color: #6c757d;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+}
+
+// TOC improvements
+#TOC {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  font-size: 0.9rem;
+  
+  .active {
+    font-weight: 600;
+    color: $toc-active-color;
+  }
+}
+
+.sidebar-title {
+  font-weight: 600;
+  color: #0d395f;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+// Nice blockquotes
+blockquote {
+  border-left: 3px solid #0d395f;
+  padding-left: 1rem;
+  margin-left: 0;
+  color: #6c757d;
+  font-style: italic;
+}
+
+// Interactive elements
+.nav-tabs {
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 1rem;
+  
+  .nav-link {
+    margin-bottom: -1px;
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    
+    &.active {
+      color: $link-color;
+      background-color: $body-bg;
+      border-color: #dee2e6 #dee2e6 $body-bg;
+    }
+  }
+}
+
+// Print improvements
+@media print {
+  body {
+    font-size: 11pt;
+  }
+  
+  h1 {
+    font-size: 18pt;
+  }
+  
+  h2 {
+    font-size: 16pt;
+  }
+  
+  h3 {
+    font-size: 14pt;
+  }
+  
+  pre, code {
+    font-size: 9pt;
+    border: 1px solid #dee2e6;
+    padding: 0.5rem;
+  }
+}
+
+/* Enhanced Full-Width Parallax for Quarto documents */
+.parallax-container {
+  position: relative;
+  width: 100%;       /* Takes full width of parent container */
+  height: 250px;     /* Reduced height so image isn't fully visible */
+  margin: 2rem 0;    /* Space before and after */
+  overflow: hidden;  /* Hide overflow */
+}
+.parallax-image-container {
+  /* Position settings - image will be set via JavaScript */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  /* Image display settings */
+  background-position: center top; /* Position from the top */
+  background-repeat: no-repeat;
+  background-size: 100% auto;     /* Width 100%, height auto to maintain aspect ratio */
+}
+/* Class for JavaScript parallax effect */
+.parallax-scroll {
+  transition: transform 0.1s ease-out;
+}

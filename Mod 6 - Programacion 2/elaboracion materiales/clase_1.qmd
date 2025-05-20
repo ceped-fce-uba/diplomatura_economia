@@ -1,0 +1,147 @@
+---
+title: "Clase 1 - Git y Github"
+subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED FCE - UBA)"
+author-title: "DOCENTES:" 
+authors:
+  - name: Guido Weksler
+  - name: Ignacio Paola
+output-file: "Clase_1" 
+format:
+  html:
+    embed-resources: true
+    code-tools: false
+    code-copy: false
+    toc: true
+    toc-location: left
+    theme: 
+      light: assets/teoria_claro.scss
+      dark: assets/teoria_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+execute:
+  freeze: auto
+editor: source
+include-after-body: assets/footer.html
+---
+
+# ¿Qué son Git y Github?
+
+[Git](https://git-scm.com/) es un software de control de versiones. Es muy utilizado en proyectos que involucran programación, ya que permite llevar un *registro* y *control* de cada uno de los **cambios** realizados sobre el código y/o los archivos que integran el mismo. El software es gratuito y de código abierto.
+
+[GitHub](https://github.com/) es una herramienta que se integra con *Git* y provee un espacio en la nube para alojar *repositorios* en los cuales se **almacena y registra el código y los archivos** que integran un proyecto. Tiene múltiples herramientas que fácilitan la **colaboración** y el **trabajo en equipo**, fácilitando la división de los integrantes de un proyecto por roles, la documentación de los cambios, flujos de control del código, métricas de colaboración, entre otras.
+
+Tener un registro de todos los cambios (y la posibilidad de deshacerlos!) se vuelve más importante a medida que nos dedicamos a proyectos más complejos y colaboramos con equipos más grandes. GitHub nos permite almacenar información sobre qué cambios se hicieron, cuándo, quién los hizo y por qué se hicieron.
+
+# Instalación y uso
+
+Comenzamos por hacernos un usuario en github.com. Entramos a “Crear una cuenta” e ingresamos con un mail y una nueva clave.
+
+![github.com](img/cuenta_github.png){width="60%"}
+
+Completamos las preguntas que nos hace Github y luego elegimos el plan gratuito. Después de eso ya podemos acceder a nuestro perfil de cuenta.
+
+![github.com](img/tutorial7.png){width="60%"}
+
+Ahora nos instalamos Git en nuestra computadora. Vamos a <https://git-scm.com/downloads/win> y elegimos la version de 64bits para Windows.
+
+![git-scm.com](img/tutorial8.png){width="60%"}
+
+Ejecutamos el instalador y elegimos todas las opciones por default.
+
+# Opciones para trabajar con Git y GitHub
+
+Git es funciona por medio de comandos que pueden insertarse por consola. Sin embargo, hay muchas [opciones](https://docs.github.com/es/get-started/onboarding/getting-started-with-your-github-account#3-elegir-c%C3%B3mo-interactuar-con-github) para interactuar con GitHub que facilitan el trabajo con Git sin necesidad de usar los comandos específicos de este programa. A continuación vamos a comentar dos de ellas que son las que recomendamos usar. Sugerimos una de ellas, aunque pueden utilizarse en simultáneo:
+
+### [Rstudio + Git](https://happygitwithr.com/rstudio-git-github.html)
+
+Es la integración de las herramientas de Git y GitHub al IDE de RStudio. Vamos a inclinarnos por esta opción. Una vez instaladas ambas herramientas, Rstudio debería reconocer automáticamente la instalación de Git. Si abrimos RStudio, elegimos Tools/Global Options, podemos ver en las opciones de Git/SVN que Rstudio haya reconocido la instalación de Git. En caso de que no, debemos buscar el ejecutable git.exe e indicarlo en el path como en la imagen.
+
+![Pantalla Rstudio](img/chequeo_git_instalacion.png){width="60%"}
+
+Para configurar nuestra cuenta de Github desde R, podemos usar el paquete `usethis`. Entramos nuestros datos con el siguiente código:
+
+```{r, eval=FALSE}
+install.packages("usethis") # Si ya está instalado usethis no es necesario correr esto
+library(usethis)
+use_git_config(user.name="tu_nombre", user.email="tucorreo@gmail.com.ar") # La dirección de correo debe coincidir con la ingresada en Github
+```
+
+![Pantalla Rstudio](img/tutorial10.png){width="60%"}
+
+Es importante que la dirección de correo en `user.email` sea la misma que pusimos al abrir la cuenta en Github. Por su parte, se puede ingresar cualquier dato en `user.name`. Si vas a trabajar desde distintas compus, puede estar bueno setear distintos nombres de usuario para luego identificar desde dónde se hicieron las modificaciones al proyecto.
+
+### [GitHub Desktop](https://docs.github.com/es/desktop/installing-and-configuring-github-desktop/overview/getting-started-with-github-desktop)
+
+Es una aplicación de escritorio que permite interactuar con GitHub de manera aún más amigable. Permite hacer los mismos pasos que con Git, pero con una interfaz gráfica que permite ver los cambios. Es otra buena opción para aquellos que no quieren trabajar con la consola de comandos o quieren revisar los cambios hechos en el código.
+
+![Visualización de cambios desde Github Desktop](img/git_captura2.png){width="60%"}
+
+# Dinámica de trabajo
+
+La estructura básica para trabajar con GitHub son los **repositorios**:
+
+*Un repositorio o proyecto de Git comprende toda la colección de archivos y carpetas asociados con un proyecto, en conjunto con el historial de revisión de cada archivo.*
+
+El **flujo básico de trabajo** en GitHub es el siguiente:
+
+1.  Crear/clonar un repositorio.
+
+2.  Agregar/modificar código localmente.
+
+3.  Enviar nuestras modificaciones al repositorio (en la nube).
+
+4.  Descargar a nuestro repositorio local las modificaciones de nuestro equipo.
+
+5.  Hacer modificaciones nuevas y enviarlas a GitHub.
+
+6.  Repetir infinitamente 4 y 5.
+
+A diferencia de otros softwares de control de versiones (Google Drive, Dropbox, etc.), está especialmente diseñado para trabajar cómodamente con código, y permite formas de colaboración más complejas: básicamente, no sólo hacer una modificación, sino proponer caminos alternativos.
+
+![build5nines.com](img/branching.png){width="800"}
+
+## 1. Clonando un repositorio
+
+Vamos a clonar el siguiente repositorio: https://github.com/ceped-fce-uba/clase_github
+
+![github.com](img/repo_github.png){width="60%"}
+
+En el botón verde “Code” vas a encontrar funcionalidades importantes. Entre otas cosas, ahí está disponible el URL que necesitamos para insertar en RStudio: [https://github.com/ceped-fce-uba/clase_github](https://github.com/ceped-fce-uba/clase_github.git){.uri}
+
+![Pantalla Rstudio](img/version_control.png){width="60%"}
+
+En RStudio seleccionamos File/New Project, luego elegimos “Version Control” y hacemos click en “Git”.
+
+![Pantalla Rstudio](img/tutorial14.png){width="60%"}
+
+Insertamos el URL completo en el primer casillero. Si está todo bien se tiene que autocompletar el nombre de la carpeta del proyecto. Hacemos click en “Create Project” y esperamos a la descarga. La descarga puede tardar unos minutos y va a generar un carpeta en tu disco local. Cuando termina, ya estamos trabajando dentro del repositorio `clase_github`. Vas a poder encontrar la carpeta usando el explorador de archivos. Por defecto, las carpetas de los respositorios se alojan en Documentos.
+
+**`Importante: Este paso se realiza una única vez. Una vez que clono un repositorio, no lo vuelvo a repetir.`**
+
+## 2. Modificando código localmente
+
+Cuando modifico el código o algún archivo en mi repositorio, voy a ver en el panel de "Git" del RStudio que el sofwtare de control de versiones, me marca con una "M" cuales archivos se modificaron.
+
+![Pantalla Rstudio](img/modifico_codigo.png){width="60%"}
+
+Si quiero "mandar" esa modificación al repositorio (en caso de tener permiso), debo hacer un **commit**, en el cual voy a tener que detallar que es lo que modifiqué, para dejarlo asentado para mis compañeros.
+
+## 3. Enviar modificaciones a la nube
+
+Una vez hecho el **commit**, haciendo click en el botón de **Push** (flecha hacia arriba) voy a poder 'envíar' los cambios al repositorio remoto (alojado en la nube) compartido por todo el equipo.
+
+## 4. *Pullear* actualizaciones a mi copia local
+
+Cada vez que quiero comenzar a trabajar nuevamente con el repositorio, antes de tocar cualquier otra cosa, debo ejecutar un **Pull** (flecha hacia abajo) para traer la versión más reciente del repositorio a la carpeta local de mi compu. Caso contrario, puedo comenzar a modificar cosas que ya fueron modificadas por un compañero. Va a traer errores (solucionables, tranqui!).
+
+Si cuando hacemos click en **Pull** nos sale un mensaje `Already up to date.` significa que no hay cambios en el repositorio remoto que no tengamos en nuestra carpeta local.
+
+## Yapa: R Studio y Github copilot
+
+**R Studio** tiene una integración desarrollada con Copilot que permite autocompletar código y tomar los comentarios que hacemos con "\#" como si fueran prompts. Github Copilot tiene una versión gratuita, pero que requiere suscribirse desde el [sitio web](https://copilot.github.com/). Luego, en las "Global Options" de **RStudio** seleccionamos "Github copilot" y nos pedirá que ingresemos nuestro usuario y contraseña de Github. Para activar esta integración debemos ir a la pestaña de "Addins" y seleccionar "Github copilot".
+
+![<https://rstudio.github.io/copilot/>](img/options_copilot.png){width="60%"}
