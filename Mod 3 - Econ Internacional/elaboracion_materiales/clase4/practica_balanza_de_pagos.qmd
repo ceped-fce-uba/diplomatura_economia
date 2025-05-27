@@ -1,0 +1,79 @@
+---
+title: "Práctica balanza de pagos"
+author: "Diplomatura PAEEC - UBA"
+output-file: "Practica balanza de pagos" 
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+    code-summary: "Mostrar respuesta"
+    code-tools: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/practica_claro.scss
+      dark: ../assets/practica_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+    output: false
+execute:
+  freeze: auto
+editor: source
+include-after-body: ../assets/footer.html
+---
+
+```{r}
+#| echo: FALSE
+
+# knitr::opts_knit$set(root.dir = "../../Clase 3 - Tidyverse avanzado y visualizacion/")
+
+```
+
+## Consignas
+
+A continuación les presentamos dos ejercicios: el primero lo resolvemos en clase -como venimos haciendo- y nuevamente `sólo van a tener que entregar el segundo`. Tendrán tiempo hasta el lunes 2 de junio a las 23:59, teniendo que enviar un script .R y las respuestas textuales. Los trabajos deberán ser enviados por mail con asunto “Apellido - Práctica 4 Módulo 4” a diplo.problemas.economia\@gmail.com.
+
+Tómense un tiempo para pensar cómo pueden lograr lo que se les pide antes de empezar a escribir el código. Y, como siempre, pueden evacuar sus dudas por los canales habituales (Slack, Whatsapp).
+
+### 1. Balanza de pagos de Argentina
+
+Ingresen a [IMF DATA - BALANACE OF PAYMENTS (BOP)](https://data.imf.org/), busquen el dataset "Balance of Payments and International Investment Position Statistics (BOP/IIP), World and Country Group Aggregates" y bajen toda la información para Argentina. Descarguen también el índice de precios al consumidor de Estados Unidos (usemos el IPC-U) de [BLS - CPI DATA](https://www.bls.gov/cpi/). Grafiquen, para Argentina, los siguientes componentes de la balanza de pagos: Saldo de la Cuenta Corriente, Saldo de la Cuenta Financiera y Variación de Reservas.
+
+### 2. Ejercicio libre de balanza de pagos
+
+Les proponemos que, utilizando las dos mismas bases de datos del ejercicio anterior, elijan uno o más países de su interés para procesar y graficar. Para finalizar, escriban un párrafo interpretando brevemente los resultados.
+
+Algunos ejemplos que podrían trabajar son:
+
+-   Ingreso secundario (por ejemplo, para el caso de méxico)
+
+-   Balanza de bienes
+
+-   Balanza de servicios
+
+-   Balanza de bienes y servicios (la suma de los dos saldos anteriores)
+
+-   Inversión extranjera directa
+
+Pueden trabajar no solo con saldos sino también con las series de ingresos y egresos e incluso con las participaciones de los componentes de la balanza de pagos presentes en las bases.
+
+## Referencias {.unnumbered}
+
+```{=html}
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+  <div id="ref-imf2025" class="csl-entry">
+   International Monetary Fund (2025) Balance of Payments and International Investment Position Statistics (BOP/IIP). IMF Data Portal. https://data.imf.org/.
+</div>
+
+  <div id="ref-bls2025" class="csl-entry">
+   U.S. Bureau of Labor Statistics (2025) Consumer Price Index for All Urban Consumers: All items in U.S. city average, all urban consumers, not seasonally adjusted.
+</div>
+  
+  </div>
+```
