@@ -21,7 +21,7 @@ Los materiales teóricos y prácticos de cada uno de los módulos se pueden desc
 [![Download](assets/images/boton_clase1.png)](M3_C1.rar) Nueva división internacional del trabajo y desindustrialización     
 [![Download](assets/images/boton_clase2.png)](M3_C2.rar) Indicadores de comercio exterior y comparación internacional     
 [![Download](assets/images/boton_clase3.png)](M3_C3.rar) Complejidad económica     
-[![Download](assets/images/boton_clase4.png)](M3_C4.rar) Tipo de cambio, competitividad y comparación internacional  
+[![Download](assets/images/boton_clase4.png)](M3_C4.rar) Balanza de pagos
 
 ## Indicadores sociolaborales
 
