@@ -1,0 +1,92 @@
+---
+title: "Práctica EPH - Tasas básicas del mercado laboral"
+author: "Diplomatura PAEEC - UBA"
+output-file: "Práctica EPH - Tasas básicas del mercado laboral" 
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+    code-summary: "Mostrar respuesta"
+    code-tools: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/practica_claro.scss
+      dark: ../assets/practica_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+    output: false
+execute:
+  freeze: auto
+editor: source
+include-after-body: ../assets/footer.html
+---
+
+```{r}
+#| echo: FALSE
+
+# knitr::opts_knit$set(root.dir = "../../Clase 3 - Tidyverse avanzado y visualizacion/")
+
+```
+
+## Consignas
+
+A continuación les presentamos dos ejercicios: el primero será resuleto en clase, por lo cual `sólo van a tener que entregar el segundo`. Como con la práctica anterior, van a tener tiempo hasta el lunes 9 de junio a las 23:59, teniendo que enviar un script .R y las respuestas textuales. Los trabajos deberán ser enviados por mail con asunto “Apellido - Práctica 1 Módulo 4” a diplo.problemas.economia\@gmail.com.
+
+Tómense un tiempo para pensar cómo pueden lograr lo que se les pide antes de empezar a escribir el código. Y, como siempre, pueden evacuar sus dudas por los canales habituales (WhatsApp, Slack).
+
+### 1. Tasas básicas y ponderadores
+
+Partiendo de la base de la Encuesta Permanente de Hogares del último trimestre del 2024, a la cual accedemos a través de la librería `(eph)`, procesar los datos para obtener las tasas básicas del mercado laboral: actividad, empleo y ocupación. ¿Qué rol juegan los factores de expansión disponibles en la encuesta? ¿es necesario aplicarlos para un correcto cálculo?.
+
+### 2. Gráfico de la distribución de ocupados por intensidad de ocupación
+
+Repliquen el gráfico disponible en el último informe de mercado de trabajo (INDEC, 2024, p. 3) sobre la distribución de los ocupados por intensidad de la ocupación. Procesen la base hasta alcanzar la data deseada, y elaboran un gráfico de torta/dona replicando el del citado informe con `ggplot()` del paquete `ggplot2`. Recordar que la clasificación por intensidad de la ocupación reconoce 4 categorías: Ocupados plenos, subocupados (trabajan menos de 35 horas semanales y están dispuestos a trabajar más), sobreocupados (ocupados que trabajan más de 45 horas semanales) y ocupados que no trabajaron en la semana de referencia.
+
+#### ANEXO: FÓRMULAS PARA EL CÁLCULO DE LAS TASAS BÁSICAS DE MERCADO LABORAL
+
+Recuerden que:
+
+$$TA_{t}=\frac{PEA_{t}}{PT_{t}}$$
+
+Donde:
+
+* $TA_{t}$: Tasa de actividad para el período (trimestre) t
+* $PEA_{t}$: Población económicamente activa en el período (trimestre) t
+* $PT_{t}$: Población total en el período (trimestre) t
+
+$$TE_{t}=\frac{PO_{t}}{PT_{t}}$$
+
+Donde:
+
+* $TE_{t}$: Tasa de empleo en el período (trimestre) t
+* $PO_{t}$: Población ocupada en el período (trimestre) t
+
+$$TD_{t}=\frac{PD_{t}}{PEA_{t}}$$
+
+Donde:
+
+* $TD_{t}$: Tasa de desocupación para el período (trimestre) t
+* $PD_{t}$: Población desocupada en el período (trimestre) t
+
+
+## Referencias {.unnumbered}
+
+```{=html}
+<div id="refs" class="references csl-bib-body hanging-indent">
+  
+  <div id="ref-eph2011" class="csl-entry">
+   Instituto Nacional de Estadística y Censos (2011). Encuesta Permanente de Hogares. Conceptos de Condición de Actividad, Subocupación Horaria y Categoría Ocupaional. INDEC, Buenos Aires.
+</div>
+
+<div id="ref-eph2025" class="csl-entry">
+   Instituto Nacional de Estadística y Censos (2025). Trabajo e ingresos, Vol. 9, n°3. Mercado de trabajo. Tasas e indicadores socioeconómicos (EPH). INDEC, Buenos Aires.
+</div>
+  
+  </div>
+```
