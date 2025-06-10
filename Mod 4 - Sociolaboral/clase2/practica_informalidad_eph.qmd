@@ -1,0 +1,66 @@
+---
+title: "Práctica EPH - Informalidad y precariedad laboral"
+author: "Diplomatura PAEEC - UBA"
+output-file: "Práctica EPH - Informalidad y precariedad laboral" 
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+    code-summary: "Mostrar respuesta"
+    code-tools: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: ../assets/practica_claro.scss
+      dark: ../assets/practica_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+    output: false
+execute:
+  freeze: auto
+editor: source
+include-after-body: ../assets/footer.html
+---
+
+```{r}
+#| echo: FALSE
+
+# knitr::opts_knit$set(root.dir = "../../Clase 3 - Tidyverse avanzado y visualizacion/")
+
+```
+
+## Consignas
+
+A continuación les presentamos dos ejercicios. El primero será resuelto en clase, por lo cual `sólo van a tener que entregar el segundo`. Como las últimas semanas, van a tener tiempo hasta el lunes 16 de junio a las 23:59, teniendo que enviar un script .R y los archivos de salida solicitados. Los trabajos deberán ser enviados por mail con asunto “Apellido - Práctica 2 Módulo 4” a diplo.problemas.economia\@gmail.com.
+
+Tómense un tiempo para pensar cómo pueden lograr lo que se les pide antes de empezar a escribir el código. Y, como siempre, pueden evacuar sus dudas por los canales habituales (WhatsApp, Slack).
+
+### 1. Asalariados: ingresos según formalidad en sector y empleo
+
+Levantar la EPH del 4to trimestre 2024 desde la librería `(eph)`. Limitándose sólo al universo de los asalariados, clasificar los mismos según empleo formal/informal (recordar: pago de aportes jubilatorios) y sector formal/informal (recordar: registro del establecimiento empleador). Obtener participaciones por región. Posteriormente obtener participación por región para cada combinación sector/empleo formada, así como también promedios de ingresos agregados. Obtener dos productos: tablas resúmen en excel y visualizaciones a partir de `ggplot()`.
+
+### 2. Precariedad en el empleo asalariado
+
+Retome sobre el procesamiento del punto 1. Además de su condición de registro, interesa identificar dimensiones de la precariedad laboral más allá de la condición de registro. Considere puntualmente: a) trabajo part time involuntario, b) empleo de duración determinada. Clasifique a los asalariados según la presencia de cada una de estas tres dimensiones de precariedad. ¿Qué participación tiene el empleo con características de precariedad sobre el total del empleo asalariado? Considere evaluar la combinación de varias dimensiones de precareidad a la vez, determinando distintas varas según el cumplimiento de alguna, dos o las tres dimensiones.
+
+
+## Referencias {.unnumbered}
+
+```{=html}
+<div id="refs" class="references csl-bib-body hanging-indent">
+  
+  <div id="ref-eph2011" class="csl-entry">
+   Instituto Nacional de Estadística y Censos (2025). Encuesta Permanente de Hogares. Diseño de registros y estructura para las bases preliminares Hogar y Personas (4to trimestre 2024). INDEC, Buenos Aires.
+</div>
+
+<div id="ref-eph2025" class="csl-entry">
+   Instituto Nacional de Estadística y Censos (2025). Mercado de trabajo. Indicadores de informalidad laboral (EPH). Cuarto trimesre de 2023 a cuarto trimestre de 2024. INDEC, Buenos Aires.
+</div>
+  
+  </div>
+```
