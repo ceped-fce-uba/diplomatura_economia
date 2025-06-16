@@ -26,7 +26,7 @@ Los materiales teóricos y prácticos de cada uno de los módulos se pueden desc
 ## Indicadores sociolaborales
 
 [![Download](assets/images/boton_clase1.png)](M4_C1.rar) Análisis del mercado de trabajo: desempleo, subempleo y sobreocupación      
-[![Download](assets/images/boton_clase2.png)](M4_C2.rar) Informalidad y precariedad del empleo: la fragmentación de la fuerza de trabajo  
+[![Download](assets/images/boton_clase2.png)](M4_C2.rar) Informalidad y precariedad del empleo  
 [![Download](assets/images/boton_clase3.png)](M4_C3.rar) Automatización del trabajo: economía de plataformas e inteligencia artificial  
 [![Download](assets/images/boton_clase4.png)](M4_C4.rar) La desigualdad en las sociedades modernas: distribución del ingreso y pobreza  
 
