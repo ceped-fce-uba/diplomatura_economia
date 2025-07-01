@@ -1,36 +1,4 @@
----
-title: "Clase 1 - Agregados monetarios y API BCRA"
-subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED FCE - UBA)"
-author-title: "DOCENTES:" 
-authors:
-  - name: Ezequiel Monteforte
-  - name: Juan Camilo Gutman
-output-file: "Clase 1 - API BCRA" 
-format:
-  html:
-    embed-resources: true
-    code-tools: false
-    code-copy: false
-    toc: true
-    toc-location: left
-    theme: 
-      light: ../assets/practica_claro.scss
-      dark: ../assets/practica_oscuro.scss
-    fig-width: 8
-    fig-height: 5
-    fig-format: retina
-    warning: false
-    message: false
-    echo: true
-execute:
-  freeze: auto
-editor: source
-include-after-body: ../assets/footer.html
----
-
-```{r}
-#| echo: true
-
+# Carga de librerías
 library(httr)       # para hacer las solicitudes a la API
 library(jsonlite)   # para procesar el formato JSON
 library(tidyverse)  # nuestro querido tidyverse
@@ -39,89 +7,32 @@ library(ggthemes)   # para la estética de los gráficos
 library(scales)     # para formatear las etiquetas de los gráficos
 
 options(scipen=999) # para evitar la notación científica
-```
-
-```{r}
-#| echo: false
-
-library(gt)
-```
-
-# Acceso a datos del BCRA via API
-
-En la práctica de hoy vamos a ver cómo acceder a datos del Banco Central de la República Argentina (BCRA) a través de su API.
-
-### ¿Qué es una API?
-
-API es una sigla que viene del inglés (Application Programming Interface) y significa `Interfaz de Programación de Aplicaciones`. Es un intermediario que nos permite comunicarnos con un sistema complejo sin necesidad de conocer todos los detalles de cómo funciona por dentro. Nosotros hacemos una "solicitud" (en inglés, request), y la API nos devuelve una "respuesta" (en inglés, response).
-
-En resumen, una API es un conjunto de reglas y herramientas que permite que diferentes aplicaciones de software se comuniquen entre sí. Simplifica el acceso a datos y funcionalidades de otros sistemas de una manera estandarizada y segura.
-
-#### Los datos y la web
-
-Para trabajar con datos de la web, es fundamental entender cómo se comunican los programas entre sí. Acá es donde entran las **APIs** , que actúan como puentes que permiten que una aplicación solicite información de otra de manera estandarizada.
-
-Al hacer una solicitud a una API nuestra aplicación envía una solicitud a un servidor. Si todo sale bien, el servidor nos devuelve los datos con un código de estado `200`, que es el "lenguaje" del servidor para decir "recibí tu solicitud y la pude completar con éxito". En cambio, si pedimos a un servidor algo que no existe entonces recibiremos como respuesta el famoso código de estado `404`, el cual ya es parte de la cultura general del internet.
-
-Sin embargo, no solo importa recibir los datos, sino también la seguridad de la conexión. Para esto existen cosas como el protocolo **SSL**. Su propósito es asegurar la **autenticación** (que sepamos que nos estamos comunicando con el servidor real) y la **encriptación** (para que la comunicación sea privada y no pueda ser leída por terceros).
-
-Todo esto para que sepan que nos vamos a ver forzados a desactivar la verificación, perdiendo la garantía de que estamos conectados a la fuente legítima y de que los datos no han sido alterados en el camino... 
-
-## API del Banco Central de la República Argentina (BCRA)
-
-El BCRA tiene varias APIs. A nosotros nos interesa la de `Estadísticas Monetarias`, cuyo manual está disponible en [Manual de API de Estadísticas monetarias](https://www.bcra.gob.ar/Catalogo/Content/files/pdf/principales-variables-v3.pdf)
-
-En nuestro caso, nosotros vamos a realizarle solicitudes a la API del BCRA desde R ("dame los datos de las reservas internacionales"), y la API nos los va responder con un código de estado y los datos en un formato ordenado (JSON, que es una especie de diccionario muy utilizado), entre otras cosas que no nos interesan.
 
 
-### Series disponibles
-
-Primero, vamos a ver qué series de datos están disponibles.
-
-```{r}
-#| output: false
-
+# URL base de la API
 url <- "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias"
 
 # Con la función GET del paquete httr realizamos la solicitud
 response <- GET(url, config(ssl_verifypeer = FALSE))
 
-# No se asusten con el JSON, simplemente es un diccionario
+# Procesamos el JSON a un formato de R
 data <- fromJSON(content(response, "text"))
 
-df <- data$results %>% 
+# Filtramos para quedarnos con las Principales Variables
+df_series <- data$results %>% 
   filter(categoria == 'Principales Variables')
 
-df
-```
+# Imprimimos la tabla de series disponibles
+print(df_series)
 
-```{r}
-#| echo: false
 
-df %>% 
-  rename(ID = 1, `Descripción de la Serie` = 2) %>%
-  gt() %>% 
-  tab_header(
-    title = "Series Monetarias Disponibles en la API del BCRA",
-    subtitle = "Variables con su descripción, ID, fecha de dato más reciente y último valor"
-  ) %>% 
-  tab_options(
-    column_labels.border.bottom.width= px(3)
-  )
-```
+#----------------------------------------------------------------
+# GRÁFICO DE BASE MONETARIA
+#----------------------------------------------------------------
 
-A continuación solicitamos algunas bases de datos y graficamos:
-### Base Monetaria
-
-Podemos, por ejemplo, graficar la base monetaria
-
-```{r}
 url_base_mon = "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias/15"
-
 response_base_mon <- GET(url_base_mon, config(ssl_verifypeer = FALSE))
-
 data_base_mon <- fromJSON(content(response_base_mon, "text"))
-
 df_base_mon <- data_base_mon$results
 df_base_mon$fecha <- as.Date(df_base_mon$fecha)
 
@@ -130,7 +41,7 @@ df_base_mon <- df_base_mon %>%
   arrange(fecha) %>% 
   select(fecha, valor)
 
-ggplot(df_base_mon, aes(x = fecha, y = valor)) +
+plot_base_monetaria <- ggplot(df_base_mon, aes(x = fecha, y = valor)) +
   geom_line(color = "#F28E2B", size = 1.5) +
   theme_fivethirtyeight() +
   labs(
@@ -150,9 +61,6 @@ ggplot(df_base_mon, aes(x = fecha, y = valor)) +
     date_labels = "%d-%m-%y",
     date_breaks = "1 month"
   ) +
-  
-  theme_fivethirtyeight()+
-  
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
     plot.title = element_text(size = 16, face = "bold"),
@@ -161,21 +69,15 @@ ggplot(df_base_mon, aes(x = fecha, y = valor)) +
     axis.title.y = element_blank()
   )
 
-```
+print(plot_base_monetaria)
 
-## Reservas Internacionales
-
-Ahora, vamos a descargar y graficar los datos de las reservas internacionales. La url es la misma de antes pero termina en `/1`, porque esa es la ID de las Reservas Internacionales del BCRA.
-
-```{r}
-#| echo: true
+#----------------------------------------------------------------
+# GRÁFICO DE RESERVAS
+#----------------------------------------------------------------
 
 url_reservas = "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias/1"
-
 response_reservas <- GET(url_reservas, config(ssl_verifypeer = FALSE))
-
 data_reservas <- fromJSON(content(response_reservas, "text"))
-
 df_reservas <- data_reservas$results
 df_reservas$fecha <- as.Date(df_reservas$fecha)
 
@@ -184,7 +86,7 @@ df_reservas <- df_reservas %>%
   arrange(fecha) %>% 
   select(fecha, valor)
 
-ggplot(df_reservas, aes(x = fecha, y = valor)) +
+plot_reservas <- ggplot(df_reservas, aes(x = fecha, y = valor)) +
   geom_line(color = "#4E79A7", size = 1.5) +
   theme_fivethirtyeight() +
   labs(
@@ -211,62 +113,55 @@ ggplot(df_reservas, aes(x = fecha, y = valor)) +
     axis.title.x = element_blank(),
     axis.title.y = element_blank()
   )
-```
 
-## Circulación monetaria y Reservas
+print(plot_reservas)
 
-Combinemos varias series disponibles en la API para graficar la circulación monetaria en dólares junto con la serie de reservas que ya descargamos.
+#----------------------------------------------------------------
+# GRÁFICO DE CIRCULACIÓN MONETARIA + RESERVAS
+#----------------------------------------------------------------
 
-```{r}
+# Descargamos datos de circulación monetaria
 url_circulacion = "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias/16"
-
 response_circulacion <- GET(url_circulacion, config(ssl_verifypeer = FALSE))
-
 data_circulacion <- fromJSON(content(response_circulacion, "text"))
-
 df_circulacion <- data_circulacion$results
 df_circulacion$fecha <- as.Date(df_circulacion$fecha)
-
 df_circulacion <- df_circulacion %>% 
   filter(fecha >= as.Date("2023-06-30")) %>% 
   arrange(fecha) %>% 
   select(fecha, circulacion = valor)
 
+# Descargamos datos de tipo de cambio
 url_tc = "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias/5"
-
 response_tc <- GET(url_tc, config(ssl_verifypeer = FALSE))
-
 data_tc <- fromJSON(content(response_tc, "text"))
-
 df_tc <- data_tc$results
 df_tc$fecha <- as.Date(df_tc$fecha)
-
 df_tc <- df_tc %>% 
   filter(fecha >= as.Date("2023-06-30")) %>% 
   arrange(fecha) %>% 
   select(fecha, tc_mayorista = valor)
 
+# Unimos y calculamos la circulación en dólares
 df_circ_tc <- left_join(df_circulacion, df_tc, by = "fecha")
-
 df_circ_tc <- df_circ_tc %>% 
   mutate(circulacion_dolares = circulacion / tc_mayorista)
 
 # Renombramos la columna valor de df_reservas para el join
-df_reservas_renamed <- df_reservas %>%
+df_reservas_join <- df_reservas %>%
   rename(reservas = valor)
 
 # Unimos los dos dataframes
-df_plot <- left_join(df_circ_tc, df_reservas_renamed, by = "fecha")
+df_plot <- left_join(df_circ_tc, df_reservas_join, by = "fecha")
 
 # Pasamos a formato long para ggplot
+
 df_plot_long <- df_plot %>%
   select(fecha, `Circulación Monetaria` = circulacion_dolares, `Reservas` = reservas) %>%
   pivot_longer(cols = -fecha, names_to = "variable", values_to = "valor")
-  
-```
 
-```{r}
-ggplot(df_plot_long, aes(x = fecha, y = valor, color = variable)) +
+# Graficamos ambas series
+plot_circ_reservas <- ggplot(df_plot_long, aes(x = fecha, y = valor, color = variable)) +
   geom_line(size = 1.5) +
   theme_fivethirtyeight() +
   labs(
@@ -297,15 +192,13 @@ ggplot(df_plot_long, aes(x = fecha, y = valor, color = variable)) +
     legend.position = "top"
   ) +
   scale_color_manual(values = c("Circulación Monetaria" = "#4E79A7", "Reservas" = "#F28E2B"))
-```
 
-## Extra: programación funcional
+print(plot_circ_reservas)
 
-Solo para quienes quieran ir un poco más allá, algo que no llegamos a ver en la diplomatura y que es extremadamente útil para procesamientos complejos es lo que se conoce como `programación funcional`. Se trata de un enfoque que consiste en construir funciones para reproducir comportamientos, mejorando la legibilidad, asegurando la funcionalidad esperada y eliminando código redundante.
+#----------------------------------------------------------------
+# EXTRA: PROGRAMACIÓN FUNCIONAL
+#----------------------------------------------------------------
 
-En internet hay muchísimo material para aprender a utilizar funciones en R. 
-
-```{r}
 api_bcra <- function(id) {
   
   # Librerías necesarias
@@ -331,16 +224,14 @@ api_bcra <- function(id) {
   df <- data$results
   df$fecha <- as.Date(df$fecha)
   
-  # 6. Estudien sobre programación funcional para entender qué hace el return
+  # 6. Vayan a estudiar si quieren saber qué hace el return!
   return(df)
 }
-```
 
-# Ahora, por ejemplo, así de fácil es pedir las reservas:
+#----------------------------------------------------------------
+# EJEMPLO DE USO DE LA FUNCIÓN
+#----------------------------------------------------------------
+prueba_función_reservas <- api_bcra(1)
+prueba_función_reservas
 
-```{r}
-prueba_función <- api_bcra(1)
-
-head(prueba_función)
-```
 
