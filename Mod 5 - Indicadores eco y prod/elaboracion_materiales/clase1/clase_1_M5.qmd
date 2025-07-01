@@ -1,0 +1,198 @@
+---
+title: "Clase 1 - Agregados monetarios y API BCRA"
+subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED FCE - UBA)"
+author-title: "DOCENTES:" 
+authors:
+  - name: Ezequiel Monteforte
+  - name: Juan Camilo Gutman
+output-file: "Clase 1 - API BCRA" 
+format:
+  html:
+    embed-resources: true
+    code-tools: false
+    code-copy: false
+    toc: true
+    toc-location: left
+    theme: 
+      light: ../assets/practica_claro.scss
+      dark: ../assets/practica_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+execute:
+  freeze: auto
+editor: source
+include-after-body: ../assets/footer.html
+---
+
+```{r}
+#| echo: false
+#| purl: false
+
+library(httr)
+library(jsonlite)
+library(tidyverse)
+library(lubridate)
+library(ggthemes)
+library(scales)
+library(gt)
+
+options(scipen=999)
+```
+
+# Acceso a datos del BCRA via API
+
+En la práctica de hoy vamos a ver cómo acceder a datos del Banco Central de la República Argentina (BCRA) a través de su API.
+
+### ¿Qué es una API?
+
+API es una sigla que viene del inglés (Application Programming Interface) y significa **Interfaz de Programación de Aplicaciones)**. Es un intermediario que nos permite comunicarnos con un sistema complejo sin necesidad de conocer todos los detalles de cómo funciona por dentro. Nosotros hacemos una "solicitud" (en inglés, request), y la API nos devuelve una "respuesta" (en inglés, response).
+
+En resumen, una API es un conjunto de reglas y herramientas que permite que diferentes aplicaciones de software se comuniquen entre sí. Simplifica el acceso a datos y funcionalidades de otros sistemas de una manera estandarizada y segura.
+
+### El Lenguaje de Internet: APIs y Conexiones Seguras
+
+Para trabajar con datos de la web, es fundamental entender cómo se comunican los programas entre sí. Aquí es donde entran las **APIs** (Interfaz de Programación de Aplicaciones), que actúan como puentes que permiten que una aplicación solicite información de otra de manera estandarizada.
+
+Al hacer una solicitud a una API, como pedir el tipo de cambio, nuestra aplicación envía una petición a un servidor. Si todo sale bien, el servidor nos devuelve los datos con un código de estado `200`, que es el "lenguaje" del servidor para decir "recibí tu pedido y aquí tienes la información". En cambio, si pedimos a un servidor algo que no existe entonces recibiremos como respuesta el famoso código de estado `404`, el cual probablemente conozcan.
+
+Sin embargo, no solo importa recibir los datos, sino también la seguridad de la conexión. Para esto existe el protocolo **SSL**. Su propósito es asegurar la **autenticación** (que sepamos que nos estamos comunicando con el servidor real) y la **encriptación** (para que la comunicación sea privada y no pueda ser leída por terceros).
+
+Todo esto para que sepan que nos vamos a ver forzados a desactivar la verificación, perdiendo la garantía de que estamos conectados a la fuente legítima y de que los datos no han sido alterados en el camino... 
+
+## API del Banco Central de la República Argentina (BCRA)
+
+El BCRA tiene varias APIs. A nosotros nos interesa la de `Estadísticas Monetarias`, cuyo manual está disponible en [Manual de API de Estadísticas monetarias](https://www.bcra.gob.ar/Catalogo/Content/files/pdf/principales-variables-v3.pdf)
+
+En nuestro caso, nosotros vamos a realizarle solicitudes a la API del BCRA desde R ("dame los datos de las reservas internacionales"), y la API nos los va responder con un código de estado y los datos en un formato ordenado (JSON, que es una especie de diccionario muy utilizado), entre otras cosas que no nos interesan.
+
+
+### Series disponibles
+
+Primero, vamos a ver qué series de datos están disponibles.
+
+```{r}
+#| output: false
+
+# URL base de la API v3.0
+url <- "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias"
+
+response <- GET(url, config(ssl_verifypeer = FALSE))
+
+data <- fromJSON(content(response, "text"))
+
+df <- data$results %>% 
+  filter(categoria == 'Principales Variables')
+
+df
+```
+
+```{r}
+#| echo: false
+
+df %>% 
+  rename(ID = 1, `Descripción de la Serie` = 2) %>%
+  gt() %>% 
+  tab_header(
+    title = "Series Monetarias Disponibles en la API del BCRA",
+    subtitle = "Variables con su descripción, ID, fecha de dato más reciente y último valor"
+  ) %>% 
+  tab_options(
+    column_labels.border.bottom.width= px(3)
+  )
+```
+
+Les proponemos entonces replicar algunos de los gráficos que el BCRA presenta en su [Informe Monetario Diario](https://www.bcra.gob.ar/Pdfs/PublicacionesEstadisticas/infomondiae.pdf)
+
+### Base Monetaria
+
+Podemos, por ejemplo, graficar la base monetaria
+
+```{r}
+url_base_mon = "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias/15"
+
+response_base_mon <- GET(url_base_mon, config(ssl_verifypeer = FALSE))
+
+data_base_mon <- fromJSON(content(response_base_mon, "text"))
+
+df_base_mon <- data_base_mon$results
+df_base_mon$fecha <- as.Date(df_base_mon$fecha)
+
+df_base_mon <- df_base_mon %>% 
+  filter(fecha >= as.Date("2024-06-25"))
+
+ggplot(df_base_mon, aes(x = fecha, y = valor)) +
+  geom_line(color = "#F28E2B", size = 1.5) +
+  theme_fivethirtyeight() +
+  labs(
+    title = "Base monetaria",
+    subtitle = "Base monetaria - Total (en millones de pesos)",
+    caption = "Fuente: BCRA"
+  ) +
+  scale_y_continuous(
+    labels = scales::comma_format(),
+    breaks = scales::pretty_breaks(n = 6)
+  ) +
+  scale_x_date(
+    date_labels = "%d-%m-%y",
+    date_breaks = "15 days"
+  ) +
+  
+  theme_fivethirtyeight()+
+  
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  )
+
+```
+## Reservas Internacionales
+
+Ahora, vamos a descargar y graficar los datos de las reservas internacionales. La url es la misma de antes pero termina en `/1`, porque tal es la ID de las Reservas Internacionales del BCRA.
+
+```{r}
+url_reservas = "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias/1"
+
+response_reservas <- GET(url_reservas, config(ssl_verifypeer = FALSE))
+
+data_reservas <- fromJSON(content(response_reservas, "text"))
+
+df_reservas <- data_reservas$results
+df_reservas$fecha <- as.Date(df_reservas$fecha)
+
+df_reservas <- df_reservas %>% 
+  filter(fecha >= as.Date("2024-06-25"))
+
+
+ggplot(df_reservas, aes(x = fecha, y = valor)) +
+  geom_line(color = "#4E79A7", size = 1.5) +
+  theme_fivethirtyeight() +
+  labs(
+    title = "Reservas BCRA",
+    subtitle = "Reservas diarias en millones de dólares",
+    caption = "Fuente: BCRA"
+  ) +
+  scale_y_continuous(
+    labels = scales::comma_format(),
+    breaks = scales::pretty_breaks(n = 6)
+  ) +
+  scale_x_date(
+    date_labels = "%d-%m-%y",
+    date_breaks = "15 days"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  )
+```
+
+
