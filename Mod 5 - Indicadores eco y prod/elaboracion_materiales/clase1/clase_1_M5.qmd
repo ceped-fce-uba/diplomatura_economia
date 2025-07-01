@@ -29,18 +29,22 @@ include-after-body: ../assets/footer.html
 ---
 
 ```{r}
+#| echo: true
+
+library(httr)       # para hacer las solicitudes a la API
+library(jsonlite)   # para procesar el formato JSON
+library(tidyverse)  # nuestro querido tidyverse
+library(lubridate)  # para manejar fechas
+library(ggthemes)   # para la estética de los gráficos
+library(scales)     # para formatear las etiquetas de los gráficos
+
+options(scipen=999) # para evitar la notación científica
+```
+
+```{r}
 #| echo: false
-#| purl: false
 
-library(httr)
-library(jsonlite)
-library(tidyverse)
-library(lubridate)
-library(ggthemes)
-library(scales)
 library(gt)
-
-options(scipen=999)
 ```
 
 # Acceso a datos del BCRA via API
@@ -49,17 +53,17 @@ En la práctica de hoy vamos a ver cómo acceder a datos del Banco Central de la
 
 ### ¿Qué es una API?
 
-API es una sigla que viene del inglés (Application Programming Interface) y significa **Interfaz de Programación de Aplicaciones)**. Es un intermediario que nos permite comunicarnos con un sistema complejo sin necesidad de conocer todos los detalles de cómo funciona por dentro. Nosotros hacemos una "solicitud" (en inglés, request), y la API nos devuelve una "respuesta" (en inglés, response).
+API es una sigla que viene del inglés (Application Programming Interface) y significa `Interfaz de Programación de Aplicaciones`. Es un intermediario que nos permite comunicarnos con un sistema complejo sin necesidad de conocer todos los detalles de cómo funciona por dentro. Nosotros hacemos una "solicitud" (en inglés, request), y la API nos devuelve una "respuesta" (en inglés, response).
 
 En resumen, una API es un conjunto de reglas y herramientas que permite que diferentes aplicaciones de software se comuniquen entre sí. Simplifica el acceso a datos y funcionalidades de otros sistemas de una manera estandarizada y segura.
 
-### El Lenguaje de Internet: APIs y Conexiones Seguras
+#### Los datos y la web
 
-Para trabajar con datos de la web, es fundamental entender cómo se comunican los programas entre sí. Aquí es donde entran las **APIs** (Interfaz de Programación de Aplicaciones), que actúan como puentes que permiten que una aplicación solicite información de otra de manera estandarizada.
+Para trabajar con datos de la web, es fundamental entender cómo se comunican los programas entre sí. Acá es donde entran las **APIs** , que actúan como puentes que permiten que una aplicación solicite información de otra de manera estandarizada.
 
-Al hacer una solicitud a una API, como pedir el tipo de cambio, nuestra aplicación envía una petición a un servidor. Si todo sale bien, el servidor nos devuelve los datos con un código de estado `200`, que es el "lenguaje" del servidor para decir "recibí tu pedido y aquí tienes la información". En cambio, si pedimos a un servidor algo que no existe entonces recibiremos como respuesta el famoso código de estado `404`, el cual probablemente conozcan.
+Al hacer una solicitud a una API nuestra aplicación envía una solicitud a un servidor. Si todo sale bien, el servidor nos devuelve los datos con un código de estado `200`, que es el "lenguaje" del servidor para decir "recibí tu solicitud y la pude completar con éxito". En cambio, si pedimos a un servidor algo que no existe entonces recibiremos como respuesta el famoso código de estado `404`, el cual ya es parte de la cultura general del internet.
 
-Sin embargo, no solo importa recibir los datos, sino también la seguridad de la conexión. Para esto existe el protocolo **SSL**. Su propósito es asegurar la **autenticación** (que sepamos que nos estamos comunicando con el servidor real) y la **encriptación** (para que la comunicación sea privada y no pueda ser leída por terceros).
+Sin embargo, no solo importa recibir los datos, sino también la seguridad de la conexión. Para esto existen cosas como el protocolo **SSL**. Su propósito es asegurar la **autenticación** (que sepamos que nos estamos comunicando con el servidor real) y la **encriptación** (para que la comunicación sea privada y no pueda ser leída por terceros).
 
 Todo esto para que sepan que nos vamos a ver forzados a desactivar la verificación, perdiendo la garantía de que estamos conectados a la fuente legítima y de que los datos no han sido alterados en el camino... 
 
@@ -77,11 +81,12 @@ Primero, vamos a ver qué series de datos están disponibles.
 ```{r}
 #| output: false
 
-# URL base de la API v3.0
 url <- "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias"
 
+# Con la función GET del paquete httr realizamos la solicitud
 response <- GET(url, config(ssl_verifypeer = FALSE))
 
+# No se asusten con el JSON, simplemente es un diccionario
 data <- fromJSON(content(response, "text"))
 
 df <- data$results %>% 
@@ -122,14 +127,16 @@ df_base_mon <- data_base_mon$results
 df_base_mon$fecha <- as.Date(df_base_mon$fecha)
 
 df_base_mon <- df_base_mon %>% 
-  filter(fecha >= as.Date("2024-06-25"))
+  filter(fecha >= as.Date("2024-06-30")) %>% 
+  arrange(fecha) %>% 
+  select(fecha, valor)
 
 ggplot(df_base_mon, aes(x = fecha, y = valor)) +
   geom_line(color = "#F28E2B", size = 1.5) +
   theme_fivethirtyeight() +
   labs(
-    title = "Base monetaria",
-    subtitle = "Base monetaria - Total (en millones de pesos)",
+    title = "Base monetaria (último año)",
+    subtitle = "Total (en millones de pesos)",
     caption = "Fuente: BCRA"
   ) +
   scale_y_continuous(
@@ -138,7 +145,7 @@ ggplot(df_base_mon, aes(x = fecha, y = valor)) +
   ) +
   scale_x_date(
     date_labels = "%d-%m-%y",
-    date_breaks = "15 days"
+    date_breaks = "1 month"
   ) +
   
   theme_fivethirtyeight()+
@@ -152,11 +159,15 @@ ggplot(df_base_mon, aes(x = fecha, y = valor)) +
   )
 
 ```
+
 ## Reservas Internacionales
 
 Ahora, vamos a descargar y graficar los datos de las reservas internacionales. La url es la misma de antes pero termina en `/1`, porque tal es la ID de las Reservas Internacionales del BCRA.
 
 ```{r}
+#| echo: true
+#| fig-cap: "Reservas Internacionales del BCRA"
+
 url_reservas = "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias/1"
 
 response_reservas <- GET(url_reservas, config(ssl_verifypeer = FALSE))
@@ -167,8 +178,9 @@ df_reservas <- data_reservas$results
 df_reservas$fecha <- as.Date(df_reservas$fecha)
 
 df_reservas <- df_reservas %>% 
-  filter(fecha >= as.Date("2024-06-25"))
-
+  filter(fecha >= as.Date("2023-06-30")) %>% 
+  arrange(fecha) %>% 
+  select(fecha, valor)
 
 ggplot(df_reservas, aes(x = fecha, y = valor)) +
   geom_line(color = "#4E79A7", size = 1.5) +
@@ -184,7 +196,7 @@ ggplot(df_reservas, aes(x = fecha, y = valor)) +
   ) +
   scale_x_date(
     date_labels = "%d-%m-%y",
-    date_breaks = "15 days"
+    date_breaks = "1 month"
   ) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
@@ -195,4 +207,67 @@ ggplot(df_reservas, aes(x = fecha, y = valor)) +
   )
 ```
 
+## Circulación monetaria en dólares
+
+```{r}
+url_circulacion = "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias/16"
+
+response_circulacion <- GET(url_circulacion, config(ssl_verifypeer = FALSE))
+
+data_circulacion <- fromJSON(content(response_circulacion, "text"))
+
+df_circulacion <- data_circulacion$results
+df_circulacion$fecha <- as.Date(df_circulacion$fecha)
+
+df_circulacion <- df_circulacion %>% 
+  filter(fecha >= as.Date("2023-06-30")) %>% 
+  arrange(fecha) %>% 
+  select(fecha, circulacion = valor)
+
+url_tc = "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias/5"
+
+response_tc <- GET(url_tc, config(ssl_verifypeer = FALSE))
+
+data_tc <- fromJSON(content(response_tc, "text"))
+
+df_tc <- data_tc$results
+df_tc$fecha <- as.Date(df_tc$fecha)
+
+df_tc <- df_tc %>% 
+  filter(fecha >= as.Date("2023-06-30")) %>% 
+  arrange(fecha) %>% 
+  select(fecha, tc_mayorista = valor)
+
+df_circ_tc <- left_join(df_circulacion, df_tc, by = "fecha")
+
+df_circ_tc <- df_circ_tc %>% 
+  mutate(circulacion_dolares = circulacion / tc_mayorista)
+  
+```
+
+```{r}
+ggplot(df_circ_tc, aes(x = fecha, y = circulacion_dolares)) +
+  geom_line(color = "#4E79A7", size = 1.5) +
+  theme_fivethirtyeight() +
+  labs(
+    title = "Circulación monetaria",
+    subtitle = "En millones de dólares",
+    caption = "Fuente: BCRA"
+  ) +
+  scale_y_continuous(
+    labels = scales::comma_format(),
+    breaks = scales::pretty_breaks(n = 6)
+  ) +
+  scale_x_date(
+    date_labels = "%d-%m-%y",
+    date_breaks = "1 month"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  )
+```
 
