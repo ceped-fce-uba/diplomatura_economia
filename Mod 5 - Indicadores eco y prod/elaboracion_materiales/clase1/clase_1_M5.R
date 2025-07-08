@@ -232,6 +232,6 @@ api_bcra <- function(id) {
 # EJEMPLO DE USO DE LA FUNCIÓN
 #----------------------------------------------------------------
 prueba_función_reservas <- api_bcra(1)
-prueba_función_reservas
+head(prueba_función_reservas)
 
 

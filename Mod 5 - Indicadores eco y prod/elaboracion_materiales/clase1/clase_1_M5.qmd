@@ -76,7 +76,10 @@ En nuestro caso, nosotros vamos a realizarle solicitudes a la API del BCRA desde
 
 ### Series disponibles
 
-Primero, vamos a ver qué series de datos están disponibles.
+Primero, vam  scale_x_date(
+    date_labels = "%d-%m-%y",
+    date_breaks = "1 month"
+  ) +os a ver qué series de datos están disponibles.
 
 ```{r}
 #| output: false

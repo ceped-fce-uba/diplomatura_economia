@@ -1,0 +1,1 @@
+Carpeta intencionalmente vacía, acá es donde el script debería descargarles el archivo de excel del BCRA

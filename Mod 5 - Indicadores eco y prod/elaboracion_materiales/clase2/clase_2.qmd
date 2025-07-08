@@ -1,11 +1,11 @@
 ---
-title: "Clase 1 - Indicadores de Tipo de Cambio Real"
+title: "Clase 2 Módulo 5 - Práctica"
 subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED FCE - UBA)"
 author-title: "DOCENTES:" 
 authors:
   - name: Ezequiel Monteforte
   - name: Juan Camilo Gutman
-output-file: "Clase 1 - ITCRM" 
+output-file: "Clase 2 - ITCRM" 
 format:
   html:
     embed-resources: true
@@ -36,27 +36,47 @@ library(tidyverse)
 library(readxl)
 library(ggthemes)
 library(plotly)
+library(scales)
 
 options(scipen=999)
 ```
 
-# Índice de Tipo de Cambio Real Multilateral (ITCRM)
-
-En esta clase vamos a replicar el cálculo y la visualización del Índice de Tipo de Cambio Real Multilateral (ITCRM) que publica el Banco Central de la República Argentina (BCRA).
+# Indicadores de Tipo de Cambio Real
 
 ## Descarga y lectura de datos
 
-Primero, vamos a descargar los datos desde la página del BCRA.
+Ya vimos cómo se puede aprovechar una API como la de Estadísticas Monetarias del Banco Central de la República Argentina (BCRA). Ahora vamos a recurrir a un método algo más artesanal, consistente en automatizar la descarga de archivos a partir de links estables.
+
+En esta ocasión vamos a descargar los datos desde un link de la página del BCRA, pero todo desde R. Para ello vamos a utilizar una función que ya viene incorporada en R base: `download.file()`
 
 ```{r}
+# La URL que copiamos del sitio web
 url <- "https://www.bcra.gob.ar/Pdfs/PublicacionesEstadisticas/ITCRMSerie.xlsx"
+
+# la ruta relativa, que voy a usarlo para la descarga y luego la carga
 destino <- "bases/ITCRMSerie.xlsx"
 
-download.file(url, destino, mode = "wb", method = "curl", extra = "-k")
+download.file(url,
+              destino,
+              mode = "wb", 
+              method = "curl",
+              extra = "-k")
+```
 
+-   `mode` es importante que quede configurado en 'wb' para archivos que no son de texto plano
+
+-   `method` refiere a qué herramienta se utiliza para descargar. `curl`\` es una herramienta famosísima y muy confiable.
+
+-   `-k` es un parámetro para curl (equivalente a –insecure) y tiene que ver con lo que vimos en la clase de la API de descargar sin pedir certificado SSL
+
+Con `download.file()` descargamos directo a la computadora así que ahora tenemos que trabajar como siempre.
+
+```{r}
+# prestenle atención al argumento skip, clave para los archivos institucionales de excel
 data <- read_xlsx(destino, 
                   skip = 1,
-                  col_types = c("text", rep("numeric", 15)))
+                  col_types = c("text", rep("numeric", 15))) # cargamos la fecha como texto y el resto como numéricas
+                  
 
 # Transformamos la columna de fechas
 data$Período <- as.Date(as.numeric(data$Período), origin = "1899-12-30")
@@ -71,42 +91,48 @@ data <- data %>%
 
 ## Visualización
 
-Ahora, vamos a crear algunos gráficos para visualizar los datos.
-
 ### ITCRM
 
+Ojo que acá dejamos el 100 como lo pone el BCRA
+
 ```{r}
-# Gráfico 1: el ITCRM
 graf1 <- ggplot(data, aes(x = Período, y = ITCRM)) +
-  geom_line(color = "blue", size = 1) +
+  geom_line(color = "4E79A7", linewidth = 1) +
   labs(title = "Índice de Tipo de Cambio Real Multilateral (ITCRM)",
        subtitle = "Base 17-12-15 = 100",
        x = "Fecha",
        y = "Índice ITCRM") +
   theme_fivethirtyeight() +
-  scale_color_fivethirtyeight() +
+  scale_color_tableau() +
+  scale_x_date(date_labels = "%m-%Y", date_breaks = "4 years") +
   theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5))
 
 graf1
 ```
 
-### ITCRB con EEUU y China
+### ITCRB con EEUU, China y Brasil + ITCRM
 
 Para graficar varias series juntas, primero tenemos que pasar los datos a formato largo.
 
 ```{r}
 data_long <- data %>%
-  select(Período, ITCRM, `ITCRB Estados Unidos`, `ITCRB China`) %>%
+  select(Período, ITCRM, `ITCRB Estados Unidos`, `ITCRB China`, `ITCRB Brasil`) %>%
   pivot_longer(cols = -Período, names_to = "Índice", values_to = "Valor")
 
-# Gráfico 2: EEUU y China
 graf2 <- ggplot(data_long, aes(x = Período, y = Valor, color = Índice)) +
   geom_line(size = 1) +
   labs(title = "Índices de Tipo de Cambio Real - Argentina",
-       subtitle = "ITCRM e ITRCB con EEUU y China (Base 17-12-15 = 100)",
+       subtitle = "ITCRM e ITRCB con EEUU, China y Brasil (Base 17-12-15 = 100)",
        x = "Fecha",
        y = "Valor del Índice") +
+
+  scale_x_date(
+    date_labels = "%Y", 
+    date_breaks = "2 years",
+    expand = c(0, 0)
+  ) +
+  
   theme_fivethirtyeight() +
   scale_color_tableau() +
   theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
@@ -116,28 +142,56 @@ graf2 <- ggplot(data_long, aes(x = Período, y = Valor, color = Índice)) +
 graf2
 ```
 
-Y podemos hacer el gráfico interactivo con `ggplotly`.
+Y, podemos poner el 100 en alguna fecha base (y de paso volverlo interactivo con ggplotly):
 
 ```{r}
-graf2 %>% ggplotly()
+# Si quisieran poner el 100 al comienzo de la serie:
+# data_long_bis <- data_long %>%
+#   group_by(Índice) %>% 
+#   mutate(Valor = (Valor / first(Valor, order_by = Período)) * 100) %>%
+#   ungroup()
+
+fecha_base <- as.Date("2006-01-01")
+
+valores_base <- data_long %>%
+  filter(Período == fecha_base) %>%
+  select(Índice, valor_base = Valor)
+
+data_long_bis <- data_long %>%
+  left_join(valores_base, by = "Índice") %>%
+  group_by(Índice) %>%
+  mutate(Valor = (Valor / valor_base) * 100) %>%
+  ungroup() %>%
+  select(-valor_base)
+
+graf3 <- ggplot(data_long_bis, aes(x = Período, y = Valor, color = Índice)) +
+  geom_line(size = 1) +
+  labs(title = "Índices de Tipo de Cambio Real - Argentina",
+       subtitle = "ITCRM e ITRCB con EEUU y China (Base 17-12-15 = 100)",
+       x = "Fecha",
+       y = "Valor del Índice") +
+  
+  scale_y_continuous(breaks = seq(40, 160, by = 20)) +
+
+  scale_x_date(
+    date_labels = "%Y", 
+    date_breaks = "2 years",
+    expand = c(0, 0)
+  ) +  
+
+  theme_fivethirtyeight() +
+  scale_color_tableau() +
+  theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.position = "bottom")
+
+graf3 %>% ggplotly()
 ```
 
-## Análisis de datos
+## Advertencia y ejemplo: INDEC
 
-Finalmente, vamos a ver un resumen estadístico de los datos.
+El problema de este flujo de trabajo es que muchas veces las instituciones cambian los nombres de los links que disponibilizan. Por ejemplo, el IPC publicado por el INDEC disponible, **por ahora**, en <https://www.indec.gob.ar/ftp/cuadros/economia/sh_ipc_06_25.xls>. Fíjense que en nombre del archivo colocan el mes y el año.
 
-```{r}
-# Filtro de los últimos 5 años
-data_reciente <- data %>%
-  filter(Período >= as.Date("2019-01-01")) %>% 
-  arrange(desc(Período))
+Si quieren crear un script sin ese problema van a tener que aprender el lenguaje HTML...
 
-# Resumen estadístico
-cat("Resumen del ITCRM:
-")
-summary(data$ITCRM)
-cat("
-Último valor disponible:
-")
-tail(data[c("Período", "ITCRM")], 1)
-```
+¡Pero hasta acá llegamos nosotros!
