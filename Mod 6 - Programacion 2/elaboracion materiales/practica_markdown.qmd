@@ -1,0 +1,55 @@
+---
+title: "Práctica Markdown"
+author: "Diplomatura PAEEC - UBA"
+output-file: "practica_markdown" 
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+    code-summary: "Mostrar respuesta"
+    code-tools: false
+    toc: true
+    toc-location: left
+    toc-title: Índice
+    theme:
+      light: assets/practica_claro.scss
+      dark: assets/practica_oscuro.scss
+    fig-width: 8
+    fig-height: 5
+    fig-format: retina
+    warning: false
+    message: false
+    echo: true
+    output: false
+execute:
+  freeze: auto
+editor: source
+include-after-body: assets/footer.html
+---
+
+```{r}
+#| echo: FALSE
+
+```
+
+## Consignas
+
+La consigna general es construir un breve informe sobre el mercado de trabajo a partir de la información del último trimestre disponible de la Encuesta Permanente de Hogares. Elijan alguna variable de corte que les resulte interesante (sexo, grupos etarios, regiones, niveles educativos) para construir indicadores de interés (pueden ser estimaciones del salario, tasas básicas, indicadores de precaried laboral, etc.). El paso a paso de lo que deben hacer es el siguiente:
+
+-   Abir un archivo de RMarkdown nuevo. Guardarlo en alguna subcarpeta de sus computadoras
+
+-   Encabezado YAML: modifiquen los parámetros para que el título sea representativo del informe, contenga sus nombres y la fecha en cuestión
+
+-   Introducción: Realicen una breve descripción de lo que se proponen hacer (formateen el texto con cursivas, negritas, bullets, etc.)
+
+-   Código:
+
+    -   Importen los paquetes a utilizar (no mostrar el código en el reporte). Importen los datos en cuestión (mostrar el código en el reporte)
+
+    -   Realicen algún procesamiento mínimo como filtrar, seleccionar, crear categorías de interés , etc. (mostrar el código en el reporte). Incluyan texto que explique brevemente lo que están haciendo con la base de datos.
+
+    -   Generar algún tabulado básico (ej: salario promedio por regiones), mostrar el resultado en el reporte utilizando el ***Kable***
+
+    -   Si hay tiempo: Incluir un gráfico
+
+### 
