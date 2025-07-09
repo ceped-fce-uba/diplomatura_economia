@@ -32,9 +32,9 @@ Los materiales teóricos y prácticos de cada uno de los módulos se pueden desc
 
 ## Indicadores económicos y de la producción
 
-[![Download](assets/images/boton_clase1.png)](M5_C1.rar) Productividad absoluta y relativa: el estancamiento secular de Argentina    
-[![Download](assets/images/boton_clase2.png)](M5_C2.rar) Agregados e indicadores de Gobierno: déficit y deuda pública  
-[![Download](assets/images/boton_clase3.png)](M5_C3.rar) Agregados monetarios: dinámicas del circulante, depósitos y créditos  
+[![Download](assets/images/boton_clase1.png)](M5_C1.rar) Agregados monetarios: dinámicas del circulante, depósitos y créditos
+[![Download](assets/images/boton_clase2.png)](M5_C2.rar) Indicadores de tipo de cambio real  
+[![Download](assets/images/boton_clase3.png)](M5_C3.rar) Productividad absoluta y relativa: el estancamiento secular de Argentina  
 
 ## Programación en R avanzada
 
