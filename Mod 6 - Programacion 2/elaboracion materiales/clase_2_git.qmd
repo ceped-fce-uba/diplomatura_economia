@@ -1,11 +1,11 @@
 ---
-title: "Clase 1 - Git y Github"
+title: "Clase 2 - Git y Github"
 subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED FCE - UBA)"
 author-title: "DOCENTES:" 
 authors:
   - name: Guido Weksler
   - name: Ignacio Paola
-output-file: "Clase_1" 
+output-file: "clase_2" 
 format:
   html:
     embed-resources: true

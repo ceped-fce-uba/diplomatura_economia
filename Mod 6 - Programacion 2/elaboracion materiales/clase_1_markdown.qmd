@@ -1,11 +1,11 @@
 ---
-title: "Clase 2 - Markdown y Quarto"
+title: "Clase 1 - Markdown y Quarto"
 subtitle: "Diplomatura Problemas Actuales de la Economía, el Empleo y el Comercio (CEPED FCE - UBA)"
 author-title: "DOCENTES:" 
 authors:
   - name: Guido Weksler
   - name: Ignacio Paola
-output-file: "Clase_2" 
+output-file: "clase_1" 
 format:
   html:
     embed-resources: true
