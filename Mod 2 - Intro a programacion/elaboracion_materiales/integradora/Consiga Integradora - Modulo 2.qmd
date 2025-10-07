@@ -1,6 +1,6 @@
 ---
 title: "Actividad integradora - Módulo 2"
-author: "Diplomatura PAEEC - UBA"
+author: ""
 output-file: "Actividad integradora - Módulo 2" 
 format:
   html:
@@ -33,7 +33,7 @@ La actividad integradora se articula de la siguiente forma, en primer lugar se d
 
 En segundo lugar, se relizaran una serie de tareas, que se indicaran en la sección de *consigna específica*, las cuales deben realizarse en el marco de una carpeta y un proyecto de R. En dicha carpeta debe figurar: una carpeta titulada `base` donde se encuentre la base utilizada, una carpeta llamada `resultados` donde se guarden las visualizaciones construidas, el proyecto y el script con todos los códigos. Por último deberá enviarse dicha carpeta (en forma comprimida), al mail de la diplomatura *diplo.problemas.economia\@gmail.com*, con asunto del mail "Apellido - Actividad Integradora M2".
 
-La fecha límite de entrega es el **lunes 12 de mayo a las 23.59hs**. Para cualquier consulta seguirán vigentes las vías de comunicación habituales del módulo y de la diplomatura.
+La fecha límite de entrega es el *martes 21 de octubre a las 18:00*. Para cualquier consulta seguirán vigentes las vías de comunicación habituales del módulo y de la diplomatura.
 
 ### Consigna específica
 

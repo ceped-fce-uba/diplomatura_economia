@@ -1,6 +1,7 @@
 # install.packages("tidyverse") si no lo instalaron todavía
 
 library(tidyverse)
+library(lubridate)
 
 OCUPADOS  <- c(6105953, 2543717, 10931300,
                6103382, 2598154, 10982740,
@@ -11,45 +12,56 @@ FECHA  <-  c("Ene-12", "Ene-12", "Ene-12",
 SECTOR  <-  c("Privado_Registrado","Público","Total",
               "Privado_Registrado","Público","Total",
               "Privado_Registrado","Público","Total")
+
 Datos <- data.frame(OCUPADOS, FECHA, SECTOR)
 
 Datos %>% 
  filter(SECTOR == "Total")
 
 Datos %>% 
-  filter(SECTOR == "Total", OCUPADOS > 10931300)
+  filter(SECTOR == "Total" & OCUPADOS > 10931300)
 
 Datos %>% 
-  filter(OCUPADOS > 10931300 | SECTOR == "Privado_Registrado")
+  filter(OCUPADOS > 10000000 | SECTOR == "Privado_Registrado")
 
-Datos %>% 
-  rename(Periodo = FECHA)
+# Datos <- Datos %>% 
+#   rename(Periodo = FECHA)
 
 Datos <- Datos %>% 
-  mutate(Promedio = mean(OCUPADOS))
+  mutate(OCUPADOS_MIL = OCUPADOS / 1000)
+
 Datos
+
+
+
+
 
 Datos <- Datos %>% 
   mutate(caso_cuando = case_when(SECTOR == "Privado_Registrado"    ~ OCUPADOS*2,
                                  SECTOR == "Público"               ~ OCUPADOS*3,
-                                 SECTOR == "Privado_No_Registrado" ~ OCUPADOS*5 ))
+                                 SECTOR == "Total" ~ OCUPADOS*5 ))
+
 Datos
 
 Datos2 <- Datos %>% 
-  select(OCUPADOS, FECHA, SECTOR)
+  select(SECTOR, OCUPADOS_MIL)
+
+Datos2 <- Datos %>% 
+  select(-OCUPADOS)
+
 Datos2
 
 Datos <- Datos %>% 
-  arrange(SECTOR, OCUPADOS)
-Datos
+  arrange(desc(OCUPADOS))
 
-Datos %>% 
-  summarise("Promedio de ocuapdos" = mean(OCUPADOS))
+resumen <- Datos %>% 
+  summarise("Promedio" = mean(OCUPADOS),
+            "Mínimo" = min(OCUPADOS),
+            "Máximo" = max(OCUPADOS))
 
-Datos %>% 
-  group_by(FECHA) %>%
+primer_group_by <- Datos %>% 
+  group_by(SECTOR) %>%
   summarise("Ocupados por habitante" = OCUPADOS/45000000)
-
 
 
 INDICE  <- c(100,   100,   100,

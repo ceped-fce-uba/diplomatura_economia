@@ -1,6 +1,7 @@
 library(tidyverse)
 library(readxl)
-options(scipen = 999)
+
+# options(scipen = 999)
 
 SIPA <- read_csv("bases/base_sipa.csv", show_col_types = FALSE)
 ipc_mensual <- read_xlsx("bases/ipc_ceped_data.xlsx")
@@ -42,6 +43,7 @@ graf_remun <- remuneracion_real %>%
 graf_remun
 
 library(ggthemes)
+library(hrbrthemes)
 
 graf_remun <- graf_remun +
   theme_fivethirtyeight() 

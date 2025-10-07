@@ -99,17 +99,16 @@ Datos$FECHA
 
 Datos[3,2]
 
-try({
-Datos$FECHA[3,2]
-})
+# Datos$FECHA[3,2]
+
 
 lista1 <- list(1, 2, "tres")
 lista1
 
-# library(readr)
-# 
-# SIPA <- read_csv("bases/base_sipa.csv")
-# names(SIPA)
+library(readr)
+
+SIPA <- read_csv("bases/base_sipa.csv")
+names(SIPA)
 
 
 

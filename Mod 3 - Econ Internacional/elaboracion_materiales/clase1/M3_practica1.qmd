@@ -34,29 +34,39 @@ include-after-body: ../assets/footer.html
 
 ```
 
+### Fuentes de información
+
+A continuación, las fuentes de información que les mencionamos en clase:
+
+-   [UNIDO](https://stat.unido.org/)
+
+-   [OECD / OCDE](https://www.oecd.org/en/data.html)
+
+-   [Banco Mundial](https://data.worldbank.org/indicator/)
+
 ## Consignas
 
-A continuación les presentamos dos ejercicios que tienen que resolver y entregar. Van a tener tiempo hasta el lunes 19 de mayo a las 23:59, teniendo que enviar un script .R y un documento de texto con las fotos de los gráficos y las respuestas textuales. Los trabajos serán recibidos en diplo.problemas.economia\@gmail.com, con asunto del mail “Apellido - Práctica 1 Módulo 3”.
+A continuación les presentamos dos ejercicios que tienen que resolver y entregar. Van a tener tiempo hasta el lunes 13 de octubre a las 23:59, teniendo que enviar un script .R y un documento de texto con las fotos de los gráficos y las respuestas textuales. Los trabajos serán recibidos en diplo.problemas.economia\@gmail.com, con asunto del mail “Apellido - Práctica 1 Módulo 3”.
 
 Los datos que necesitan se encuentran en el archivo comprimido que descargaron bajo el nombre de *empleo_industrial.csv*. Son datos del trabajo de Graña y Terranova (2022). Remuevan el año 1999 de la base de datos: faltan datos de China para dicho período.
 
-El primero de los ejercicios es el más sencillo. El segundo ya es más difícil. En ambos casos tómense un tiempo para pensar cómo pueden lograr lo que se les pide antes de empezar a escribir el código. Como siempre, pueden evacuar sus dudas por los canales habituales (WhatsApp, Slack).
+Tienen dos ejercicios, que no deberían presentarles mayor dificultad, y un extra (no obligatorio) bastante difícil. En ambos casos tómense un tiempo para pensar cómo pueden lograr lo que se les pide antes de empezar a escribir el código. Como siempre, pueden evacuar sus dudas por el canal habitual.
 
 ### 1. Evolución de la participación del Empleo industrial
 
 Construyan un gráfico de líneas de la evolución de la participación del empleo industrial en el empleo total de cada país, para el período 1978-2018, para Alemania, Argentina, China y México (por si no conocen los códigos oficiales de países: [ISO 3166-1 alfa-3](https://es.wikipedia.org/wiki/ISO_3166-1_alfa-3))
 
-Utilicen lo aprendido en el módulo anterior. Y, adicionalmente, agreguen dos capas geométricas al gráfico: `geom_col()` y `geom_point()`, como dos capas independendientes. De este modo se construye un gráfico de puntos conectados por una línea. Es importante que luego de filtrar los años y países utilicen `arrange(País, Anio)` para tener los datos bien ordenados al momento de graficar.
+Utilicen lo aprendido en el módulo anterior. Agreguen DOS capas geométricas al gráfico: tando `geom_col()` como `geom_point()`, como dos capas superpuestas. De este modo se construye un gráfico de puntos conectados por una línea. Es importante que luego de filtrar los años y países utilicen `arrange(País, Anio)` para tener los datos bien ordenados al momento de graficar.
 
 Escriban un párrafo en el cual interpreten brevemente el gráfico. No es necesario que mencionen a todos los países, pueden concentrarse en lo que más les llame la atención o les interese.
 
-::: {.callout-tip icon="false"}
-## EXTRA
+### 2. Participación del Empleo industrial en números índice
 
-Les proponemos realizar, de manera opcional, un ejercicio adicional: construir un gráfico comparativo mediante números índice para los países indicados en la consigna. Asignen el valor 100 a la participación del empleo industrial en cada uno de los países en un año base que consideren apropiado y grafiquen su progresión. Esto facilitará observar cómo evolucionan relativamente desde el punto de referencia.
-:::
+Con la misma base de datos, construyan un gráfico comparativo mediante números índice para los países indicados en la consigna anterior. Asignen el valor 100 a la participación del empleo industrial en cada uno de los países en un mismo año base que consideren apropiado y grafiquen su progresión. No es necesario que grafiquen todo el período 1978-2018, pueden tomar algún recorte. Luego, peguen en el mismo archivo de la consigna anterior el gráfico e interpreten la evolución relativa de cada uno de los países desde el punto de referencia elegido.
 
-### 2. Participación del Empleo industrial por regiones
+### EXTRA (no obligatorio)
+
+#### Participación del Empleo industrial por regiones
 
 Para el mismo período del punto anterior, pero ahora para todos los paises, construyan un gráfico de barras apiladas de la participación del empleo industrial por región. Calculen las participaciones del empleo industrial de cada región **en el empleo total de todos los países de la muestra**. De este modo, apilar las barras que representan proporciones no pierde el sentido matemático.
 
@@ -70,15 +80,6 @@ Luego ya van a poder construir el gráfico de columnas apiladas. Recuerden usar 
 
 Finalmente, escriban un párrafo para describir lo que observan en el gráfico.
 
-### Fuentes de información
-
-A continuación, las fuentes de información que les mencionamos en clase:
-
--   [UNIDO](https://stat.unido.org/)
-
--   [OECD / OCDE](https://www.oecd.org/en/data.html)
-
--   [Banco Mundial](https://data.worldbank.org/indicator/)
 
 ## Referencias {.unnumbered}
 
