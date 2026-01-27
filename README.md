@@ -1,5 +1,5 @@
 # Materiales
-Este repositorio contiene los materiales de la diplomatura, organizados por módulos.  
+Este repositorio contiene los materiales de la diplomatura, organizados por módulos.   
 Los materiales teóricos y prácticos de cada uno de los módulos se pueden descargar clickeando el botón de cada clase. 
 
 [![Download](assets/images/boton_biblio.png)](https://drive.google.com/drive/folders/1MOkyekIffcvcanEWP0mp1Z46g4CV3kiY?usp=sharing) Acceso al Drive con la bibliografía general de la diplomatura    
